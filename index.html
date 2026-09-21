@@ -18,7 +18,7 @@ button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 .hidden{display:none!important}
 header{position:sticky;top:0;z-index:20;background:rgba(247,243,232,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:9px 12px;display:flex;align-items:center;justify-content:space-between}
-.brand{display:flex;align-items:center;gap:9px}.logo{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#111;color:var(--gold);border:2px solid var(--gold);font-weight:900}.brand small{display:block;color:var(--muted);font-size:11px}
+.brand{display:flex;align-items:center;gap:9px}.logo{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#111;color:var(--gold);border:2px solid var(--gold);font-weight:900;overflow:hidden}.logo img{width:100%;height:100%;object-fit:cover;display:block}.brand small{display:block;color:var(--muted);font-size:11px}
 main{padding:14px 10px 100px;max-width:1180px;margin:auto}
 nav{position:fixed;bottom:0;left:0;right:0;z-index:30;display:grid;grid-template-columns:repeat(5,1fr);background:rgba(255,253,248,.98);border-top:1px solid var(--line);padding-bottom:max(4px,env(safe-area-inset-bottom))}
 nav button{border:0;background:transparent;padding:7px 2px 9px;color:#5d574e;font-size:10px}
@@ -93,6 +93,12 @@ a.btn{text-decoration:none;display:inline-block}
 .expense-list-card .amt small{font-weight:600}
 @media(max-width:560px){.expense-summary{grid-template-columns:1fr 1fr}.expense-actions{grid-template-columns:1fr 1fr}}
 
+
+.quick-sheet .amount-box{font-size:32px;min-height:62px;border:2px solid #c9a227}
+.quick-savebar{position:sticky;bottom:-15px;background:linear-gradient(180deg,#fffdf800 0,#fffdf8 20%);padding:18px 0 4px;margin-top:8px}
+.quick-savebar .btn{width:100%;min-height:48px;font-size:16px}
+.live-step{min-height:60px}
+.live-step:active{transform:scale(.97)}
 </style>
 </head>
 <body>
@@ -106,7 +112,7 @@ a.btn{text-decoration:none;display:inline-block}
   </div>
 </div>
 <header>
-  <div class="brand"><div class="logo">OL</div><div><b>Control OLMS</b><small>La Mambito Sound · v6.3</small></div></div>
+  <div class="brand"><div class="logo" id="headerAvatar"><img src="mambito-logo.png" alt="Perfil"></div><div><b>Control OLMS</b><small id="headerSubtitle">La Mambito Sound · v6.4</small></div></div>
   <div class="header-actions">
   <button class="iconbtn bellbtn" onclick="openNotifications()" aria-label="Notificaciones">🔔<span id="notifBadge" class="notif-badge hidden">0</span></button>
   <button class="iconbtn" onclick="calendarQuickAction()" aria-label="Sincronizar Google Calendar">↻</button>
@@ -132,7 +138,7 @@ a.btn{text-decoration:none;display:inline-block}
 
 <dialog id="activityDlg">
 <div class="dlg">
-<button class="iconbtn close" onclick="activityDlg.close()">✕</button>
+<button class="iconbtn close" onclick="D('activityDlg').close()">✕</button>
 <h2 id="activityTitle">Nueva actividad</h2>
 <input id="aid" type="hidden">
 <div class="grid2">
@@ -162,13 +168,13 @@ a.btn{text-decoration:none;display:inline-block}
 <option value="">Pendiente / futura</option><option value="realizado">Realizado</option><option value="asisti">Asistí</option><option value="no-participe">No participé</option><option value="no-asisti">No asistí</option><option value="cancelado">Cancelado</option>
 </select></div>
 <div class="field"><label>Observación</label><textarea id="anotes" rows="2"></textarea></div>
-<div class="row"><button class="btn ghost" onclick="activityDlg.close()">Cancelar</button><button class="btn primary" onclick="saveActivity()">Guardar</button></div>
+<div class="row"><button class="btn ghost" onclick="D('activityDlg').close()">Cancelar</button><button class="btn primary" onclick="saveActivity()">Guardar</button></div>
 </div>
 </dialog>
 
 <dialog id="detailDlg"><div class="dlg" id="detailBody"></div></dialog>
 <dialog id="transportDlg"><div class="dlg">
-<button class="iconbtn close" onclick="transportDlg.close()">✕</button>
+<button class="iconbtn close" onclick="D('transportDlg').close()">✕</button>
 <h2>Seleccionar transporte</h2>
 <p class="muted">Usa las imágenes que seleccionaste para identificar rápidamente cada medio.</p>
 <div id="transportPicker" class="transport-picker"></div>
@@ -182,6 +188,16 @@ a.btn{text-decoration:none;display:inline-block}
 <div class="toast" id="toast"></div>
 
 <script>
+/* v6.4: el splash nunca puede bloquear el acceso a la app */
+window.__olmsBootTimer=setTimeout(()=>{
+  const sp=document.getElementById("splash");
+  if(sp){sp.classList.add("hide");setTimeout(()=>sp.remove(),260)}
+},1400);
+window.addEventListener("error",e=>{
+  console.error("Control OLMS:",e.error||e.message);
+  const sp=document.getElementById("splash");
+  if(sp){sp.classList.add("hide");setTimeout(()=>sp.remove(),260)}
+});
 const KEY="control_olms_v2";
 const TYPES=["Boda","Cumpleaños","Quince años","Evento corporativo","Bar/Discoteca","Hotel","Casino","Festival","Carnaval","Concierto","Evento privado","Grabación","Promoción","Ensayo regular","Ensayo especial","Viaje","Otro"];
 const TRANSPORTS=[
@@ -267,10 +283,49 @@ if(!state.settings.calendarCutoffMigrationV63){
  localStorage.setItem(KEY,JSON.stringify(state));
 }
 
+
+function normalizeActivity(a){
+ if(!a||typeof a!=="object")a={};
+ a.id=a.id||uid();
+ a.title=a.title||a.type||"Actividad Mambito Sound";
+ a.kind=a.kind||"presentacion";
+ a.type=a.type||"Otro";
+ a.date=a.date||todayISO();
+ a.start=a.start||"20:00";
+ a.end=a.end||"22:00";
+ a.venue=a.venue||"";
+ a.location=a.location||"";
+ a.payments=Array.isArray(a.payments)?a.payments:[];
+ a.expenses=(a.expenses&&typeof a.expenses==="object")?a.expenses:{};
+ a.expenses.outbound=Array.isArray(a.expenses.outbound)?a.expenses.outbound:[];
+ a.expenses.return=Array.isArray(a.expenses.return)?a.expenses.return:[];
+ a.expenses.extras=Array.isArray(a.expenses.extras)?a.expenses.extras:[];
+ [...a.expenses.outbound,...a.expenses.return].forEach(t=>{
+   if(!t.id)t.id=uid();
+   if(t.type===undefined)t.type="taxi";
+   if(t.amount===undefined)t.amount=null;
+   if(t.driver===undefined)t.driver="";
+ });
+ a.expenses.extras.forEach(e=>{
+   if(!e.id)e.id=uid();
+   if(e.category===undefined)e.category="Otro";
+   if(e.subtype===undefined)e.subtype="";
+   if(e.amount===undefined)e.amount=null;
+ });
+ if(a.liveStage===undefined)a.liveStage="";
+ if(a.outcome===undefined)a.outcome="";
+ return a;
+}
+state.activities=(Array.isArray(state.activities)?state.activities:[]).map(normalizeActivity);
+state.deleted=(Array.isArray(state.deleted)?state.deleted:[]).map(normalizeActivity);
+state.settings=state.settings||{};
+state.settings.profile=state.settings.profile||{name:"",email:"",photo:"",googleName:"",googlePhoto:"",customName:false,customPhoto:false};
+
 const bootNow=new Date();
 let dashMode="money", periodMode="month", periodYear=bootNow.getFullYear(), periodMonth=bootNow.getMonth(), calMode="month", undoAction=null;
 
 const $=id=>document.getElementById(id);
+const D=id=>document.getElementById(id);
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const cap=s=>s?String(s).charAt(0).toUpperCase()+String(s).slice(1):"";
@@ -498,17 +553,17 @@ function avgRehearsal(){let a=periodArr().filter(x=>x.kind==="ensayo"&&done(x));
 
 function expenseListCard(a){
  const spent=expTotal(a),pending=pendingExp(a);
- return `<button class="expense-list-card" onclick="listDlg.close();openDetail('${a.id}','expenses')">
+ return `<button class="expense-list-card" onclick="D('listDlg').close();openDetail('${a.id}','expenses')">
    <div><b>${esc(a.title)}</b><small>${panamaDate(a.date)} · ${panamaRange(a)} · ${esc(a.venue||"Lugar pendiente")}</small></div>
    <div class="amt">${money(spent)}<small>${pending?`${pending} pendiente${pending===1?"":"s"}`:"Abrir gastos"}</small></div>
  </button>`
 }
 function openExpenseHub(){
  const arr=periodArr().slice().sort(chronological);
- $("listBody").innerHTML=`<button class="iconbtn close" onclick="listDlg.close()">✕</button><h2>💸 Gastos por actividad</h2>
+ $("listBody").innerHTML=`<button class="iconbtn close" onclick="D('listDlg').close()">✕</button><h2>💸 Gastos por actividad</h2>
  <p class="muted">Elige cualquier actividad para registrar, editar o revisar sus gastos.</p>
  ${arr.map(expenseListCard).join("")||'<div class="empty">No hay actividades en este período.</div>'}`;
- listDlg.showModal()
+ D('listDlg').showModal()
 }
 
 function openKpi(id){
@@ -524,9 +579,9 @@ function openKpi(id){
  if(id==="pexp"){arr=arr.filter(a=>pendingExp(a)>0);title="Gastos incompletos"}
  arr=arr.slice().sort(chronological);
  const expenseMode=id==="g"||id==="pexp";
- $("listBody").innerHTML=`<button class="iconbtn close" onclick="listDlg.close()">✕</button><h2>${title}</h2>${expenseMode?arr.map(expenseListCard).join(""):arr.map(card).join("")||'<div class="empty">Sin registros.</div>'}`;
+ $("listBody").innerHTML=`<button class="iconbtn close" onclick="D('listDlg').close()">✕</button><h2>${title}</h2>${expenseMode?arr.map(expenseListCard).join(""):arr.map(card).join("")||'<div class="empty">Sin registros.</div>'}`;
  if(expenseMode && !arr.length)$("listBody").innerHTML+=`<div class="empty">Sin registros.</div>`;
- listDlg.showModal()
+ D('listDlg').showModal()
 }
 function findKnownPlace(v){
  const q=(v||"").trim().toLowerCase(); if(!q)return null;
@@ -541,7 +596,7 @@ function placeConfig(v){
 function openPlaceDefaults(){
  const names=[...new Set([...KNOWN_PLACES.map(p=>p.name),...Object.keys(state.settings.placeDefaults||{})])];
  const rows=names.map(name=>{const c=placeConfig(name)||{rate:0,rule:"Sin regla"};return `<button class="place-card" onclick="editPlaceDefault(decodeURIComponent('${encodeURIComponent(name)}'))"><div><b>${esc(name)}</b><div class="place-metrics">Tarifa ${money(c.rate||0)} · ${esc(c.rule||"Sin regla")}</div></div><span class="chev">›</span></button>`}).join("");
- $("listBody").innerHTML=`<button class="iconbtn close" onclick="listDlg.close()">✕</button><h2>Tarifas y reglas futuras</h2><p class="muted">Editar aquí actualiza la referencia y puede aplicarse a actividades futuras del mismo lugar. Nunca toca actividades ya realizadas.</p>${rows}`;listDlg.showModal()
+ $("listBody").innerHTML=`<button class="iconbtn close" onclick="D('listDlg').close()">✕</button><h2>Tarifas y reglas futuras</h2><p class="muted">Editar aquí actualiza la referencia y puede aplicarse a actividades futuras del mismo lugar. Nunca toca actividades ya realizadas.</p>${rows}`;D('listDlg').showModal()
 }
 function editPlaceDefault(name){
  const base=KNOWN_PLACES.find(p=>p.name===name)||{name,rate:state.settings.placeDefaults?.[name]?.rate||0,rule:state.settings.placeDefaults?.[name]?.rule||"Hasta 7 días"};const cur=placeConfig(name)||base;
@@ -618,7 +673,7 @@ function openActivityForm(id=""){
  const a=state.activities.find(x=>x.id===id);
  autoFinal=!a || Number(a.final??a.expected??0)===Number(a.expected??0);
  $("aid").value=a?.id||"";$("akind").value=a?.kind||"presentacion";$("atype").innerHTML=TYPES.map(x=>`<option ${x===(a?.type||"Boda")?"selected":""}>${x}</option>`).join("");$("atitle").value=a?.title||"";$("avenue").value=a?.venue||"";$("alocation").value=a?.location||"";$("aprovince").value=a?.province||"";$("adate").value=a?.date||todayISO();$("astart").value=a?.start||"20:00";$("aend").value=a?.end||"22:00";$("aexpected").value=a?.expected??"";$("afinal").value=a?.final??"";$("afree").checked=!!a?.free;$("aoutcome").value=a?.outcome||"";$("anotes").value=a?.notes||"";$("apaymentrule").value=a?.paymentRule||placeConfig(a?.venue)?.rule||"";$("activityTitle").textContent=a?"Editar actividad":"Nueva actividad";
- $("aexpected").disabled=!!a?.free;$("afinal").disabled=!!a?.free;updateDuePreview();activityDlg.showModal()
+ $("aexpected").disabled=!!a?.free;$("afinal").disabled=!!a?.free;updateDuePreview();D('activityDlg').showModal()
 }
 async function saveActivity(){
  let id=$("aid").value||uid(),old=state.activities.find(x=>x.id===id);
@@ -627,7 +682,7 @@ async function saveActivity(){
 ${conflict.title} · ${panamaDate(conflict.date)} · ${panamaRange(conflict)}`);return}
  if(!placeConfig(obj.venue)&&obj.venue&&!obj.free&&!old){const r=prompt(`Es la primera vez que registras ${obj.venue}. ¿Cuándo suelen pagarte aquí?`,obj.paymentRule||"Hasta 7 días");if(r!==null&&r.trim()){obj.paymentRule=r.trim();state.settings.placeDefaults[obj.venue]={rate:obj.expected,rule:r.trim(),custom:true}}}
  if(old)Object.assign(old,obj);else state.activities.push(obj);
- save();activityDlg.close();toast("Actividad guardada · KPIs recalculados");
+ save();D('activityDlg').close();toast("Actividad guardada · KPIs recalculados");
  if(googleAccessToken){
    try{if(obj.calendarEventId)await updateCalendarEvent(obj);else await createCalendarEvent(obj);toast("Guardado también en Google Calendar")}
    catch(e){toast("Guardado en OLMS; Calendar no pudo actualizarse")}
@@ -635,7 +690,7 @@ ${conflict.title} · ${panamaDate(conflict.date)} · ${panamaRange(conflict)}`);
 }
 function openDetail(id,tab="summary"){
  const a=state.activities.find(x=>x.id===id);if(!a)return;let s=status(a);
- $("detailBody").innerHTML=`<button class="iconbtn close" onclick="detailDlg.close()">✕</button><h2>${a.title}</h2><span class="badge ${s[0]}">${s[1]}</span><p class="muted">${panamaDate(a.date)} · ${panamaRange(a)} · ${a.venue}</p><div class="tabs"><button class="${tab==="summary"?"active":""}" onclick="openDetail('${id}','summary')">Resumen</button><button class="${tab==="payments"?"active":""}" onclick="openDetail('${id}','payments')">Pagos</button><button class="${tab==="expenses"?"active":""}" onclick="openDetail('${id}','expenses')">Gastos</button><button class="${tab==="route"?"active":""}" onclick="openDetail('${id}','route')">Cómo llegar</button></div>${detailTab(a,tab)}<div class="row" style="margin-top:14px"><button class="btn ghost" onclick="detailDlg.close();openActivityForm('${id}')">Editar actividad</button><button class="btn danger" onclick="deleteActivity('${id}')">Mover a eliminados</button></div>`;detailDlg.showModal()
+ $("detailBody").innerHTML=`<button class="iconbtn close" onclick="D('detailDlg').close()">✕</button><h2>${a.title}</h2><span class="badge ${s[0]}">${s[1]}</span><p class="muted">${panamaDate(a.date)} · ${panamaRange(a)} · ${a.venue}</p><div class="tabs"><button class="${tab==="summary"?"active":""}" onclick="openDetail('${id}','summary')">Resumen</button><button class="${tab==="payments"?"active":""}" onclick="openDetail('${id}','payments')">Pagos</button><button class="${tab==="expenses"?"active":""}" onclick="openDetail('${id}','expenses')">Gastos</button><button class="${tab==="route"?"active":""}" onclick="openDetail('${id}','route')">Cómo llegar</button></div>${detailTab(a,tab)}<div class="row" style="margin-top:14px"><button class="btn ghost" onclick="D('detailDlg').close();openActivityForm('${id}')">Editar actividad</button><button class="btn danger" onclick="deleteActivity('${id}')">Mover a eliminados</button></div>`;D('detailDlg').showModal()
 }
 function detailTab(a,tab){
  if(tab==="payments")return paymentsTab(a);
@@ -677,6 +732,14 @@ function expensesTab(a){
 function paymentsTab(a){
  return`<div class="info"><div class="box"><small>Esperado</small><b>${money(a.expected)}</b></div><div class="box"><small>Final acordado</small><b>${money(finalAmt(a))}</b></div><div class="box"><small>Recibido</small><b>${money(received(a))}</b></div><div class="box"><small>Saldo</small><b>${money(balance(a))}</b></div>${extraordinary(a)>0?`<div class="box"><small>Excedente excepcional</small><b>${money(extraordinary(a))}</b></div>`:""}${negativeAdjustment(a)>0?`<div class="box"><small>Ajuste negativo</small><b>-${money(negativeAdjustment(a))}</b></div>`:""}<div class="box"><small>Regla de pago</small><b>${a.paymentRule||placeConfig(a.venue)?.rule||"Hasta 7 días"}</b></div><div class="box"><small>Fecha estimada</small><b>${due(a)?panamaDate(due(a)):"No aplica"}</b></div></div>${a.paymentAdjustmentNote?`<div class="sectionline"><b>Observación</b><p>${esc(a.paymentAdjustmentNote)}</p></div>`:""}<div class="sectionline"><div class="triphead"><h3>Abonos</h3><button class="btn ghost small" onclick="addPayment('${a.id}')">＋ Agregar abono</button></div>${(a.payments||[]).map((p,i)=>({...p,_i:i})).sort((x,y)=>String(x.date).localeCompare(String(y.date))).map(p=>`<div class="card"><div class="row" style="justify-content:space-between"><span>${panamaDate(p.date)} · <b>${money(p.amount)}</b></span><button class="mini" onclick="delPayment('${a.id}',${p._i})">✕</button></div></div>`).join("")||'<div class="muted">Sin pagos registrados.</div>'}</div>`
 }
+function delPayment(id,i){
+ const a=state.activities.find(x=>x.id===id);if(!a||!a.payments?.[i])return;
+ const old=a.payments.splice(i,1)[0];
+ a.paidFullAdjusted=false;a.paymentAdjustmentNote="";
+ localStorage.setItem(KEY,JSON.stringify(state));render();openDetail(id,"payments");
+ showUndo("Pago eliminado",()=>{a.payments.splice(i,0,old);localStorage.setItem(KEY,JSON.stringify(state));render();openDetail(id,"payments")});
+}
+
 function addPayment(id){
  let a=state.activities.find(x=>x.id===id),amt=prompt("Monto del abono (B/.)");if(amt===null)return;let d=prompt("Fecha (AAAA-MM-DD)",todayISO());if(!d)return;a.payments.push({id:uid(),date:d,amount:Number(amt||0)});a.paidFullAdjusted=false;a.paymentAdjustmentNote="";
  if(received(a)<finalAmt(a)&&confirm(`Has recibido ${money(received(a))} de ${money(finalAmt(a))}.\n\n¿Quieres marcarlo como PAGADO COMPLETO con ajuste?\n\nCancelar = mantener pago parcial.`)){
@@ -704,13 +767,13 @@ let pendingTransportTarget=null;
 function openTransportPicker(id,key){
  pendingTransportTarget={id,key};
  $("transportPicker").innerHTML=TRANSPORTS.map(x=>`<button class="transport-choice" onclick="chooseTransport('${x[0]}')"><img src="${transportIcon(x[0])}" alt="${x[1]}"><span>${x[1]}</span></button>`).join("");
- transportDlg.showModal()
+ D('transportDlg').showModal()
 }
 function chooseTransport(type){
  if(!pendingTransportTarget)return;
  const a=state.activities.find(x=>x.id===pendingTransportTarget.id);
  a.expenses[pendingTransportTarget.key].push({id:uid(),type,amount:null,driver:""});
- const id=a.id;pendingTransportTarget=null;save();transportDlg.close();openDetail(id,"expenses")
+ const id=a.id;pendingTransportTarget=null;save();D('transportDlg').close();openDetail(id,"expenses")
 }
 function addTransport(id,key){openTransportPicker(id,key)}
 function changeTransport(id,key,i,f,v){let a=state.activities.find(x=>x.id===id);a.expenses[key][i][f]=f==="amount"?(v===""?null:Number(v)):v;save();openDetail(id,"expenses")}
@@ -723,10 +786,23 @@ function extraRow(a,e,i){
 function addExtra(id){let a=state.activities.find(x=>x.id===id);a.expenses.extras.push({id:uid(),category:"Comida",subtype:"Snack",amount:null});save();openDetail(id,"expenses")}
 function changeExtra(id,i,f,v){let a=state.activities.find(x=>x.id===id);a.expenses.extras[i][f]=f==="amount"?(v===""?null:Number(v)):v;if(f==="category"){if(v==="Comida")a.expenses.extras[i].subtype="Snack";else if(v==="Hospedaje")a.expenses.extras[i].subtype="Horas";else a.expenses.extras[i].subtype=""}save();openDetail(id,"expenses")}
 function delExtra(id,i){let a=state.activities.find(x=>x.id===id),old=a.expenses.extras.splice(i,1)[0];save();openDetail(id,"expenses");showUndo("Gasto eliminado",()=>{a.expenses.extras.splice(i,0,old);save();openDetail(id,"expenses")})}
-function deleteActivity(id){if(!confirm("¿Mover esta actividad al historial de eliminados?"))return;let i=state.activities.findIndex(x=>x.id===id),a=state.activities.splice(i,1)[0];state.deleted.push(a);save();detailDlg.close();showUndo("Actividad movida a eliminados",()=>{state.deleted=state.deleted.filter(x=>x.id!==id);state.activities.push(a);save()})}
+function deleteActivity(id){if(!confirm("¿Mover esta actividad al historial de eliminados?"))return;let i=state.activities.findIndex(x=>x.id===id),a=state.activities.splice(i,1)[0];state.deleted.push(a);save();D('detailDlg').close();showUndo("Actividad movida a eliminados",()=>{state.deleted=state.deleted.filter(x=>x.id!==id);state.activities.push(a);save()})}
 function restoreDeleted(id){let i=state.deleted.findIndex(x=>x.id===id),a=state.deleted.splice(i,1)[0];state.activities.push(a);save()}
 function reuseDeleted(id){let a=state.deleted.find(x=>x.id===id),c=structuredClone(a);c.id=uid();c.date=todayISO();c.start="20:00";c.end="22:00";c.outcome="";c.payments=[];c.expenses={outbound:[],return:[],extras:[]};state.activities.push(c);save();openActivityForm(c.id)}
 
+
+
+function renderHeaderProfile(){
+ const p=state.settings.profile||{};
+ const av=$("headerAvatar"),sub=$("headerSubtitle");
+ if(av){
+   const src=p.photo||"mambito-logo.png";
+   av.innerHTML=`<img src="${esc(src)}" alt="Perfil">`;
+ }
+ if(sub){
+   sub.textContent=p.name?`${p.name} · La Mambito Sound · v6.4`:`La Mambito Sound · v6.4`;
+ }
+}
 
 async function loadGoogleProfile(force=false){
  if(!googleAccessToken)return toast("Conecta Google para cargar tu perfil");
@@ -743,14 +819,14 @@ async function loadGoogleProfile(force=false){
      state.settings.profile.photo=p.picture||state.settings.profile.photo||"";
      state.settings.profile.customPhoto=false;
    }
-   localStorage.setItem(KEY,JSON.stringify(state));render();toast("Perfil de Google actualizado");
+   localStorage.setItem(KEY,JSON.stringify(state));render();renderHeaderProfile();toast("Perfil de Google actualizado");
  }catch(e){toast("No se pudo cargar el perfil de Google")}
 }
 function saveProfileName(){
  const v=($("profileName")?.value||"").trim();
  state.settings.profile.name=v;
  state.settings.profile.customName=!!v;
- localStorage.setItem(KEY,JSON.stringify(state));render();toast("Perfil guardado")
+ localStorage.setItem(KEY,JSON.stringify(state));render();renderHeaderProfile();toast("Perfil guardado")
 }
 function handleProfilePhoto(file){
  if(!file)return;
@@ -765,7 +841,7 @@ function handleProfilePhoto(file){
      c.getContext("2d").drawImage(img,0,0,w,h);
      state.settings.profile.photo=c.toDataURL("image/jpeg",0.86);
      state.settings.profile.customPhoto=true;
-     localStorage.setItem(KEY,JSON.stringify(state));render();toast("Foto de perfil guardada");
+     localStorage.setItem(KEY,JSON.stringify(state));render();renderHeaderProfile();toast("Foto de perfil guardada");
    };
    img.src=reader.result;
  };
@@ -774,7 +850,7 @@ function handleProfilePhoto(file){
 function restoreGooglePhoto(){
  state.settings.profile.customPhoto=false;
  state.settings.profile.photo=state.settings.profile.googlePhoto||"";
- localStorage.setItem(KEY,JSON.stringify(state));render();toast(state.settings.profile.photo?"Foto de Google restaurada":"Conecta Google para recuperar tu foto")
+ localStorage.setItem(KEY,JSON.stringify(state));render();renderHeaderProfile();toast(state.settings.profile.photo?"Foto de Google restaurada":"Conecta Google para recuperar tu foto")
 }
 
 function saveGoogleClientId(){
@@ -941,15 +1017,15 @@ function renderNotificationBadge(){
 }
 function openNotifications(){
  const items=notificationItems();
- $("notificationBody").innerHTML=`<button class="iconbtn close" onclick="notificationDlg.close()">✕</button><h2>🔔 Notificaciones</h2>
+ $("notificationBody").innerHTML=`<button class="iconbtn close" onclick="D('notificationDlg').close()">✕</button><h2>🔔 Notificaciones</h2>
  <p class="muted">${items.length?`${items.length} aviso${items.length===1?"":"s"} pendiente${items.length===1?"":"s"}.`:"No tienes avisos pendientes."}</p>
- ${items.map(n=>`<div class="notice"><b>${n.title}</b><small>${n.body}</small><div class="notice-actions">${n.activityId?`<button class="btn ghost small" onclick="notificationDlg.close();openDetail('${n.activityId}', '${n.type==="expense"?"expenses":"summary"}')">Abrir</button>`:""}${n.type==="alert"?`<button class="btn ghost small" onclick="markAlertRead('${n.id}')">Marcar leído</button>`:""}</div></div>`).join("")}`;
- if(!notificationDlg.open)notificationDlg.showModal()
+ ${items.map(n=>`<div class="notice"><b>${n.title}</b><small>${n.body}</small><div class="notice-actions">${n.activityId?`<button class="btn ghost small" onclick="D('notificationDlg').close();openDetail('${n.activityId}', '${n.type==="expense"?"expenses":"summary"}')">Abrir</button>`:""}${n.type==="alert"?`<button class="btn ghost small" onclick="markAlertRead('${n.id}')">Marcar leído</button>`:""}</div></div>`).join("")}`;
+ if(!D('notificationDlg').open)D('notificationDlg').showModal()
 }
 function markAlertRead(id){let x=state.alerts.find(a=>a.id===id);if(x)x.read=true;localStorage.setItem(KEY,JSON.stringify(state));render();openNotifications()}
 function promptSnoozed(a){return a.postPromptSnoozedUntil&&new Date(a.postPromptSnoozedUntil)>new Date()}
 function maybePromptPostActivity(force=false){
- if(postActivityDlg.open||activityDlg.open||detailDlg.open||transportDlg.open)return;
+ if(D('postActivityDlg').open||D('activityDlg').open||D('detailDlg').open||D('transportDlg').open)return;
  const a=state.activities.filter(needsConfirmation).filter(x=>force||!promptSnoozed(x)).sort((x,y)=>activityEndTime(x)-activityEndTime(y))[0];
  if(!a)return;
  const rehearsal=a.kind==="ensayo";
@@ -961,11 +1037,11 @@ function maybePromptPostActivity(force=false){
    <button class="btn danger" onclick="confirmPostOutcome('${a.id}','cancelado')">🚫 Se canceló</button>
    <button class="btn ghost" onclick="snoozePostPrompt('${a.id}')">Recordarme después</button>
  </div>`;
- postActivityDlg.showModal()
+ D('postActivityDlg').showModal()
 }
 function snoozePostPrompt(id){
  const a=state.activities.find(x=>x.id===id);if(a)a.postPromptSnoozedUntil=new Date(Date.now()+3*3600000).toISOString();
- localStorage.setItem(KEY,JSON.stringify(state));postActivityDlg.close();render()
+ localStorage.setItem(KEY,JSON.stringify(state));D('postActivityDlg').close();render()
 }
 function confirmPostOutcome(id,outcome){
  const a=state.activities.find(x=>x.id===id);if(!a)return;
@@ -973,7 +1049,7 @@ function confirmPostOutcome(id,outcome){
  if(["realizado","asisti"].includes(outcome)){a.expenseReviewDone=false;a.expensePromptAnswered=false}
  else {a.expenseReviewDone=true;a.expensePromptAnswered=true}
  localStorage.setItem(KEY,JSON.stringify(state));render();
- if(["realizado","asisti"].includes(outcome))showExpenseQuestion(id);else{postActivityDlg.close();setTimeout(maybePromptPostActivity,250)}
+ if(["realizado","asisti"].includes(outcome))showExpenseQuestion(id);else{D('postActivityDlg').close();setTimeout(maybePromptPostActivity,250)}
 }
 function showExpenseQuestion(id){
  const a=state.activities.find(x=>x.id===id);if(!a)return;
@@ -984,14 +1060,14 @@ function showExpenseQuestion(id){
   <button class="btn ghost" onclick="expenseDecision('${id}','none')">No tuve gastos</button>
   <button class="btn ghost" onclick="expenseDecision('${id}','later')">Lo completaré después</button>
  </div>`;
- if(!postActivityDlg.open)postActivityDlg.showModal()
+ if(!D('postActivityDlg').open)D('postActivityDlg').showModal()
 }
 function expenseDecision(id,choice){
  const a=state.activities.find(x=>x.id===id);if(!a)return;
  a.expensePromptAnswered=true;
  if(choice==="none")a.expenseReviewDone=true;
  if(choice==="register"||choice==="later")a.expenseReviewDone=false;
- localStorage.setItem(KEY,JSON.stringify(state));render();postActivityDlg.close();
+ localStorage.setItem(KEY,JSON.stringify(state));render();D('postActivityDlg').close();
  if(choice==="register")openDetail(id,"expenses");
  else setTimeout(maybePromptPostActivity,250)
 }
@@ -1024,16 +1100,21 @@ async function maybeFireNativeNotifications(force=false){
 
 
 function setLiveStage(id,stage){
- const a=state.activities.find(x=>x.id===id);if(!a)return;a.liveStage=stage;save();
- if(stage==="ended")showImmediatePostActivity(id)
+ const a=state.activities.find(x=>x.id===id);if(!a)return;
+ a.liveStage=stage;
+ localStorage.setItem(KEY,JSON.stringify(state));
+ render();
+ const labels={going:"Ya voy",arrived:"Llegué",ended:"Terminó"};
+ toast(`Estado actualizado: ${labels[stage]||stage}`);
+ if(stage==="ended")setTimeout(()=>showImmediatePostActivity(id),120);
 }
 function showImmediatePostActivity(id){
  const a=state.activities.find(x=>x.id===id);if(!a)return;const rehearsal=a.kind==="ensayo";
- $("postActivityBody").innerHTML=`<h2>${rehearsal?"🎵 ¿Asististe al ensayo?":"🎤 ¿Participaste en la actividad?"}</h2><p><b>${esc(a.title)}</b></p><div class="post-actions"><button class="btn primary" onclick="confirmPostOutcome('${a.id}','${rehearsal?"asisti":"realizado"}')">${rehearsal?"✅ Sí, asistí":"✅ Sí, participé"}</button><button class="btn ghost" onclick="confirmPostOutcome('${a.id}','${rehearsal?"no-asisti":"no-participe"}')">${rehearsal?"❌ No asistí":"❌ No participé"}</button><button class="btn danger" onclick="confirmPostOutcome('${a.id}','cancelado')">🚫 Se canceló</button><button class="btn ghost" onclick="postActivityDlg.close()">Cerrar por ahora</button></div>`;if(!postActivityDlg.open)postActivityDlg.showModal()
+ $("postActivityBody").innerHTML=`<h2>${rehearsal?"🎵 ¿Asististe al ensayo?":"🎤 ¿Participaste en la actividad?"}</h2><p><b>${esc(a.title)}</b></p><div class="post-actions"><button class="btn primary" onclick="confirmPostOutcome('${a.id}','${rehearsal?"asisti":"realizado"}')">${rehearsal?"✅ Sí, asistí":"✅ Sí, participé"}</button><button class="btn ghost" onclick="confirmPostOutcome('${a.id}','${rehearsal?"no-asisti":"no-participe"}')">${rehearsal?"❌ No asistí":"❌ No participé"}</button><button class="btn danger" onclick="confirmPostOutcome('${a.id}','cancelado')">🚫 Se canceló</button><button class="btn ghost" onclick="D('postActivityDlg').close()">Cerrar por ahora</button></div>`;if(!D('postActivityDlg').open)D('postActivityDlg').showModal()
 }
 function openNavigate(id){
  const a=state.activities.find(x=>x.id===id);if(!a)return;const d=encodeURIComponent(a.location||a.venue||"");
- $("navBody").innerHTML=`<button class="iconbtn close close-sheet" onclick="navDlg.close()">✕</button><h2>📍 Navegar</h2><p class="muted">Elige cómo quieres abrir la ruta hacia ${esc(a.venue||"la actividad")}.</p><div class="nav-options"><a class="maps" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=${d}">Google Maps</a><a class="uber" target="_blank" href="https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[formatted_address]=${d}">Uber</a></div>`;navDlg.showModal()
+ $("navBody").innerHTML=`<button class="iconbtn close close-sheet" onclick="D('navDlg').close()">✕</button><h2>📍 Navegar</h2><p class="muted">Elige cómo quieres abrir la ruta hacia ${esc(a.venue||"la actividad")}.</p><div class="nav-options"><a class="maps" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=${d}">Google Maps</a><a class="uber" target="_blank" href="https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[formatted_address]=${d}">Uber</a></div>`;D('navDlg').showModal()
 }
 let quickExpenseState=null;
 function recentAmounts(a,category,subtype="",transport=""){
@@ -1045,32 +1126,44 @@ function recentAmounts(a,category,subtype="",transport=""){
 function habitualTransport(a,side){const counts={};state.activities.filter(x=>x.venue===a.venue).forEach(x=>(x.expenses?.[side]||[]).forEach(t=>counts[t.type]=(counts[t.type]||0)+1));return Object.entries(counts).sort((x,y)=>y[1]-x[1])[0]?.[0]||"uber"}
 function openQuickExpense(id,category){const a=state.activities.find(x=>x.id===id),side=(a?.liveStage==="ended"||done(a))?"return":"outbound";quickExpenseState={id,category,subtype:category==="Comida"?"Cena":category==="Hospedaje"?"Noches":"",transport:a?habitualTransport(a,side):"uber",side};renderQuickExpense()}
 function renderQuickExpense(){
- const q=quickExpenseState,a=state.activities.find(x=>x.id===q.id);if(!a)return;let choices="",extra="";
+ const q=quickExpenseState,a=state.activities.find(x=>x.id===q.id);if(!a)return;
+ let choices="",extra="";
  if(q.category==="Comida")choices=`<div class="choice-pills">${FOOD.map(x=>`<button class="choice-pill ${q.subtype===x?"active":""}" onclick="quickExpenseState.subtype='${x}';renderQuickExpense()">${x}</button>`).join("")}</div>`;
  if(q.category==="Hospedaje")choices=`<div class="choice-pills"><button class="choice-pill ${q.subtype==="Horas"?"active":""}" onclick="quickExpenseState.subtype='Horas';renderQuickExpense()">Horas</button><button class="choice-pill ${q.subtype==="Noches"?"active":""}" onclick="quickExpenseState.subtype='Noches';renderQuickExpense()">Noches</button></div>`;
  if(q.category==="Transporte"){
    if(!q.side)q.side=(a.liveStage==="ended"||done(a))?"return":"outbound";
-   choices=`<div class="choice-pills"><button class="choice-pill ${q.side==="outbound"?"active":""}" onclick="quickExpenseState.side='outbound';renderQuickExpense()">Ida</button><button class="choice-pill ${q.side==="return"?"active":""}" onclick="quickExpenseState.side='return';renderQuickExpense()">Regreso</button></div><div class="transport-picker">${TRANSPORTS.map(x=>`<button class="transport-choice ${q.transport===x[0]?"active":""}" onclick="quickExpenseState.transport='${x[0]}';renderQuickExpense()"><img src="${transportIcon(x[0])}" alt="${x[1]}"><span>${x[1]}</span></button>`).join("")}</div>`
+   choices=`<div class="choice-pills"><button class="choice-pill ${q.side==="outbound"?"active":""}" onclick="quickExpenseState.side='outbound';renderQuickExpense()">Ida</button><button class="choice-pill ${q.side==="return"?"active":""}" onclick="quickExpenseState.side='return';renderQuickExpense()">Regreso</button></div>
+   <div class="transport-picker">${TRANSPORTS.map(x=>`<button class="transport-choice ${q.transport===x[0]?"active":""}" onclick="quickExpenseState.transport='${x[0]}';renderQuickExpense()"><img src="${transportIcon(x[0])}" alt="${x[1]}"><span>${x[1]}</span></button>`).join("")}</div>`;
  }
- if(q.category==="Otro")extra=`<div class="field"><label>Detalle</label><input id="quickDetail" placeholder="Ej. Vestuario, entrada, propina..."></div>`;
+ if(q.category==="Otro")extra=`<div class="field"><label>Detalle</label><input id="quickDetail" placeholder="Ej. vestuario, estacionamiento..."></div>`;
  const recent=recentAmounts(a,q.category,q.subtype,q.transport);
- $("quickExpenseBody").innerHTML=`<div class="quick-sheet"><button class="iconbtn close" onclick="quickExpenseDlg.close()">✕</button><h2>${q.category==="Transporte"?"🚗":q.category==="Comida"?"🍽️":q.category==="Hospedaje"?"🏨":"＋"} ${q.category}</h2><p class="muted">${esc(a.title)} · ${panamaDate(a.date)} · gasto real</p>${choices}${extra}<div class="field"><label>Monto</label><input id="quickAmount" class="amount-box" type="number" inputmode="decimal" step=".01" min="0" placeholder="B/. 0.00"></div>${recent.length?`<div><small class="muted">Importes usados recientemente</small><div class="recent-amounts">${recent.map(v=>`<button onclick="$('quickAmount').value='${v.toFixed(2)}'">${money(v)}</button>`).join("")}</div></div>`:""}<div class="row" style="margin-top:15px"><button class="btn primary" onclick="saveQuickExpense()">Guardar gasto</button><button class="btn ghost" onclick="quickExpenseDlg.close()">Cancelar</button></div></div>`;if(!quickExpenseDlg.open)quickExpenseDlg.showModal()
+ const current=$("quickAmount")?.value||"";
+ $("quickExpenseBody").innerHTML=`<div class="quick-sheet"><button class="iconbtn close" onclick="D('quickExpenseDlg').close()">✕</button>
+ <h2>${q.category==="Transporte"?"🚗":q.category==="Comida"?"🍽️":q.category==="Hospedaje"?"🏨":"＋"} ${q.category}</h2>
+ <p class="muted">${esc(a.title)} · ${panamaDate(a.date)}</p>
+ <div class="field"><label>Monto pagado</label><input id="quickAmount" class="amount-box" type="number" inputmode="decimal" step=".01" min="0" placeholder="B/. 0.00" value="${esc(current)}"></div>
+ ${recent.length?`<div><small class="muted">Montos usados recientemente</small><div class="recent-amounts">${recent.map(v=>`<button onclick="$('quickAmount').value='${v.toFixed(2)}'">${money(v)}</button>`).join("")}</div></div>`:""}
+ ${choices}${extra}
+ <div class="quick-savebar"><button class="btn primary" onclick="saveQuickExpense()">Guardar gasto</button></div>
+ </div>`;
+ if(!D('quickExpenseDlg').open)D('quickExpenseDlg').showModal();
+ setTimeout(()=>{const el=$("quickAmount");if(el)el.focus({preventScroll:true})},80);
 }
 function saveQuickExpense(){
- const q=quickExpenseState,a=state.activities.find(x=>x.id===q.id);if(!a)return;const amount=Number($("quickAmount").value||0);if(!amount&&$("quickAmount").value!=="0")return toast("Escribe el monto del gasto");
+ const q=quickExpenseState,a=state.activities.find(x=>x.id===q.id);if(!a)return;const raw=($("quickAmount")?.value||"").trim();if(raw==="")return toast("Escribe el monto del gasto");const amount=Number(raw);if(!Number.isFinite(amount)||amount<0)return toast("Monto no válido");
  const projected=expTotal(a)+amount;if(finalAmt(a)>0&&projected>=finalAmt(a)*.5&&!confirm(`⚠️ Con este gasto ya habrás consumido al menos la mitad de lo acordado para este evento.\n\n¿Registrar el gasto de todas formas?`))return;
  if(q.category==="Transporte")a.expenses[q.side].push({id:uid(),type:q.transport,amount,driver:""});
  else a.expenses.extras.push({id:uid(),category:q.category==="Otro"?"Otro":q.category,subtype:q.category==="Otro"?($("quickDetail")?.value||""):q.subtype,amount});
- a.expensePromptAnswered=true;localStorage.setItem(KEY,JSON.stringify(state));quickExpenseDlg.close();render();if(detailDlg.open)openDetail(a.id,"expenses");toast("Gasto agregado")
+ a.expensePromptAnswered=true;localStorage.setItem(KEY,JSON.stringify(state));D('quickExpenseDlg').close();render();if(D('detailDlg').open)openDetail(a.id,"expenses");toast("Gasto agregado")
 }
 function reviewCalendarLocation(id){
  const a=state.activities.find(x=>x.id===id);if(!a?.pendingCalendarLocation)return;const loc=a.pendingCalendarLocation,venue=a.pendingCalendarVenue||loc.split(",")[0];
  if(!confirm(`Google Calendar cambió la ubicación a:\n${loc}\n\n¿Aplicar esta nueva ubicación en Control OLMS?`))return;
  a.location=loc;if(venue)a.venue=venue;a.pendingCalendarLocation="";a.pendingCalendarVenue="";
  const p=placeConfig(a.venue);if(p&&isUpcoming(a)&&confirm("¿Aplicar también la tarifa y regla de pago habituales del nuevo lugar a esta actividad futura?")){a.expected=p.rate??a.expected;a.final=p.rate??a.final;a.paymentRule=p.rule||a.paymentRule}
- save();if(detailDlg.open)openDetail(id,"summary");toast("Ubicación actualizada")
+ save();if(D('detailDlg').open)openDetail(id,"summary");toast("Ubicación actualizada")
 }
-function dismissCalendarLocation(id){const a=state.activities.find(x=>x.id===id);if(!a)return;a.pendingCalendarLocation="";a.pendingCalendarVenue="";save();if(detailDlg.open)openDetail(id,"summary")}
+function dismissCalendarLocation(id){const a=state.activities.find(x=>x.id===id);if(!a)return;a.pendingCalendarLocation="";a.pendingCalendarVenue="";save();if(D('detailDlg').open)openDetail(id,"summary")}
 
 async function maybeAutoCalendarSync(){
  if(!googleAccessToken)return;
@@ -1092,7 +1185,22 @@ if("serviceWorker" in navigator && location.protocol.startsWith("http"))navigato
 function showUndo(msg,fn){undoAction=fn;let t=$("toast");t.innerHTML=`${msg} &nbsp; <button style="border:0;background:transparent;color:#e5c15a;font-weight:900" onclick="undoNow()">DESHACER</button>`;t.style.display="block";clearTimeout(window.tt);window.tt=setTimeout(()=>{t.style.display="none";undoAction=null},5000)}
 function undoNow(){if(undoAction)undoAction();$("toast").style.display="none";undoAction=null}
 function toast(msg){let t=$("toast");t.textContent=msg;t.style.display="block";clearTimeout(window.tt);window.tt=setTimeout(()=>t.style.display="none",2600)}
-function render(){renderDash();renderActivities();renderCalendar();renderPayments();renderMore();renderNotificationBadge()}
+function safeRender(fn,label){
+ try{fn()}catch(e){
+   console.error(`Error en ${label}:`,e);
+   const el=$(label);
+   if(el)el.innerHTML=`<div class="card"><b>No se pudo cargar esta sección.</b><div class="muted">Vuelve a abrirla o recarga la app.</div></div>`;
+ }
+}
+function render(){
+ safeRender(renderDash,"dashboard");
+ safeRender(renderActivities,"activities");
+ safeRender(renderCalendar,"calendar");
+ safeRender(renderPayments,"payments");
+ safeRender(renderMore,"more");
+ try{renderNotificationBadge()}catch(e){console.error("Notificaciones",e)}
+ renderHeaderProfile();
+}
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll("main section").forEach(x=>x.classList.add("hidden"));$(b.dataset.view).classList.remove("hidden")});
 $("akind").onchange=()=>{
  if($("akind").value==="ensayo"){
@@ -1110,7 +1218,8 @@ $("aexpected").addEventListener("input",()=>{if(autoFinal)$("afinal").value=$("a
 $("afinal").addEventListener("input",()=>{autoFinal=false});
 $("afree").addEventListener("change",syncFreeFields);
 render();
-setTimeout(()=>{const sp=$("splash");if(sp){sp.classList.add("hide");setTimeout(()=>sp.remove(),260)}},1000);
+clearTimeout(window.__olmsBootTimer);
+setTimeout(()=>{const sp=$("splash");if(sp){sp.classList.add("hide");setTimeout(()=>sp.remove(),260)}},900);
 setTimeout(()=>{maybeAutoCalendarSync();maybePromptPostActivity();maybeFireNativeNotifications();},1100);
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){render();setTimeout(()=>{maybeAutoCalendarSync();maybePromptPostActivity();maybeFireNativeNotifications();},250)}});
 window.addEventListener("focus",()=>{render();setTimeout(()=>{maybeAutoCalendarSync();maybePromptPostActivity();maybeFireNativeNotifications();},250)});
