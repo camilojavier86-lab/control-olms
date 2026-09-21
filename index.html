@@ -112,7 +112,7 @@ a.btn{text-decoration:none;display:inline-block}
   </div>
 </div>
 <header>
-  <div class="brand"><div class="logo" id="headerAvatar"><img src="mambito-logo.png" alt="Perfil"></div><div><b>Control OLMS</b><small id="headerSubtitle">La Mambito Sound · v6.4</small></div></div>
+  <div class="brand"><div class="logo" id="headerAvatar"><img src="mambito-logo.png" alt="Perfil"></div><div><b>Control OLMS</b><small id="headerSubtitle">La Mambito Sound · v6.5</small></div></div>
   <div class="header-actions">
   <button class="iconbtn bellbtn" onclick="openNotifications()" aria-label="Notificaciones">🔔<span id="notifBadge" class="notif-badge hidden">0</span></button>
   <button class="iconbtn" onclick="calendarQuickAction()" aria-label="Sincronizar Google Calendar">↻</button>
@@ -253,24 +253,9 @@ if(state.settings.profile.googlePhoto===undefined)state.settings.profile.googleP
 if(state.settings.profile.customName===undefined)state.settings.profile.customName=false;
 if(state.settings.profile.customPhoto===undefined)state.settings.profile.customPhoto=false;
 state.settings.placeDefaults=state.settings.placeDefaults||{};
-state.alerts=state.alerts||[];
-state.deleted=state.deleted||[];
-(state.activities||[]).forEach(a=>{
- a.payments=a.payments||[];
- a.expenses=a.expenses||{outbound:[],return:[],extras:[]};
- a.expenses.outbound=a.expenses.outbound||[];
- a.expenses.return=a.expenses.return||[];
- a.expenses.extras=a.expenses.extras||[];
- [...a.expenses.outbound,...a.expenses.return].forEach(t=>{if(t.driver===undefined)t.driver=""});
- if(a.paymentRule===undefined)a.paymentRule="";
- if(a.expenseReviewDone===undefined)a.expenseReviewDone=!!a.outcome;
- if(a.expensePromptAnswered===undefined)a.expensePromptAnswered=!!a.outcome;
- if(a.liveStage===undefined)a.liveStage="";
- if(a.paidFullAdjusted===undefined)a.paidFullAdjusted=false;
- if(a.paymentAdjustmentNote===undefined)a.paymentAdjustmentNote="";
- if(a.pendingCalendarLocation===undefined)a.pendingCalendarLocation="";
- if(a.pendingCalendarVenue===undefined)a.pendingCalendarVenue="";
-});
+state.alerts=Array.isArray(state.alerts)?state.alerts:[];
+state.deleted=Array.isArray(state.deleted)?state.deleted:[];
+state.activities=Array.isArray(state.activities)?state.activities:[];
 const CALENDAR_SYNC_START="2026-06-01";
 const CALENDAR_SYNC_START_ISO="2026-06-01T00:00:00-05:00";
 
@@ -286,34 +271,39 @@ if(!state.settings.calendarCutoffMigrationV63){
 
 function normalizeActivity(a){
  if(!a||typeof a!=="object")a={};
- a.id=a.id||uid();
- a.title=a.title||a.type||"Actividad Mambito Sound";
- a.kind=a.kind||"presentacion";
- a.type=a.type||"Otro";
- a.date=a.date||todayISO();
- a.start=a.start||"20:00";
- a.end=a.end||"22:00";
- a.venue=a.venue||"";
- a.location=a.location||"";
- a.payments=Array.isArray(a.payments)?a.payments:[];
+ const fallbackDate=(()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`})();
+ const makeId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+ a.id=String(a.id||makeId());
+ a.title=String(a.title||a.type||"Actividad Mambito Sound");
+ a.kind=String(a.kind||"presentacion");
+ a.type=String(a.type||"Otro");
+ a.date=(typeof a.date==="string"&&/^\d{4}-\d{2}-\d{2}/.test(a.date))?a.date.slice(0,10):fallbackDate;
+ a.start=(typeof a.start==="string"&&/^\d{1,2}:\d{2}/.test(a.start))?a.start.slice(0,5):"20:00";
+ a.end=(typeof a.end==="string"&&/^\d{1,2}:\d{2}/.test(a.end))?a.end.slice(0,5):"22:00";
+ a.venue=String(a.venue||"");
+ a.location=String(a.location||"");
+ a.province=String(a.province||"");
+ a.payments=(Array.isArray(a.payments)?a.payments:[]).filter(p=>p&&typeof p==="object").map(p=>({
+   ...p,id:String(p.id||makeId()),date:(typeof p.date==="string"&&/^\d{4}-\d{2}-\d{2}/.test(p.date))?p.date.slice(0,10):a.date,amount:(p.amount==null||p.amount==="")?0:Number(p.amount)||0
+ }));
  a.expenses=(a.expenses&&typeof a.expenses==="object")?a.expenses:{};
- a.expenses.outbound=Array.isArray(a.expenses.outbound)?a.expenses.outbound:[];
- a.expenses.return=Array.isArray(a.expenses.return)?a.expenses.return:[];
- a.expenses.extras=Array.isArray(a.expenses.extras)?a.expenses.extras:[];
- [...a.expenses.outbound,...a.expenses.return].forEach(t=>{
-   if(!t.id)t.id=uid();
-   if(t.type===undefined)t.type="taxi";
-   if(t.amount===undefined)t.amount=null;
-   if(t.driver===undefined)t.driver="";
- });
- a.expenses.extras.forEach(e=>{
-   if(!e.id)e.id=uid();
-   if(e.category===undefined)e.category="Otro";
-   if(e.subtype===undefined)e.subtype="";
-   if(e.amount===undefined)e.amount=null;
- });
- if(a.liveStage===undefined)a.liveStage="";
- if(a.outcome===undefined)a.outcome="";
+ const cleanExpense=(e,transport=false)=>{
+   if(!e||typeof e!=="object")e={};
+   return {...e,id:String(e.id||makeId()),type:transport?String(e.type||"taxi"):e.type,amount:(e.amount===undefined?null:e.amount),driver:transport?String(e.driver||""):e.driver,category:transport?e.category:String(e.category||"Otro"),subtype:transport?e.subtype:String(e.subtype||"")}
+ };
+ a.expenses.outbound=(Array.isArray(a.expenses.outbound)?a.expenses.outbound:[]).map(e=>cleanExpense(e,true));
+ a.expenses.return=(Array.isArray(a.expenses.return)?a.expenses.return:[]).map(e=>cleanExpense(e,true));
+ a.expenses.extras=(Array.isArray(a.expenses.extras)?a.expenses.extras:[]).map(e=>cleanExpense(e,false));
+ a.liveStage=String(a.liveStage||"");
+ a.outcome=String(a.outcome||"");
+ a.paymentRule=String(a.paymentRule||"");
+ a.notes=String(a.notes||"");
+ a.pendingCalendarLocation=String(a.pendingCalendarLocation||"");
+ a.pendingCalendarVenue=String(a.pendingCalendarVenue||"");
+ a.expenseReviewDone=!!a.expenseReviewDone;
+ a.expensePromptAnswered=!!a.expensePromptAnswered;
+ a.paidFullAdjusted=!!a.paidFullAdjusted;
+ a.paymentAdjustmentNote=String(a.paymentAdjustmentNote||"");
  return a;
 }
 state.activities=(Array.isArray(state.activities)?state.activities:[]).map(normalizeActivity);
@@ -371,12 +361,12 @@ function daysBetween(a,b){return Math.floor((new Date(`${a}T12:00:00-05:00`)-new
 const done=a=>["realizado","asisti"].includes(a.outcome);
 const closed=a=>["cancelado","no-participe","no-asisti"].includes(a.outcome);
 const finalAmt=a=>a.free?0:Number(a.final??a.expected??0);
-const received=a=>(a.payments||[]).reduce((s,p)=>s+Number(p.amount||0),0);
+const received=a=>(Array.isArray(a?.payments)?a.payments:[]).reduce((s,p)=>s+Number(p?.amount||0),0);
 const balance=a=>a.paidFullAdjusted?0:Math.max(0,finalAmt(a)-received(a));
 const extraordinary=a=>Math.max(0,received(a)-finalAmt(a));
 const negativeAdjustment=a=>a.paidFullAdjusted?Math.max(0,finalAmt(a)-received(a)):0;
-function expTotal(a){let x=a.expenses||{outbound:[],return:[],extras:[]};return [...x.outbound,...x.return,...x.extras].reduce((s,e)=>s+(e.amount==null?0:Number(e.amount||0)),0)}
-function pendingExp(a){let x=a.expenses||{outbound:[],return:[],extras:[]};return [...x.outbound,...x.return,...x.extras].filter(e=>e.amount==null||e.amount==="").length}
+function expTotal(a){let x=(a?.expenses&&typeof a.expenses==="object")?a.expenses:{};let all=[...(Array.isArray(x.outbound)?x.outbound:[]),...(Array.isArray(x.return)?x.return:[]),...(Array.isArray(x.extras)?x.extras:[])];return all.reduce((s,e)=>s+(e?.amount==null?0:Number(e.amount)||0),0)}
+function pendingExp(a){let x=(a?.expenses&&typeof a.expenses==="object")?a.expenses:{};let all=[...(Array.isArray(x.outbound)?x.outbound:[]),...(Array.isArray(x.return)?x.return:[]),...(Array.isArray(x.extras)?x.extras:[])];return all.filter(e=>e&& (e.amount==null||e.amount==="")).length}
 const earned=a=>done(a)&&!a.free?(a.paidFullAdjusted?received(a):Math.max(finalAmt(a),received(a))):0;
 function due(a){
  if(a.free)return null;
@@ -409,7 +399,7 @@ function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
 function periodArr(){
  return state.activities.filter(a=>{
   if(periodMode==="all")return a.date>=CALENDAR_SYNC_START;
-  const [y,m]=a.date.split("-").map(Number);
+  const [y,m]=String(a.date||"").split("-").map(Number);
   if(periodMode==="year")return y===periodYear;
   if(periodMode==="quarter")return y===periodYear && Math.floor((m-1)/3)===Math.floor(periodMonth/3);
   return y===periodYear && (m-1)===periodMonth;
@@ -420,17 +410,17 @@ function kpis(){
  const dev=comp.reduce((s,a)=>s+earned(a),0),rec=comp.reduce((s,a)=>s+Math.min(received(a),finalAmt(a)),0),pend=comp.reduce((s,a)=>s+balance(a),0),venc=comp.filter(a=>payStatus(a)==="overdue").reduce((s,a)=>s+balance(a),0),g=arr.reduce((s,a)=>s+expTotal(a),0);
  return {arr,dev,rec,pend,venc,g,net:dev-g,gigs:comp.filter(a=>a.kind==="presentacion").length,ens:comp.filter(a=>a.kind==="ensayo").length,up:arr.filter(isUpcoming).length,confirm:arr.filter(needsConfirmation).length,free:comp.filter(a=>a.free).length,pendingExp:arr.reduce((s,a)=>s+pendingExp(a),0)}
 }
-function periodLabel(){if(periodMode==="all")return"Acumulado desde ago 2026";if(periodMode==="year")return String(periodYear);if(periodMode==="quarter")return`T${Math.floor(periodMonth/3)+1} ${periodYear}`;return new Intl.DateTimeFormat("es-PA",{month:"long",year:"numeric"}).format(new Date(periodYear,periodMonth,1))}
+function periodLabel(){if(periodMode==="all")return"Acumulado desde jun 2026";if(periodMode==="year")return String(periodYear);if(periodMode==="quarter")return`T${Math.floor(periodMonth/3)+1} ${periodYear}`;return new Intl.DateTimeFormat("es-PA",{month:"long",year:"numeric"}).format(new Date(periodYear,periodMonth,1))}
 function periodControls(){return`<div class="period"><button onclick="movePeriod(-1)">‹</button><b>${periodLabel()}</b><button onclick="movePeriod(1)">›</button><select onchange="periodMode=this.value;render()" ><option value="month" ${periodMode==="month"?"selected":""}>Mes</option><option value="quarter" ${periodMode==="quarter"?"selected":""}>Trimestre</option><option value="year" ${periodMode==="year"?"selected":""}>Año</option><option value="all" ${periodMode==="all"?"selected":""}>Acumulado</option></select></div>`}
 function movePeriod(d){if(periodMode==="all")return;if(periodMode==="year")periodYear+=d;else if(periodMode==="quarter"){periodMonth+=d*3;while(periodMonth<0){periodMonth+=12;periodYear--}while(periodMonth>11){periodMonth-=12;periodYear++}}else{periodMonth+=d;if(periodMonth<0){periodMonth=11;periodYear--}if(periodMonth>11){periodMonth=0;periodYear++}}render()}
 function card(a){
- const dd=a.date.split("-"),mon=["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"][+dd[1]-1],s=status(a);
+ const dd=String(a.date||todayISO()).split("-"),mon=["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"][+dd[1]-1],s=status(a);
  return`<div class="card activity" onclick="openDetail('${a.id}')"><div class="date"><b>${dd[2]}</b><small>${mon}</small></div><div class="main"><b>${a.title}</b><div>${panamaDate(a.date)} · ${panamaRange(a)} · ${a.venue||"Lugar pendiente"}</div></div><span class="badge ${s[0]}">${s[1]}</span></div>`
 }
-function eventStartTime(a){return new Date(`${a.date}T${a.start||"00:00"}:00-05:00`)}
+function eventStartTime(a){const d=String(a?.date||todayISO()),t=String(a?.start||"00:00");const x=new Date(`${d}T${t}:00-05:00`);return Number.isNaN(x.getTime())?new Date(8640000000000000):x}
 function todayActivity(){
  const t=todayISO();
- return state.activities.filter(a=>a.date===t&&!closed(a)).sort((a,b)=>a.start.localeCompare(b.start))[0]||null;
+ return state.activities.filter(a=>String(a.date||"")===t&&!closed(a)).sort((a,b)=>String(a.start||"").localeCompare(String(b.start||"")))[0]||null;
 }
 function nextActivity(){return state.activities.filter(isUpcoming).sort((a,b)=>eventStartTime(a)-eventStartTime(b))[0]||null}
 function countdownText(a){
@@ -440,7 +430,9 @@ function countdownText(a){
 function kindLabel(a){return a.kind==="ensayo"?"🎵 Ensayo":a.kind==="viaje"?"✈️ Viaje":a.kind==="grabacion"?"🎙️ Grabación":a.kind==="promocion"?"📣 Promoción":"🎤 Presentación"}
 function displayEventTitle(a){return `${a.type||a.title||"Actividad"}${a.venue?` | ${a.venue}`:""}`}
 function journeyButton(a,key,label){
- const order={"":0,going:1,arrived:2,ended:3},idx={going:1,arrived:2,ended:3}[key],cl=order[a.liveStage]>=idx?"done":"";if(a.liveStage===key)cl="active";
+ const order={"":0,going:1,arrived:2,ended:3},idx={going:1,arrived:2,ended:3}[key];
+ let cl=order[a.liveStage]>=idx?"done":"";
+ if(a.liveStage===key)cl="active";
  return `<button class="live-step ${cl}" onclick="setLiveStage('${a.id}','${key}')">${label}</button>`
 }
 function todayHero(a){
@@ -473,7 +465,13 @@ function financialDashboard(){
  let k=kpis();const cards=dashMode==="money"?[["dev","Ingresos devengados",money(k.dev),"gold"],["rec","Cobrado",money(k.rec),"green"],["pend","Pendiente",money(k.pend),"orange"],["venc","Vencido",money(k.venc),"red"],["g","Gastos",money(k.g),"blue"],["net","Ganancia neta",money(k.net),k.net>=0?"green":"red"]]:[["gigs","Toques realizados",k.gigs,"green"],["ens","Ensayos asistidos",k.ens,"blue"],["up","Próximas actividades",k.up,"gold"],["confirm","Pendientes de confirmar",k.confirm,"red"],["free","Actividades gratis",k.free,"purple"],["pexp","Gastos incompletos",k.pendingExp,"orange"]];
  const next=nextActivity();return `<div class="dash-title"><div><h2>Resumen financiero</h2><div class="muted">Todo se recalcula en tiempo real.</div></div><div class="segment"><button class="${dashMode==="money"?"active":""}" onclick="dashMode='money';renderDash()">💰 Montos</button><button class="${dashMode==="count"?"active":""}" onclick="dashMode='count';renderDash()">🔢 Cantidades</button></div></div>${periodControls()}<div class="kpis">${cards.map(c=>`<button class="kpi ${c[3]}" onclick="openKpi('${c[0]}')"><span>${c[1]}</span><strong>${c[2]}</strong></button>`).join("")}</div><button class="expense-hub-btn" onclick="openExpenseHub()">💸 Registrar / revisar gastos</button>${nextCapsule(next)}<h3 style="margin-top:16px">Próximas actividades</h3>${state.activities.filter(isUpcoming).sort(chronological).slice(0,5).map(card).join("")||'<div class="empty">Sin próximas actividades.</div>'}`
 }
-function renderDash(){const today=todayActivity();$("dashboard").innerHTML=today?todayHero(today)+financialDashboard():financialDashboard()}
+function renderDash(){
+ const host=$("dashboard");if(!host)return;
+ let hero="",finance="";
+ try{const today=todayActivity();if(today)hero=todayHero(normalizeActivity(today))}catch(e){console.error("Hero de hoy",e)}
+ try{finance=financialDashboard()}catch(e){console.error("Dashboard financiero",e);finance=`<div class="card"><b>Resumen financiero temporalmente no disponible.</b><div class="muted">Tus actividades siguen guardadas. Revisa Actividades o Pagos.</div></div>`}
+ host.innerHTML=hero+finance;
+}
 
 function renderActivities(){
  $("activities").innerHTML=`<div class="toprow"><div><h2>Actividades</h2><div class="muted">Guardar nunca bloquea un registro.</div></div><button class="btn primary" onclick="openActivityForm()">＋ Nueva</button></div><div class="field"><label>Buscar</label><input id="searchAct" placeholder="Lugar, tipo, fecha..." oninput="filterActs(this.value)"></div><div id="actList">${[...state.activities].sort(chronological).map(card).join("")}</div>`
@@ -800,7 +798,7 @@ function renderHeaderProfile(){
    av.innerHTML=`<img src="${esc(src)}" alt="Perfil">`;
  }
  if(sub){
-   sub.textContent=p.name?`${p.name} · La Mambito Sound · v6.4`:`La Mambito Sound · v6.4`;
+   sub.textContent=p.name?`${p.name} · La Mambito Sound · v6.5`:`La Mambito Sound · v6.5`;
  }
 }
 
