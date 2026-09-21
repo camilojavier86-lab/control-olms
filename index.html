@@ -60,12 +60,42 @@ a.btn{text-decoration:none;display:inline-block}
 .transport-preview img{width:54px;height:54px;object-fit:cover;border-radius:12px;border:1px solid var(--line)}
 @media(max-width:560px){.transport-picker{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
+
+.header-actions{display:flex;gap:7px;align-items:center}.bellbtn{position:relative}.notif-badge{position:absolute;right:-3px;top:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#d64545;color:white;font-size:10px;font-weight:900;display:grid;place-items:center}.notif-badge.hidden{display:none}
+.confirm{background:#d9a62122;color:#8a6811}.notice{border:1px solid var(--line);border-radius:13px;padding:10px;margin:8px 0;background:#fff}.notice b{display:block}.notice small{display:block;color:var(--muted);margin-top:3px}.notice-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.post-actions{display:grid;grid-template-columns:1fr;gap:9px;margin-top:14px}.post-actions .btn{width:100%}.native-state{font-weight:800}
+
+
+.profile-card{display:grid;grid-template-columns:84px 1fr;gap:14px;align-items:center}
+.profile-avatar{width:84px;height:84px;border-radius:50%;object-fit:cover;border:3px solid #c9a227;background:#ece9df}
+.profile-avatar.fallback{display:grid;place-items:center;font-size:30px;font-weight:900;color:#c9a227;background:#111}
+.profile-meta h3{margin:0 0 3px}.profile-meta .muted{overflow-wrap:anywhere}
+.profile-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.profile-edit{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+@media(max-width:430px){.profile-card{grid-template-columns:70px 1fr}.profile-avatar{width:70px;height:70px}}
+
+/* ===== Control OLMS v6 experience ===== */
+.splash-screen{position:fixed;inset:0;z-index:9999;background:#f7f3e8;display:grid;place-items:center;overflow:hidden;transition:opacity .22s ease,visibility .22s ease}.splash-screen.hide{opacity:0;visibility:hidden}.splash-notes{position:absolute;inset:-5%;font-size:clamp(54px,11vw,120px);line-height:1.9;letter-spacing:22px;word-spacing:22px;color:#090909;opacity:.14;transform:rotate(-8deg);user-select:none}.splash-inner{position:relative;z-index:2;text-align:center;padding:28px}.splash-logo{width:min(48vw,220px);aspect-ratio:1;object-fit:cover;border-radius:28%;box-shadow:0 18px 45px #0002}.splash-inner h1{margin:20px 0 5px;font-size:30px}.splash-inner p{margin:0;color:#635d52}.splash-loader{width:44px;height:44px;border:5px solid #d8d0be;border-top-color:var(--gold);border-radius:50%;margin:22px auto 0;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.today-shell{min-height:calc(100dvh - 142px);margin:-14px -10px 18px;padding:18px 14px 22px;background:radial-gradient(circle at 82% 18%,#9b6a142b 0 12%,transparent 34%),linear-gradient(145deg,#080808,#12110e 56%,#050505);color:#fff;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden}.today-shell:after{content:"♫";position:absolute;right:-10px;top:90px;font-size:190px;color:#d9ae3b0d;transform:rotate(-12deg);pointer-events:none}.today-heading{position:relative;z-index:1}.today-heading small{color:#e4c56c;font-weight:900;text-transform:uppercase;letter-spacing:.13em}.today-heading h1{font-size:34px;line-height:1.02;margin:6px 0 2px}.today-heading h1 span{display:block;font-size:25px;color:#fff;font-weight:650}.live-card{position:relative;z-index:1;border:1px solid #d0a33b66;background:linear-gradient(150deg,#1b1812,#080808);border-radius:22px;padding:18px;box-shadow:0 18px 38px #0006}.live-card .event-kind{display:inline-flex;background:#c9a22722;border:1px solid #c9a22755;color:#f1cf6d;padding:6px 9px;border-radius:999px;font-size:11px;font-weight:900}.live-title{font-size:26px;margin:12px 0 10px;line-height:1.05}.live-meta{display:grid;gap:7px;color:#eee}.live-meta span{display:flex;gap:8px;align-items:flex-start}.nav-main{width:100%;background:linear-gradient(135deg,#e3b746,#c89527);color:#0a0a0a;border:0;border-radius:15px;padding:14px;font-weight:950;font-size:17px;margin-top:15px}.live-progress{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.live-step{border:1px solid #ffffff22;background:#ffffff0b;color:#b8b8b8;border-radius:14px;padding:11px 6px;font-weight:850}.live-step.active{background:#d6a52f;color:#080808;border-color:#e9c05c}.live-step.done{background:#ffffff15;color:#f2d376}.live-finance{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.live-money{background:#ffffff0d;border:1px solid #ffffff18;border-radius:15px;padding:12px 8px;text-align:center}.live-money small{display:block;color:#aaa;font-size:10px;text-transform:uppercase}.live-money strong{display:block;margin-top:4px;font-size:19px}.live-money.net strong{color:#55ce79}.live-expenses{position:relative;z-index:1;margin-top:auto}.live-expenses h3{margin-bottom:9px}.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.quick-expense{border:1px solid #ffffff20;background:#ffffff0d;color:#fff;border-radius:16px;padding:14px 8px;font-weight:850}.quick-expense b{font-size:21px;display:block;margin-bottom:4px}.expense-running{font-size:12px;color:#c7c7c7;margin-top:10px}.next-capsule{display:grid;grid-template-columns:46px 1fr auto;align-items:center;gap:10px;padding:12px 13px;margin-bottom:13px;background:linear-gradient(145deg,#fffdf8,#f0e8d8);border:1px solid var(--line);border-radius:17px;box-shadow:0 7px 22px #6a55220d}.next-capsule .next-icon{width:46px;height:46px;border-radius:13px;background:#111;color:#d8ad37;display:grid;place-items:center;font-size:22px}.next-capsule h3{font-size:17px;line-height:1.05;margin:0}.next-capsule h3 span{display:block;font-size:14px;font-weight:650;margin-top:2px}.next-capsule p{margin:5px 0 0;font-size:11px;color:var(--muted)}.next-capsule .arrow{font-size:24px;color:#8a8172}.dash-title{display:flex;justify-content:space-between;gap:10px;align-items:flex-end;margin-bottom:10px}.dash-title h2{font-size:25px}.kpi{transition:transform .15s ease,box-shadow .15s ease}.kpi:active,.card:active,.quick-expense:active{transform:scale(.985)}.kpi strong{letter-spacing:-.02em}.place-card{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px;margin:8px 0}.place-card .chev{font-size:20px;color:#8b8376}.place-metrics{font-size:11px;color:var(--muted);margin-top:3px}.location-review{border:1px solid #e0ab3a;background:#fff7dc;border-radius:13px;padding:11px;margin-bottom:12px}.quick-sheet h2{margin-bottom:4px}.choice-pills{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.choice-pill{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-weight:800}.choice-pill.active{background:#111;color:#fff}.amount-box{font-size:27px;font-weight:900;text-align:center}.recent-amounts{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.recent-amounts button{border:1px solid var(--line);background:#f3eee2;border-radius:999px;padding:8px 11px;font-weight:800}.nav-options{display:grid;gap:10px;margin-top:14px}.nav-options a{text-decoration:none;text-align:center;padding:15px;border-radius:14px;font-weight:900}.nav-options .maps{background:#111;color:#fff}.nav-options .uber{background:#eee9dc;color:#111}.close-sheet{position:absolute;right:15px;top:15px}.closeout{margin-top:12px;border-top:1px solid #ffffff1b;padding-top:12px}.closeout-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.closeout-grid div{background:#ffffff0b;border-radius:10px;padding:9px}.closeout-grid small{display:block;color:#aaa}.today-shell .badge{background:#d3a53422;color:#f0c95d}.profit-note{margin-top:8px;font-size:11px;color:#cfcfcf}.profit-warn{color:#ffd56e;font-weight:850}
+@media(min-width:900px){.today-shell{border-radius:24px;margin:0 0 20px;min-height:720px}.quick-grid{grid-template-columns:repeat(4,1fr)}.live-card{max-width:760px}.today-shell>*{max-width:860px;width:100%;margin-left:auto;margin-right:auto}}
+
 </style>
 </head>
 <body>
+<div id="splash" class="splash-screen" aria-label="Bienvenida a Control OLMS">
+  <div class="splash-notes" aria-hidden="true">♪ ♫ ♩ ♬ ♪ ♫ ♩ ♬</div>
+  <div class="splash-inner">
+    <img src="mambito-logo.png" class="splash-logo" alt="La Mambito Sound">
+    <h1>Bienvenido</h1>
+    <p>Cargando sistema...</p>
+    <div class="splash-loader"><span></span></div>
+  </div>
+</div>
 <header>
-  <div class="brand"><div class="logo">OL</div><div><b>Control OLMS</b><small>La Mambito Sound · v4</small></div></div>
-  <button class="iconbtn" onclick="toast('Google Calendar todavía no está conectado en esta versión local')">↻</button>
+  <div class="brand"><div class="logo">OL</div><div><b>Control OLMS</b><small>La Mambito Sound · v6.1</small></div></div>
+  <div class="header-actions">
+  <button class="iconbtn bellbtn" onclick="openNotifications()" aria-label="Notificaciones">🔔<span id="notifBadge" class="notif-badge hidden">0</span></button>
+  <button class="iconbtn" onclick="calendarQuickAction()" aria-label="Sincronizar Google Calendar">↻</button>
+</div>
 </header>
 
 <main>
@@ -129,6 +159,11 @@ a.btn{text-decoration:none;display:inline-block}
 <div id="transportPicker" class="transport-picker"></div>
 </div></dialog>
 <dialog id="listDlg"><div class="dlg" id="listBody"></div></dialog>
+<dialog id="postActivityDlg"><div class="dlg" id="postActivityBody"></div></dialog>
+<dialog id="notificationDlg"><div class="dlg" id="notificationBody"></div></dialog>
+<dialog id="quickExpenseDlg"><div class="dlg" id="quickExpenseBody"></div></dialog>
+<dialog id="navDlg"><div class="dlg" id="navBody"></div></dialog>
+<dialog id="placeDlg"><div class="dlg" id="placeBody"></div></dialog>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -177,6 +212,17 @@ let state=JSON.parse(localStorage.getItem(KEY)||"null")||structuredClone(seed);
 state.settings=state.settings||{};
 if(state.settings.googleClientId===undefined)state.settings.googleClientId="";
 if(state.settings.calendarConnected===undefined)state.settings.calendarConnected=false;
+state.settings.notifiedTags=state.settings.notifiedTags||{};
+state.settings.profile=state.settings.profile||{};
+if(state.settings.profile.name===undefined)state.settings.profile.name="";
+if(state.settings.profile.email===undefined)state.settings.profile.email="";
+if(state.settings.profile.photo===undefined)state.settings.profile.photo="";
+if(state.settings.profile.googleName===undefined)state.settings.profile.googleName="";
+if(state.settings.profile.googlePhoto===undefined)state.settings.profile.googlePhoto="";
+if(state.settings.profile.customName===undefined)state.settings.profile.customName=false;
+if(state.settings.profile.customPhoto===undefined)state.settings.profile.customPhoto=false;
+state.settings.placeDefaults=state.settings.placeDefaults||{};
+state.alerts=state.alerts||[];
 state.deleted=state.deleted||[];
 (state.activities||[]).forEach(a=>{
  a.payments=a.payments||[];
@@ -186,20 +232,70 @@ state.deleted=state.deleted||[];
  a.expenses.extras=a.expenses.extras||[];
  [...a.expenses.outbound,...a.expenses.return].forEach(t=>{if(t.driver===undefined)t.driver=""});
  if(a.paymentRule===undefined)a.paymentRule="";
+ if(a.expenseReviewDone===undefined)a.expenseReviewDone=!!a.outcome;
+ if(a.expensePromptAnswered===undefined)a.expensePromptAnswered=!!a.outcome;
+ if(a.liveStage===undefined)a.liveStage="";
+ if(a.paidFullAdjusted===undefined)a.paidFullAdjusted=false;
+ if(a.paymentAdjustmentNote===undefined)a.paymentAdjustmentNote="";
+ if(a.pendingCalendarLocation===undefined)a.pendingCalendarLocation="";
+ if(a.pendingCalendarVenue===undefined)a.pendingCalendarVenue="";
 });
-let dashMode="money", periodMode="month", periodYear=2026, periodMonth=8, calMode="month", undoAction=null;
+const bootNow=new Date();
+let dashMode="money", periodMode="month", periodYear=bootNow.getFullYear(), periodMonth=bootNow.getMonth(), calMode="month", undoAction=null;
 
 const $=id=>document.getElementById(id);
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const cap=s=>s?String(s).charAt(0).toUpperCase()+String(s).slice(1):"";
+function panamaDate(iso,withWeekday=true){
+ if(!iso)return"";
+ const [y,m,d]=String(iso).slice(0,10).split("-");
+ if(!y||!m||!d)return iso;
+ const base=`${d}/${m}/${y}`;
+ if(!withWeekday)return base;
+ const dt=new Date(`${y}-${m}-${d}T12:00:00-05:00`);
+ const wd=new Intl.DateTimeFormat("es-PA",{weekday:"long",timeZone:"America/Panama"}).format(dt);
+ return `${cap(wd)} ${base}`;
+}
+function panamaTime(hm){
+ if(!hm)return"";
+ const [hRaw,mRaw="00"]=String(hm).split(":");
+ let h=Number(hRaw),m=String(mRaw).padStart(2,"0");
+ if(!Number.isFinite(h))return hm;
+ const ap=h>=12?"pm":"am";
+ h=h%12||12;
+ return `${h}:${m} ${ap}`;
+}
+function panamaDateTime(date,time){return `${panamaDate(date)}  ${panamaTime(time)}`}
+function panamaRange(a){
+ const endNext=(a.end||"")<(a.start||"");
+ return `${panamaTime(a.start)} – ${panamaTime(a.end)}${endNext?" · día siguiente":""}`;
+}
+function chronological(a,b){return eventStartTime(a)-eventStartTime(b)}
+
 const money=n=>"B/. "+Number(n||0).toFixed(2);
+const todayISO=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`};
+function activityEndTime(a){
+ if(!a?.date)return new Date(8640000000000000);
+ const start=a.start||"00:00",end=a.end||start;
+ let d=new Date(`${a.date}T${end}:00-05:00`);
+ if(end<start)d=new Date(d.getTime()+86400000);
+ return d;
+}
+const hasEnded=a=>activityEndTime(a).getTime()<=Date.now();
+const isUpcoming=a=>!a.outcome&&!hasEnded(a);
+const needsConfirmation=a=>!a.outcome&&hasEnded(a);
+function daysBetween(a,b){return Math.floor((new Date(`${a}T12:00:00-05:00`)-new Date(`${b}T12:00:00-05:00`))/86400000)}
 const done=a=>["realizado","asisti"].includes(a.outcome);
 const closed=a=>["cancelado","no-participe","no-asisti"].includes(a.outcome);
 const finalAmt=a=>a.free?0:Number(a.final??a.expected??0);
 const received=a=>(a.payments||[]).reduce((s,p)=>s+Number(p.amount||0),0);
-const balance=a=>Math.max(0,finalAmt(a)-received(a));
+const balance=a=>a.paidFullAdjusted?0:Math.max(0,finalAmt(a)-received(a));
+const extraordinary=a=>Math.max(0,received(a)-finalAmt(a));
+const negativeAdjustment=a=>a.paidFullAdjusted?Math.max(0,finalAmt(a)-received(a)):0;
 function expTotal(a){let x=a.expenses||{outbound:[],return:[],extras:[]};return [...x.outbound,...x.return,...x.extras].reduce((s,e)=>s+(e.amount==null?0:Number(e.amount||0)),0)}
 function pendingExp(a){let x=a.expenses||{outbound:[],return:[],extras:[]};return [...x.outbound,...x.return,...x.extras].filter(e=>e.amount==null||e.amount==="").length}
-const earned=a=>done(a)&&!a.free?finalAmt(a):0;
+const earned=a=>done(a)&&!a.free?(a.paidFullAdjusted?received(a):Math.max(finalAmt(a),received(a))):0;
 function due(a){
  if(a.free)return null;
  const rule=(a.paymentRule||"").toLowerCase(),v=(a.venue||"").toLowerCase(),d=new Date(a.date+"T12:00:00");
@@ -213,14 +309,14 @@ function due(a){
 }
 function payStatus(a){
  if(a.free||!done(a))return "none";
- if(received(a)>=finalAmt(a))return "paid";
+ if(a.paidFullAdjusted||received(a)>=finalAmt(a))return "paid";
  if(received(a)>0)return "partial";
- const d=due(a); if(d&&d<"2026-09-21")return "overdue";
+ const d=due(a); if(d&&d<todayISO())return "overdue";
  return "pending";
 }
 function status(a){
  if(a.free&&done(a))return["free","Gratis"];
- if(!a.outcome)return["future","Por realizar"];
+ if(!a.outcome)return needsConfirmation(a)?["confirm","Pendiente de confirmar"]:["future","Por realizar"];
  if(closed(a))return["gray",a.outcome==="cancelado"?"Cancelado":a.outcome==="no-asisti"?"No asistí":"No participé"];
  if(a.kind==="ensayo")return["paid","Asistí"];
  const p=payStatus(a);
@@ -240,27 +336,70 @@ function periodArr(){
 function kpis(){
  const arr=periodArr(),comp=arr.filter(done);
  const dev=comp.reduce((s,a)=>s+earned(a),0),rec=comp.reduce((s,a)=>s+Math.min(received(a),finalAmt(a)),0),pend=comp.reduce((s,a)=>s+balance(a),0),venc=comp.filter(a=>payStatus(a)==="overdue").reduce((s,a)=>s+balance(a),0),g=arr.reduce((s,a)=>s+expTotal(a),0);
- return {arr,dev,rec,pend,venc,g,net:dev-g,gigs:comp.filter(a=>a.kind==="presentacion").length,ens:comp.filter(a=>a.kind==="ensayo").length,up:arr.filter(a=>!a.outcome).length,confirm:arr.filter(a=>a.date<="2026-09-21"&&!a.outcome).length,free:comp.filter(a=>a.free).length,pendingExp:arr.reduce((s,a)=>s+pendingExp(a),0)}
+ return {arr,dev,rec,pend,venc,g,net:dev-g,gigs:comp.filter(a=>a.kind==="presentacion").length,ens:comp.filter(a=>a.kind==="ensayo").length,up:arr.filter(isUpcoming).length,confirm:arr.filter(needsConfirmation).length,free:comp.filter(a=>a.free).length,pendingExp:arr.reduce((s,a)=>s+pendingExp(a),0)}
 }
 function periodLabel(){if(periodMode==="all")return"Acumulado desde ago 2026";if(periodMode==="year")return String(periodYear);if(periodMode==="quarter")return`T${Math.floor(periodMonth/3)+1} ${periodYear}`;return new Intl.DateTimeFormat("es-PA",{month:"long",year:"numeric"}).format(new Date(periodYear,periodMonth,1))}
 function periodControls(){return`<div class="period"><button onclick="movePeriod(-1)">‹</button><b>${periodLabel()}</b><button onclick="movePeriod(1)">›</button><select onchange="periodMode=this.value;render()" ><option value="month" ${periodMode==="month"?"selected":""}>Mes</option><option value="quarter" ${periodMode==="quarter"?"selected":""}>Trimestre</option><option value="year" ${periodMode==="year"?"selected":""}>Año</option><option value="all" ${periodMode==="all"?"selected":""}>Acumulado</option></select></div>`}
 function movePeriod(d){if(periodMode==="all")return;if(periodMode==="year")periodYear+=d;else if(periodMode==="quarter"){periodMonth+=d*3;while(periodMonth<0){periodMonth+=12;periodYear--}while(periodMonth>11){periodMonth-=12;periodYear++}}else{periodMonth+=d;if(periodMonth<0){periodMonth=11;periodYear--}if(periodMonth>11){periodMonth=0;periodYear++}}render()}
 function card(a){
  const dd=a.date.split("-"),mon=["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"][+dd[1]-1],s=status(a);
- return`<div class="card activity" onclick="openDetail('${a.id}')"><div class="date"><b>${dd[2]}</b><small>${mon}</small></div><div class="main"><b>${a.title}</b><div>${a.start}–${a.end} · ${a.venue||"Lugar pendiente"}</div></div><span class="badge ${s[0]}">${s[1]}</span></div>`
+ return`<div class="card activity" onclick="openDetail('${a.id}')"><div class="date"><b>${dd[2]}</b><small>${mon}</small></div><div class="main"><b>${a.title}</b><div>${panamaDate(a.date)} · ${panamaRange(a)} · ${a.venue||"Lugar pendiente"}</div></div><span class="badge ${s[0]}">${s[1]}</span></div>`
 }
-function renderDash(){
- let k=kpis();
- const cards=dashMode==="money"?[["dev","Ingresos devengados",money(k.dev),"gold"],["rec","Cobrado",money(k.rec),"green"],["pend","Pendiente",money(k.pend),"orange"],["venc","Vencido",money(k.venc),"red"],["g","Gastos",money(k.g),"blue"],["net","Ganancia neta",money(k.net),k.net>=0?"green":"red"]]:[["gigs","Toques realizados",k.gigs,"green"],["ens","Ensayos asistidos",k.ens,"blue"],["up","Próximas actividades",k.up,"gold"],["confirm","Pendientes de confirmar",k.confirm,"red"],["free","Actividades gratis",k.free,"purple"],["pexp","Gastos incompletos",k.pendingExp,"orange"]];
- $("dashboard").innerHTML=`<div class="toprow"><div><h2>Resumen financiero</h2><div class="muted">Todo se recalcula en tiempo real.</div></div><div class="segment"><button class="${dashMode==="money"?"active":""}" onclick="dashMode='money';renderDash()">💰 Montos</button><button class="${dashMode==="count"?"active":""}" onclick="dashMode='count';renderDash()">🔢 Cantidades</button></div></div>${periodControls()}<div class="kpis">${cards.map(c=>`<button class="kpi ${c[3]}" onclick="openKpi('${c[0]}')"><span>${c[1]}</span><strong>${c[2]}</strong></button>`).join("")}</div><h3 style="margin-top:16px">Próximas actividades</h3>${state.activities.filter(a=>!a.outcome).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5).map(card).join("")||'<div class="empty">Sin próximas actividades.</div>'}`
+function eventStartTime(a){return new Date(`${a.date}T${a.start||"00:00"}:00-05:00`)}
+function todayActivity(){
+ const t=todayISO();
+ return state.activities.filter(a=>a.date===t&&!closed(a)).sort((a,b)=>a.start.localeCompare(b.start))[0]||null;
 }
+function nextActivity(){return state.activities.filter(isUpcoming).sort((a,b)=>eventStartTime(a)-eventStartTime(b))[0]||null}
+function countdownText(a){
+ if(!a)return"";let ms=Math.max(0,eventStartTime(a)-new Date()),d=Math.floor(ms/86400000);ms%=86400000;let h=Math.floor(ms/3600000);ms%=3600000;let mi=Math.floor(ms/60000);
+ return d?`Faltan ${d} día${d===1?"":"s"} · ${h} h`:`Faltan ${h} h · ${mi} min`;
+}
+function kindLabel(a){return a.kind==="ensayo"?"🎵 Ensayo":a.kind==="viaje"?"✈️ Viaje":a.kind==="grabacion"?"🎙️ Grabación":a.kind==="promocion"?"📣 Promoción":"🎤 Presentación"}
+function displayEventTitle(a){return `${a.type||a.title||"Actividad"}${a.venue?` | ${a.venue}`:""}`}
+function journeyButton(a,key,label){
+ const order={"":0,going:1,arrived:2,ended:3},idx={going:1,arrived:2,ended:3}[key],cl=order[a.liveStage]>=idx?"done":"";if(a.liveStage===key)cl="active";
+ return `<button class="live-step ${cl}" onclick="setLiveStage('${a.id}','${key}')">${label}</button>`
+}
+function todayHero(a){
+ const income=finalAmt(a),spent=expTotal(a),net=(a.free?0:income)-spent;
+ const closeout=done(a)?`<div class="closeout"><b>Cierre del toque</b><div class="closeout-grid"><div><small>Recibido</small><b>${money(received(a))}</b></div><div><small>Gastos</small><b>${money(spent)}</b></div><div><small>Neto actual</small><b>${money(earned(a)-spent)}</b></div><div><small>Pago</small><b>${status(a)[1]}</b></div></div></div>`:"";
+ return `<div class="today-shell">
+   <div class="today-heading"><small>Actividad de hoy</small><h1>Hoy con<span>La Mambito Sound</span></h1></div>
+   <div class="live-card">
+    <span class="event-kind">${kindLabel(a)}</span><div class="live-title">${esc(displayEventTitle(a))}</div>
+    <div class="live-meta"><span>📅 <b>${panamaDate(a.date)}</b></span><span>🕒 <b>${panamaRange(a)}</b></span><span>📍 <span>${esc(a.venue||"Lugar pendiente")}${a.location?`<small style="display:block;color:#aaa">${esc(a.location)}</small>`:""}</span></span></div>
+    <button class="nav-main" onclick="openNavigate('${a.id}')">📍 Navegar</button>
+    ${a.pendingCalendarLocation?`<div class="location-review" style="color:#111;margin-top:12px"><b>Google Calendar propone otra ubicación.</b><div style="margin-top:7px"><button class="btn primary small" onclick="reviewCalendarLocation('${a.id}')">Revisar cambio</button></div></div>`:""}
+   </div>
+   <div class="live-progress">${journeyButton(a,"going","▶ Ya voy")}${journeyButton(a,"arrived","● Llegué")}${journeyButton(a,"ended","■ Terminó")}</div>
+   <div class="live-finance">
+    <div class="live-money"><small>Acordado</small><strong>${money(income)}</strong></div>
+    <div class="live-money"><small>Gastado</small><strong>${money(spent)}</strong></div>
+    <div class="live-money net"><small>Ganancia provisional</small><strong>${money(net)}</strong></div>
+   </div>
+   <div class="live-expenses"><h3>Registrar gasto</h3><div class="quick-grid">
+    <button class="quick-expense" onclick="openQuickExpense('${a.id}','Transporte')"><b>🚗</b>Transporte</button>
+    <button class="quick-expense" onclick="openQuickExpense('${a.id}','Comida')"><b>🍽️</b>Comida</button>
+    <button class="quick-expense" onclick="openQuickExpense('${a.id}','Hospedaje')"><b>🏨</b>Hospedaje</button>
+    <button class="quick-expense" onclick="openQuickExpense('${a.id}','Otro')"><b>＋</b>Otro gasto</button>
+   </div><div class="expense-running">Los gastos se suman en tiempo real. ${income>0&&spent>=income*.5?`<span class="profit-warn">Ya consumiste al menos la mitad del ingreso acordado.</span>`:""}</div>${closeout}</div>
+  </div>`
+}
+function nextCapsule(a){if(!a)return"";return `<button class="next-capsule" onclick="openDetail('${a.id}')"><div class="next-icon">${a.kind==="ensayo"?"🎵":"🎤"}</div><div><h3>Próximamente con<span>La Mambito Sound</span></h3><p><b>${esc(a.type||a.title)}</b> · ${esc(a.venue||"Lugar pendiente")}<br>${panamaDateTime(a.date,a.start)} · ${countdownText(a)}</p></div><div class="arrow">›</div></button>`}
+function financialDashboard(){
+ let k=kpis();const cards=dashMode==="money"?[["dev","Ingresos devengados",money(k.dev),"gold"],["rec","Cobrado",money(k.rec),"green"],["pend","Pendiente",money(k.pend),"orange"],["venc","Vencido",money(k.venc),"red"],["g","Gastos",money(k.g),"blue"],["net","Ganancia neta",money(k.net),k.net>=0?"green":"red"]]:[["gigs","Toques realizados",k.gigs,"green"],["ens","Ensayos asistidos",k.ens,"blue"],["up","Próximas actividades",k.up,"gold"],["confirm","Pendientes de confirmar",k.confirm,"red"],["free","Actividades gratis",k.free,"purple"],["pexp","Gastos incompletos",k.pendingExp,"orange"]];
+ const next=nextActivity();return `<div class="dash-title"><div><h2>Resumen financiero</h2><div class="muted">Todo se recalcula en tiempo real.</div></div><div class="segment"><button class="${dashMode==="money"?"active":""}" onclick="dashMode='money';renderDash()">💰 Montos</button><button class="${dashMode==="count"?"active":""}" onclick="dashMode='count';renderDash()">🔢 Cantidades</button></div></div>${periodControls()}<div class="kpis">${cards.map(c=>`<button class="kpi ${c[3]}" onclick="openKpi('${c[0]}')"><span>${c[1]}</span><strong>${c[2]}</strong></button>`).join("")}</div>${nextCapsule(next)}<h3 style="margin-top:16px">Próximas actividades</h3>${state.activities.filter(isUpcoming).sort(chronological).slice(0,5).map(card).join("")||'<div class="empty">Sin próximas actividades.</div>'}`
+}
+function renderDash(){const today=todayActivity();$("dashboard").innerHTML=today?todayHero(today)+financialDashboard():financialDashboard()}
+
 function renderActivities(){
- $("activities").innerHTML=`<div class="toprow"><div><h2>Actividades</h2><div class="muted">Guardar nunca bloquea un registro.</div></div><button class="btn primary" onclick="openActivityForm()">＋ Nueva</button></div><div class="field"><label>Buscar</label><input id="searchAct" placeholder="Lugar, tipo, fecha..." oninput="filterActs(this.value)"></div><div id="actList">${[...state.activities].sort((a,b)=>b.date.localeCompare(a.date)).map(card).join("")}</div>`
+ $("activities").innerHTML=`<div class="toprow"><div><h2>Actividades</h2><div class="muted">Guardar nunca bloquea un registro.</div></div><button class="btn primary" onclick="openActivityForm()">＋ Nueva</button></div><div class="field"><label>Buscar</label><input id="searchAct" placeholder="Lugar, tipo, fecha..." oninput="filterActs(this.value)"></div><div id="actList">${[...state.activities].sort(chronological).map(card).join("")}</div>`
 }
-function filterActs(q){q=q.toLowerCase();$("actList").innerHTML=state.activities.filter(a=>JSON.stringify(a).toLowerCase().includes(q)).sort((a,b)=>b.date.localeCompare(a.date)).map(card).join("")||'<div class="empty">Sin resultados.</div>'}
+function filterActs(q){q=q.toLowerCase();$("actList").innerHTML=state.activities.filter(a=>JSON.stringify(a).toLowerCase().includes(q)).sort(chronological).map(card).join("")||'<div class="empty">Sin resultados.</div>'}
 function renderPayments(){
- const arr=state.activities.filter(a=>done(a)&&!a.free);
- $("payments").innerHTML=`<h2>Pagos</h2><div class="muted" style="margin-bottom:10px">Esperado → Final acordado → Recibido</div><div class="tablewrap"><table><tr><th>Fecha</th><th>Actividad</th><th>Esperado</th><th>Final</th><th>Recibido</th><th>Saldo</th><th>Estado</th></tr>${arr.map(a=>{let s=status(a);return`<tr onclick="openDetail('${a.id}','payments')"><td>${a.date}</td><td>${a.title}</td><td>${money(a.expected)}</td><td>${money(finalAmt(a))}</td><td>${money(received(a))}</td><td>${money(balance(a))}</td><td><span class="badge ${s[0]}">${s[1]}</span></td></tr>`}).join("")}</table></div>`
+ const arr=state.activities.filter(a=>done(a)&&!a.free).sort(chronological);
+ $("payments").innerHTML=`<h2>Pagos</h2><div class="muted" style="margin-bottom:10px">Esperado → Final acordado → Recibido</div><div class="tablewrap"><table><tr><th>Fecha</th><th>Actividad</th><th>Esperado</th><th>Final</th><th>Recibido</th><th>Saldo</th><th>Estado</th></tr>${arr.map(a=>{let s=status(a);return`<tr onclick="openDetail('${a.id}','payments')"><td>${panamaDate(a.date,false)}</td><td>${a.title}</td><td>${money(a.expected)}</td><td>${money(finalAmt(a))}</td><td>${money(received(a))}</td><td>${money(balance(a))}</td><td><span class="badge ${s[0]}">${s[1]}</span></td></tr>`}).join("")}</table></div>`
 }
 function renderCalendar(){
  let controls=`<div class="toprow"><div><h2>Calendario</h2><div class="muted">Mes / Semana / Agenda</div></div><div class="segment"><button class="${calMode==="month"?"active":""}" onclick="calMode='month';renderCalendar()">Mes</button><button class="${calMode==="week"?"active":""}" onclick="calMode='week';renderCalendar()">Semana</button><button class="${calMode==="agenda"?"active":""}" onclick="calMode='agenda';renderCalendar()">Agenda</button></div></div>`;
@@ -270,18 +409,49 @@ function renderCalendar(){
   for(let d=1;d<=days;d++){let iso=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`,ev=state.activities.filter(a=>a.date===iso);cells+=`<div class="day"><div class="n">${d}</div>${ev.map(a=>`<button class="ev" onclick="openDetail('${a.id}')">${a.kind==="ensayo"?"🎵":"🎤"} ${a.title}</button>`).join("")}</div>`}
   $("calendar").innerHTML=controls+periodControls()+`<div class="cal">${["D","L","M","M","J","V","S"].map(x=>`<div class="dayhead">${x}</div>`).join("")}${cells}</div>`;
  } else if(calMode==="week"){
-  const start=new Date(2026,8,20),rows=[];for(let i=0;i<7;i++){let d=new Date(start);d.setDate(start.getDate()+i);let iso=d.toISOString().slice(0,10),ev=state.activities.filter(a=>a.date===iso);rows.push(`<div class="card"><b>${new Intl.DateTimeFormat("es-PA",{weekday:"long",day:"numeric",month:"short"}).format(d)}</b><div style="margin-top:8px">${ev.length?ev.map(card).join(""):'<span class="muted">Sin actividades</span>'}</div></div>`)}$("calendar").innerHTML=controls+rows.join("");
- } else $("calendar").innerHTML=controls+state.activities.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(card).join("");
+  const now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),now.getDate()-now.getDay()),rows=[];for(let i=0;i<7;i++){let d=new Date(start);d.setDate(start.getDate()+i);let iso=d.toISOString().slice(0,10),ev=state.activities.filter(a=>a.date===iso);rows.push(`<div class="card"><b>${panamaDate(iso)}</b><div style="margin-top:8px">${ev.length?ev.map(card).join(""):'<span class="muted">Sin actividades</span>'}</div></div>`)}$("calendar").innerHTML=controls+rows.join("");
+ } else $("calendar").innerHTML=controls+state.activities.slice().sort(chronological).map(card).join("");
 }
 function renderMore(){
  const k=kpis(),places=[...new Set(state.activities.map(a=>a.venue).filter(Boolean))];
  $("more").innerHTML=`<h2>Más</h2>
- <div class="card"><h3>📍 Lugares</h3>${places.map(p=>{let arr=state.activities.filter(a=>a.venue===p);let inc=arr.reduce((s,a)=>s+earned(a),0),ex=arr.reduce((s,a)=>s+expTotal(a),0);return`<div style="margin:8px 0"><b>${p}</b><div class="muted">${arr.length} actividades · ${money(inc)} ingresos · ${money(ex)} gastos · ${money(inc-ex)} neto</div></div>`}).join("")}</div>
+ <div class="card">
+   <h3>👤 Mi perfil</h3>
+   <div class="profile-card">
+     ${state.settings.profile.photo
+       ? `<img class="profile-avatar" src="${esc(state.settings.profile.photo)}" alt="Foto de perfil">`
+       : `<div class="profile-avatar fallback">${esc((state.settings.profile.name||"OL").trim().slice(0,2).toUpperCase()||"OL")}</div>`}
+     <div class="profile-meta">
+       <h3>${esc(state.settings.profile.name||"Tu nombre")}</h3>
+       <div class="muted">${esc(state.settings.profile.email||"Correo de Google pendiente")}</div>
+       <div class="profile-actions">
+         <button class="btn ghost small" onclick="$('profilePhotoInput').click()">Cambiar foto</button>
+         <button class="btn ghost small" onclick="loadGoogleProfile(true)">Usar datos de Google</button>
+       </div>
+     </div>
+   </div>
+   <input id="profilePhotoInput" type="file" accept="image/*" style="display:none" onchange="handleProfilePhoto(this.files&&this.files[0])">
+   <div class="profile-edit">
+     <div class="field"><label>Nombre visible</label><input id="profileName" value="${esc(state.settings.profile.name||"")}" placeholder="Tu nombre"></div>
+     <div class="row">
+       <button class="btn primary" onclick="saveProfileName()">Guardar perfil</button>
+       ${state.settings.profile.customPhoto?`<button class="btn ghost" onclick="restoreGooglePhoto()">Usar foto de Google</button>`:""}
+     </div>
+     <p class="muted" style="font-size:12px">La foto que elijas se guarda en este dispositivo. Tu correo se toma de la cuenta de Google conectada.</p>
+   </div>
+ </div>
+ <div class="card"><h3>📍 Historial por lugares</h3>${places.map(p=>{let arr=state.activities.filter(a=>a.venue===p);let inc=arr.reduce((s,a)=>s+earned(a),0),ex=arr.reduce((s,a)=>s+expTotal(a),0);return`<button class="place-card" onclick="openPlaceHistory(decodeURIComponent('${encodeURIComponent(p)}'))"><div><b>${esc(p)}</b><div class="place-metrics">${arr.length} actividades · ${money(inc-ex)} neto acumulado</div></div><span class="chev">›</span></button>`}).join("")}</div>
  <div class="card"><h3>📊 KPIs</h3><div class="info"><div class="box"><small>Promedio neto por toque</small><b>${money(avgNetGig())}</b></div><div class="box"><small>Gasto promedio por ensayo</small><b>${money(avgRehearsal())}</b></div><div class="box"><small>Gastos del período</small><b>${money(k.g)}</b></div><div class="box"><small>Ganancia neta</small><b>${money(k.net)}</b></div></div></div>
- <div class="card"><h3>🗑️ Historial de eliminados</h3>${state.deleted.length?state.deleted.map(a=>`<div style="margin:7px 0"><b>${a.title}</b> <button class="btn ghost small" onclick="restoreDeleted('${a.id}')">Restaurar</button> <button class="btn ghost small" onclick="reuseDeleted('${a.id}')">Reutilizar</button></div>`).join(""):'<div class="muted">Vacío</div>'}</div>
+ <div class="card"><h3>🗑️ Historial de eliminados</h3>${state.deleted.length?[...state.deleted].sort(chronological).map(a=>`<div style="margin:7px 0"><b>${a.title}</b><div class="muted" style="font-size:11px">${panamaDateTime(a.date,a.start)}</div><button class="btn ghost small" onclick="restoreDeleted('${a.id}')">Restaurar</button> <button class="btn ghost small" onclick="reuseDeleted('${a.id}')">Reutilizar</button></div>`).join(""):'<div class="muted">Vacío</div>'}</div>
+ <div class="card"><h3>🔔 Notificaciones</h3>
+   <p class="muted">Recordatorios de actividades, gastos, cobros y cambios de Google Calendar.</p>
+   <div class="row"><button class="btn primary" onclick="enableNotifications()">Activar notificaciones del teléfono</button><button class="btn ghost" onclick="openNotifications()">Ver avisos (${notificationItems().length})</button></div>
+   <p class="muted" style="font-size:12px">Estado del teléfono: <span class="native-state">${notificationPermissionLabel()}</span></p>
+ </div>
  <div class="card"><h3>⚙️ Configuración</h3>
    <div class="field"><label>Dirección de mi casa</label><input id="homeAddr" value="${state.settings.homeAddress||""}"></div>
    <button class="btn primary" onclick="state.settings.homeAddress=$('homeAddr').value;save();toast('Dirección guardada')">Guardar dirección</button>
+   <div class="sectionline"><h3>💵 Tarifas y reglas futuras</h3><p class="muted">Los cambios hechos aquí solo afectan actividades futuras. El historial cerrado no se modifica.</p><button class="btn ghost" onclick="openPlaceDefaults()">Administrar lugares conocidos</button></div>
    <div class="sectionline"><h3>📅 Google Calendar</h3>
      <p class="muted">Estado: <b>${googleAccessToken?"Conectado en esta sesión":state.settings.googleClientId?"Configurado, falta conectar":"Falta configurar"}</b></p>
      <div class="field"><label>ID de cliente OAuth de Google</label><input id="googleClientId" value="${state.settings.googleClientId||""}" placeholder="xxxxxxxx.apps.googleusercontent.com"></div>
@@ -290,7 +460,7 @@ function renderMore(){
        <button class="btn primary" onclick="connectGoogle()">Conectar Google</button>
        <button class="btn ghost" onclick="syncCalendar()">🔄 Sincronizar ahora</button>
      </div>
-     <p class="muted" style="font-size:12px">Cuando la app esté publicada en HTTPS y ese dominio esté autorizado en Google Cloud, podrá leer, crear y actualizar tus eventos de La Mambito Sound.</p>
+     <p class="muted" style="font-size:12px">Conectado a Google Calendar: puede leer, crear y actualizar eventos de Mambito Sound. Los eventos creados o editados desde OLMS llevan recordatorio a las 11:00 p. m. de la noche anterior.</p>
    </div>
    <div class="sectionline"><h3>📲 Instalación</h3><p class="muted">Cuando se abra desde una dirección HTTPS compatible, podrás instalar Control OLMS como aplicación.</p><button class="btn primary" onclick="installApp()">Instalar aplicación</button></div>
    <div class="sectionline"><button class="btn ghost" onclick="if(confirm('¿Restaurar datos de ejemplo?')){state=structuredClone(seed);state.settings.googleClientId='';save()}">Restaurar datos de ejemplo</button></div>
@@ -305,14 +475,45 @@ function openKpi(id){
  if(id==="g"){arr=arr.filter(a=>expTotal(a)>0||pendingExp(a)>0);title="Gastos"}
  if(id==="gigs"){arr=arr.filter(a=>a.kind==="presentacion"&&done(a));title="Toques realizados"}
  if(id==="ens"){arr=arr.filter(a=>a.kind==="ensayo"&&done(a));title="Ensayos asistidos"}
- if(id==="up"){arr=arr.filter(a=>!a.outcome);title="Próximas actividades"}
+ if(id==="up"){arr=arr.filter(isUpcoming);title="Próximas actividades"}
+ if(id==="confirm"){arr=arr.filter(needsConfirmation);title="Pendientes de confirmar"}
  if(id==="free"){arr=arr.filter(a=>a.free&&done(a));title="Actividades gratis"}
  if(id==="pexp"){arr=arr.filter(a=>pendingExp(a)>0);title="Gastos incompletos"}
+ arr=arr.slice().sort(chronological);
  $("listBody").innerHTML=`<button class="iconbtn close" onclick="listDlg.close()">✕</button><h2>${title}</h2>${arr.map(card).join("")||'<div class="empty">Sin registros.</div>'}`;listDlg.showModal()
 }
 function findKnownPlace(v){
  const q=(v||"").trim().toLowerCase(); if(!q)return null;
  return KNOWN_PLACES.find(p=>p.match.some(m=>q===m||q.includes(m)))||null;
+}
+
+function placeConfig(v){
+ const q=(v||"").trim();if(!q)return null;
+ const direct=state.settings.placeDefaults?.[q];if(direct)return {name:q,match:[q.toLowerCase()],...direct};
+ const p=findKnownPlace(q);if(!p)return null;const o=state.settings.placeDefaults?.[p.name]||{};return {...p,...o}
+}
+function openPlaceDefaults(){
+ const names=[...new Set([...KNOWN_PLACES.map(p=>p.name),...Object.keys(state.settings.placeDefaults||{})])];
+ const rows=names.map(name=>{const c=placeConfig(name)||{rate:0,rule:"Sin regla"};return `<button class="place-card" onclick="editPlaceDefault(decodeURIComponent('${encodeURIComponent(name)}'))"><div><b>${esc(name)}</b><div class="place-metrics">Tarifa ${money(c.rate||0)} · ${esc(c.rule||"Sin regla")}</div></div><span class="chev">›</span></button>`}).join("");
+ $("listBody").innerHTML=`<button class="iconbtn close" onclick="listDlg.close()">✕</button><h2>Tarifas y reglas futuras</h2><p class="muted">Editar aquí actualiza la referencia y puede aplicarse a actividades futuras del mismo lugar. Nunca toca actividades ya realizadas.</p>${rows}`;listDlg.showModal()
+}
+function editPlaceDefault(name){
+ const base=KNOWN_PLACES.find(p=>p.name===name)||{name,rate:state.settings.placeDefaults?.[name]?.rate||0,rule:state.settings.placeDefaults?.[name]?.rule||"Hasta 7 días"};const cur=placeConfig(name)||base;
+ const rate=prompt(`Tarifa habitual futura para ${name} (B/.)`,Number(cur.rate||0).toFixed(2));if(rate===null)return;
+ const rule=prompt(`Regla de pago futura para ${name}`,cur.rule||"Hasta 7 días");if(rule===null)return;
+ state.settings.placeDefaults[name]={...(state.settings.placeDefaults[name]||{}),rate:Number(rate||0),rule};
+ if(confirm("¿Aplicar este cambio también a las actividades futuras ya creadas de este lugar?")){
+   state.activities.filter(a=>a.venue===name&&isUpcoming(a)).forEach(a=>{a.expected=Number(rate||0);a.final=Number(rate||0);a.paymentRule=rule});
+ }
+ save();openPlaceDefaults();toast("Ajuste futuro guardado")
+}
+function openPlaceHistory(venue){
+ const arr=state.activities.filter(a=>a.venue===venue).sort(chronological);const doneArr=arr.filter(done);
+ const avg=x=>x.length?x.reduce((s,n)=>s+n,0)/x.length:0;
+ const avgReceived=avg(doneArr.map(received)),avgExp=avg(doneArr.map(expTotal)),avgNet=avg(doneArr.map(a=>earned(a)-expTotal(a)));
+ const transports={};arr.forEach(a=>[...(a.expenses?.outbound||[]),...(a.expenses?.return||[])].forEach(t=>transports[t.type]=(transports[t.type]||0)+1));
+ const top=Object.entries(transports).sort((a,b)=>b[1]-a[1])[0];const tname=top?(TRANSPORTS.find(x=>x[0]===top[0])?.[1]||top[0]):"Sin datos";
+ $("placeBody").innerHTML=`<button class="iconbtn close" onclick="placeDlg.close()">✕</button><h2>📍 ${esc(venue)}</h2><div class="info"><div class="box"><small>Actividades</small><b>${arr.length}</b></div><div class="box"><small>Promedio cobrado</small><b>${money(avgReceived)}</b></div><div class="box"><small>Promedio gastos</small><b>${money(avgExp)}</b></div><div class="box"><small>Ganancia neta promedio</small><b>${money(avgNet)}</b></div><div class="box"><small>Transporte más usado</small><b>${esc(tname)}</b></div><div class="box"><small>Regla habitual</small><b>${esc(placeConfig(venue)?.rule||arr[0]?.paymentRule||"Sin datos")}</b></div></div><div class="sectionline"><h3>Historial</h3>${arr.map(card).join("")||'<div class="empty">Sin registros.</div>'}</div>`;placeDlg.showModal()
 }
 function suggestedRate(){
  const venue=($("avenue").value||"").toLowerCase(),loc=($("alocation").value||"").toLowerCase(),prov=($("aprovince").value||"").toLowerCase();
@@ -328,7 +529,7 @@ function plusTwoHours(){
 }
 function updateDuePreview(){
  const a={date:$("adate").value,venue:$("avenue").value,free:$("afree").checked,paymentRule:$("apaymentrule").value};
- $("aduepreview").value=a.free?"No aplica":(due(a)||"");
+ $("aduepreview").value=a.free?"No aplica":(due(a)?panamaDate(due(a)):"");
 }
 function syncFreeFields(){
  const fr=$("afree").checked;
@@ -339,7 +540,7 @@ function syncFreeFields(){
 }
 function applyRateSuggestion(force=false){
  if($("afree").checked)return;
- const k=findKnownPlace($("avenue").value);
+ const k=placeConfig($("avenue").value);
  let rate=k?.rate;
  if(rate==null)rate=suggestedRate();
  if(rate!=null && (force||$("aexpected").value==="")){$("aexpected").value=Number(rate).toFixed(2);if(autoFinal)$("afinal").value=Number(rate).toFixed(2)}
@@ -347,7 +548,7 @@ function applyRateSuggestion(force=false){
  updateDuePreview();
 }
 function applyKnownPlace(){
- const p=findKnownPlace($("avenue").value);if(!p){applyRateSuggestion(false);return}
+ const p=placeConfig($("avenue").value);if(!p){applyRateSuggestion(false);return}
  $("avenue").value=p.name;
  if(p.location)$("alocation").value=p.location;
  if(p.province)$("aprovince").value=p.province;
@@ -360,15 +561,25 @@ function applyKnownPlace(){
  if(p.kind==="ensayo"){plusTwoHours()}
  syncFreeFields();updateDuePreview();
 }
+
+function activityInterval(a){
+ const st=new Date(`${a.date}T${a.start||"00:00"}:00-05:00`);let en=new Date(`${a.date}T${a.end||a.start||"00:00"}:00-05:00`);if((a.end||"")<(a.start||""))en=new Date(en.getTime()+86400000);return[st,en]
+}
+function findScheduleConflict(candidate,ignoreId=""){
+ const [cs,ce]=activityInterval(candidate);return state.activities.find(a=>a.id!==ignoreId&&!closed(a)&&(()=>{const [as,ae]=activityInterval(a);return cs<ae&&ce>as})())||null
+}
 function openActivityForm(id=""){
  const a=state.activities.find(x=>x.id===id);
  autoFinal=!a || Number(a.final??a.expected??0)===Number(a.expected??0);
- $("aid").value=a?.id||"";$("akind").value=a?.kind||"presentacion";$("atype").innerHTML=TYPES.map(x=>`<option ${x===(a?.type||"Boda")?"selected":""}>${x}</option>`).join("");$("atitle").value=a?.title||"";$("avenue").value=a?.venue||"";$("alocation").value=a?.location||"";$("aprovince").value=a?.province||"";$("adate").value=a?.date||"2026-09-21";$("astart").value=a?.start||"20:00";$("aend").value=a?.end||"22:00";$("aexpected").value=a?.expected??"";$("afinal").value=a?.final??"";$("afree").checked=!!a?.free;$("aoutcome").value=a?.outcome||"";$("anotes").value=a?.notes||"";$("apaymentrule").value=a?.paymentRule||findKnownPlace(a?.venue)?.rule||"";$("activityTitle").textContent=a?"Editar actividad":"Nueva actividad";
+ $("aid").value=a?.id||"";$("akind").value=a?.kind||"presentacion";$("atype").innerHTML=TYPES.map(x=>`<option ${x===(a?.type||"Boda")?"selected":""}>${x}</option>`).join("");$("atitle").value=a?.title||"";$("avenue").value=a?.venue||"";$("alocation").value=a?.location||"";$("aprovince").value=a?.province||"";$("adate").value=a?.date||todayISO();$("astart").value=a?.start||"20:00";$("aend").value=a?.end||"22:00";$("aexpected").value=a?.expected??"";$("afinal").value=a?.final??"";$("afree").checked=!!a?.free;$("aoutcome").value=a?.outcome||"";$("anotes").value=a?.notes||"";$("apaymentrule").value=a?.paymentRule||placeConfig(a?.venue)?.rule||"";$("activityTitle").textContent=a?"Editar actividad":"Nueva actividad";
  $("aexpected").disabled=!!a?.free;$("afinal").disabled=!!a?.free;updateDuePreview();activityDlg.showModal()
 }
 async function saveActivity(){
  let id=$("aid").value||uid(),old=state.activities.find(x=>x.id===id);
- let obj={id,kind:$("akind").value,type:$("atype").value,title:$("atitle").value||$("atype").value,venue:$("avenue").value,location:$("alocation").value,province:$("aprovince").value,date:$("adate").value,start:$("astart").value,end:$("aend").value,expected:$("afree").checked?0:Number($("aexpected").value||0),final:$("afree").checked?0:Number($("afinal").value||$("aexpected").value||0),free:$("afree").checked,outcome:$("aoutcome").value,notes:$("anotes").value,paymentRule:$("apaymentrule").value||"Hasta 7 días",payments:old?.payments||[],expenses:old?.expenses||{outbound:[],return:[],extras:[]},calendarEventId:old?.calendarEventId||null,source:old?.source||"manual"};
+ let obj={id,kind:$("akind").value,type:$("atype").value,title:$("atitle").value||$("atype").value,venue:$("avenue").value,location:$("alocation").value,province:$("aprovince").value,date:$("adate").value,start:$("astart").value,end:$("aend").value,expected:$("afree").checked?0:Number($("aexpected").value||0),final:$("afree").checked?0:Number($("afinal").value||$("aexpected").value||0),free:$("afree").checked,outcome:$("aoutcome").value,notes:$("anotes").value,paymentRule:$("apaymentrule").value||"Hasta 7 días",payments:old?.payments||[],expenses:old?.expenses||{outbound:[],return:[],extras:[]},calendarEventId:old?.calendarEventId||null,source:old?.source||"manual",expenseReviewDone:old?.expenseReviewDone??false,expensePromptAnswered:old?.expensePromptAnswered??false,postPromptSnoozedUntil:old?.postPromptSnoozedUntil||null,liveStage:old?.liveStage||"",paidFullAdjusted:old?.paidFullAdjusted||false,paymentAdjustmentNote:old?.paymentAdjustmentNote||"",pendingCalendarLocation:old?.pendingCalendarLocation||"",pendingCalendarVenue:old?.pendingCalendarVenue||""};
+ const conflict=findScheduleConflict(obj,id);if(conflict){alert(`No se puede guardar porque se cruza con:
+${conflict.title} · ${panamaDate(conflict.date)} · ${panamaRange(conflict)}`);return}
+ if(!placeConfig(obj.venue)&&obj.venue&&!obj.free&&!old){const r=prompt(`Es la primera vez que registras ${obj.venue}. ¿Cuándo suelen pagarte aquí?`,obj.paymentRule||"Hasta 7 días");if(r!==null&&r.trim()){obj.paymentRule=r.trim();state.settings.placeDefaults[obj.venue]={rate:obj.expected,rule:r.trim(),custom:true}}}
  if(old)Object.assign(old,obj);else state.activities.push(obj);
  save();activityDlg.close();toast("Actividad guardada · KPIs recalculados");
  if(googleAccessToken){
@@ -378,22 +589,28 @@ async function saveActivity(){
 }
 function openDetail(id,tab="summary"){
  const a=state.activities.find(x=>x.id===id);if(!a)return;let s=status(a);
- $("detailBody").innerHTML=`<button class="iconbtn close" onclick="detailDlg.close()">✕</button><h2>${a.title}</h2><span class="badge ${s[0]}">${s[1]}</span><p class="muted">${a.date} · ${a.start}–${a.end} · ${a.venue}</p><div class="tabs"><button class="${tab==="summary"?"active":""}" onclick="openDetail('${id}','summary')">Resumen</button><button class="${tab==="payments"?"active":""}" onclick="openDetail('${id}','payments')">Pagos</button><button class="${tab==="expenses"?"active":""}" onclick="openDetail('${id}','expenses')">Gastos</button><button class="${tab==="route"?"active":""}" onclick="openDetail('${id}','route')">Cómo llegar</button></div>${detailTab(a,tab)}<div class="row" style="margin-top:14px"><button class="btn ghost" onclick="detailDlg.close();openActivityForm('${id}')">Editar actividad</button><button class="btn danger" onclick="deleteActivity('${id}')">Mover a eliminados</button></div>`;detailDlg.showModal()
+ $("detailBody").innerHTML=`<button class="iconbtn close" onclick="detailDlg.close()">✕</button><h2>${a.title}</h2><span class="badge ${s[0]}">${s[1]}</span><p class="muted">${panamaDate(a.date)} · ${panamaRange(a)} · ${a.venue}</p><div class="tabs"><button class="${tab==="summary"?"active":""}" onclick="openDetail('${id}','summary')">Resumen</button><button class="${tab==="payments"?"active":""}" onclick="openDetail('${id}','payments')">Pagos</button><button class="${tab==="expenses"?"active":""}" onclick="openDetail('${id}','expenses')">Gastos</button><button class="${tab==="route"?"active":""}" onclick="openDetail('${id}','route')">Cómo llegar</button></div>${detailTab(a,tab)}<div class="row" style="margin-top:14px"><button class="btn ghost" onclick="detailDlg.close();openActivityForm('${id}')">Editar actividad</button><button class="btn danger" onclick="deleteActivity('${id}')">Mover a eliminados</button></div>`;detailDlg.showModal()
 }
 function detailTab(a,tab){
  if(tab==="payments")return paymentsTab(a);
  if(tab==="expenses")return expensesTab(a);
  if(tab==="route"){let d=encodeURIComponent(a.location||a.venue),h=encodeURIComponent(state.settings.homeAddress||"");return`<h3>Cómo llegar</h3><div class="row"><a class="btn primary" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=${d}">Google Maps · ubicación actual</a><a class="btn ghost" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=${h}&destination=${d}">Google Maps · desde casa</a><a class="btn ghost" target="_blank" href="https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[formatted_address]=${d}">Uber</a></div>`}
- return`<div class="info"><div class="box"><small>Esperado</small><b>${money(a.expected)}</b></div><div class="box"><small>Final acordado</small><b>${money(finalAmt(a))}</b></div><div class="box"><small>Recibido</small><b>${money(received(a))}</b></div><div class="box"><small>Gastos reales conocidos</small><b>${money(expTotal(a))}</b></div><div class="box"><small>Gastos con monto pendiente</small><b>${pendingExp(a)}</b></div><div class="box"><small>Neto</small><b>${money(earned(a)-expTotal(a))}</b></div><div class="box"><small>Regla de pago</small><b>${a.paymentRule||findKnownPlace(a.venue)?.rule||"Hasta 7 días"}</b></div><div class="box"><small>Fecha estimada</small><b>${due(a)||"No aplica"}</b></div></div>${a.notes?`<div class="sectionline"><b>Observación</b><p>${a.notes}</p></div>`:""}`
+ return`${a.pendingCalendarLocation?`<div class="location-review"><b>📍 Google Calendar propone otra ubicación</b><p>${esc(a.pendingCalendarLocation)}</p><button class="btn primary small" onclick="reviewCalendarLocation('${a.id}')">Revisar cambio</button> <button class="btn ghost small" onclick="dismissCalendarLocation('${a.id}')">Ignorar</button></div>`:""}<div class="info"><div class="box"><small>Esperado</small><b>${money(a.expected)}</b></div><div class="box"><small>Final acordado</small><b>${money(finalAmt(a))}</b></div><div class="box"><small>Recibido</small><b>${money(received(a))}</b></div><div class="box"><small>Gastos reales conocidos</small><b>${money(expTotal(a))}</b></div><div class="box"><small>Gastos con monto pendiente</small><b>${pendingExp(a)}</b></div><div class="box"><small>Neto actual</small><b>${money(earned(a)-expTotal(a))}</b></div><div class="box"><small>Regla de pago</small><b>${a.paymentRule||placeConfig(a.venue)?.rule||"Hasta 7 días"}</b></div><div class="box"><small>Fecha estimada</small><b>${due(a)?panamaDate(due(a)):"No aplica"}</b></div>${extraordinary(a)>0?`<div class="box"><small>Ingreso extraordinario</small><b>${money(extraordinary(a))}</b></div>`:""}${negativeAdjustment(a)>0?`<div class="box"><small>Ajuste negativo</small><b>-${money(negativeAdjustment(a))}</b></div>`:""}</div>${done(a)?`<div class="sectionline"><h3>📊 Cierre del toque</h3><div class="info"><div class="box"><small>Ingreso actual</small><b>${money(earned(a))}</b></div><div class="box"><small>Gastos totales</small><b>${money(expTotal(a))}</b></div><div class="box"><small>Ganancia neta</small><b>${money(earned(a)-expTotal(a))}</b></div><div class="box"><small>Estado del pago</small><b>${status(a)[1]}</b></div></div></div>`:""}${a.paymentAdjustmentNote?`<div class="sectionline"><b>Observación de ajuste de pago</b><p>${esc(a.paymentAdjustmentNote)}</p></div>`:""}${a.notes?`<div class="sectionline"><b>Observación</b><p>${esc(a.notes)}</p></div>`:""}`
 }
 function paymentsTab(a){
- return`<div class="info"><div class="box"><small>Esperado</small><b>${money(a.expected)}</b></div><div class="box"><small>Final acordado</small><b>${money(finalAmt(a))}</b></div><div class="box"><small>Recibido</small><b>${money(received(a))}</b></div><div class="box"><small>Saldo</small><b>${money(balance(a))}</b></div><div class="box"><small>Regla de pago</small><b>${a.paymentRule||findKnownPlace(a.venue)?.rule||"Hasta 7 días"}</b></div><div class="box"><small>Fecha estimada</small><b>${due(a)||"No aplica"}</b></div></div><div class="sectionline"><div class="triphead"><h3>Abonos</h3><button class="btn ghost small" onclick="addPayment('${a.id}')">＋ Agregar abono</button></div>${(a.payments||[]).map((p,i)=>`<div class="card"><div class="row" style="justify-content:space-between"><span>${p.date} · <b>${money(p.amount)}</b></span><button class="mini" onclick="delPayment('${a.id}',${i})">✕</button></div></div>`).join("")||'<div class="muted">Sin pagos registrados.</div>'}</div>`
+ return`<div class="info"><div class="box"><small>Esperado</small><b>${money(a.expected)}</b></div><div class="box"><small>Final acordado</small><b>${money(finalAmt(a))}</b></div><div class="box"><small>Recibido</small><b>${money(received(a))}</b></div><div class="box"><small>Saldo</small><b>${money(balance(a))}</b></div>${extraordinary(a)>0?`<div class="box"><small>Excedente excepcional</small><b>${money(extraordinary(a))}</b></div>`:""}${negativeAdjustment(a)>0?`<div class="box"><small>Ajuste negativo</small><b>-${money(negativeAdjustment(a))}</b></div>`:""}<div class="box"><small>Regla de pago</small><b>${a.paymentRule||placeConfig(a.venue)?.rule||"Hasta 7 días"}</b></div><div class="box"><small>Fecha estimada</small><b>${due(a)?panamaDate(due(a)):"No aplica"}</b></div></div>${a.paymentAdjustmentNote?`<div class="sectionline"><b>Observación</b><p>${esc(a.paymentAdjustmentNote)}</p></div>`:""}<div class="sectionline"><div class="triphead"><h3>Abonos</h3><button class="btn ghost small" onclick="addPayment('${a.id}')">＋ Agregar abono</button></div>${(a.payments||[]).map((p,i)=>({...p,_i:i})).sort((x,y)=>String(x.date).localeCompare(String(y.date))).map(p=>`<div class="card"><div class="row" style="justify-content:space-between"><span>${panamaDate(p.date)} · <b>${money(p.amount)}</b></span><button class="mini" onclick="delPayment('${a.id}',${p._i})">✕</button></div></div>`).join("")||'<div class="muted">Sin pagos registrados.</div>'}</div>`
 }
-function addPayment(id){let a=state.activities.find(x=>x.id===id),amt=prompt("Monto del abono (B/.)");if(amt===null)return;let d=prompt("Fecha (AAAA-MM-DD)","2026-09-21");if(!d)return;a.payments.push({id:uid(),date:d,amount:Number(amt||0)});save();openDetail(id,"payments")}
-function delPayment(id,i){let a=state.activities.find(x=>x.id===id),old=a.payments.splice(i,1)[0];save();openDetail(id,"payments");showUndo("Abono eliminado",()=>{a.payments.splice(i,0,old);save();openDetail(id,"payments")})}
-function expensesTab(a){
- const trip=(key,label)=>`<div class="trip"><div class="triphead"><b>${label}</b><button class="btn ghost small" onclick="addTransport('${a.id}','${key}')">＋ Transporte</button></div>${a.expenses[key].length?a.expenses[key].map((t,i)=>transportRow(a,key,t,i)).join(""):'<div class="muted">No seleccionaste transporte: no se registra gasto.</div>'}</div>`;
- return`<h3>Transporte</h3><p class="muted">Selecciona el medio por su imagen. Si dejas el monto vacío, queda como ⏳ pendiente.</p>${trip("outbound","Casa → Actividad")}${trip("return","Actividad → Casa")}<div class="triphead"><h3>Otros gastos</h3><button class="btn ghost small" onclick="addExtra('${a.id}')">＋ Agregar gasto</button></div>${a.expenses.extras.length?a.expenses.extras.map((e,i)=>extraRow(a,e,i)).join(""):'<div class="muted">No seleccionaste otros gastos.</div>'}<div class="sectionline info"><div class="box"><small>Total conocido</small><b>${money(expTotal(a))}</b></div><div class="box"><small>Montos pendientes</small><b>${pendingExp(a)}</b></div></div>`
+function addPayment(id){
+ let a=state.activities.find(x=>x.id===id),amt=prompt("Monto del abono (B/.)");if(amt===null)return;let d=prompt("Fecha (AAAA-MM-DD)",todayISO());if(!d)return;a.payments.push({id:uid(),date:d,amount:Number(amt||0)});a.paidFullAdjusted=false;a.paymentAdjustmentNote="";
+ if(received(a)<finalAmt(a)&&confirm(`Has recibido ${money(received(a))} de ${money(finalAmt(a))}.\n\n¿Quieres marcarlo como PAGADO COMPLETO con ajuste?\n\nCancelar = mantener pago parcial.`)){
+   let note="";while(!note.trim()){note=prompt("Observación obligatoria para explicar por qué el pago menor queda cerrado:","")||"";if(!note.trim()&&!confirm("La observación es obligatoria. ¿Intentar de nuevo?"))break}
+   if(note.trim()){a.paidFullAdjusted=true;a.paymentAdjustmentNote=note.trim()}
+ }
+ save();openDetail(id,"payments")
+}
+function markExpenseReviewDone(id){
+ const a=state.activities.find(x=>x.id===id);if(!a)return;
+ a.expenseReviewDone=true;a.expensePromptAnswered=true;localStorage.setItem(KEY,JSON.stringify(state));render();openDetail(id,"expenses");toast("Gastos marcados como revisados")
 }
 function transportRow(a,key,t,i){
  let meta=TRANSPORTS.find(x=>x[0]===t.type)||["taxi","Taxi"];
@@ -431,7 +648,57 @@ function changeExtra(id,i,f,v){let a=state.activities.find(x=>x.id===id);a.expen
 function delExtra(id,i){let a=state.activities.find(x=>x.id===id),old=a.expenses.extras.splice(i,1)[0];save();openDetail(id,"expenses");showUndo("Gasto eliminado",()=>{a.expenses.extras.splice(i,0,old);save();openDetail(id,"expenses")})}
 function deleteActivity(id){if(!confirm("¿Mover esta actividad al historial de eliminados?"))return;let i=state.activities.findIndex(x=>x.id===id),a=state.activities.splice(i,1)[0];state.deleted.push(a);save();detailDlg.close();showUndo("Actividad movida a eliminados",()=>{state.deleted=state.deleted.filter(x=>x.id!==id);state.activities.push(a);save()})}
 function restoreDeleted(id){let i=state.deleted.findIndex(x=>x.id===id),a=state.deleted.splice(i,1)[0];state.activities.push(a);save()}
-function reuseDeleted(id){let a=state.deleted.find(x=>x.id===id),c=structuredClone(a);c.id=uid();c.date="2026-09-21";c.start="20:00";c.end="22:00";c.outcome="";c.payments=[];c.expenses={outbound:[],return:[],extras:[]};state.activities.push(c);save();openActivityForm(c.id)}
+function reuseDeleted(id){let a=state.deleted.find(x=>x.id===id),c=structuredClone(a);c.id=uid();c.date=todayISO();c.start="20:00";c.end="22:00";c.outcome="";c.payments=[];c.expenses={outbound:[],return:[],extras:[]};state.activities.push(c);save();openActivityForm(c.id)}
+
+
+async function loadGoogleProfile(force=false){
+ if(!googleAccessToken)return toast("Conecta Google para cargar tu perfil");
+ try{
+   const p=await gfetch("https://openidconnect.googleapis.com/v1/userinfo");
+   state.settings.profile.googleName=p.name||"";
+   state.settings.profile.googlePhoto=p.picture||"";
+   state.settings.profile.email=p.email||state.settings.profile.email||"";
+   if(force||!state.settings.profile.customName){
+     state.settings.profile.name=p.name||state.settings.profile.name||"";
+     state.settings.profile.customName=false;
+   }
+   if(force||!state.settings.profile.customPhoto){
+     state.settings.profile.photo=p.picture||state.settings.profile.photo||"";
+     state.settings.profile.customPhoto=false;
+   }
+   localStorage.setItem(KEY,JSON.stringify(state));render();toast("Perfil de Google actualizado");
+ }catch(e){toast("No se pudo cargar el perfil de Google")}
+}
+function saveProfileName(){
+ const v=($("profileName")?.value||"").trim();
+ state.settings.profile.name=v;
+ state.settings.profile.customName=!!v;
+ localStorage.setItem(KEY,JSON.stringify(state));render();toast("Perfil guardado")
+}
+function handleProfilePhoto(file){
+ if(!file)return;
+ if(!file.type.startsWith("image/"))return toast("Selecciona una imagen");
+ const reader=new FileReader();
+ reader.onload=()=>{
+   const img=new Image();
+   img.onload=()=>{
+     const max=512,scale=Math.min(1,max/Math.max(img.width,img.height));
+     const w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale));
+     const c=document.createElement("canvas");c.width=w;c.height=h;
+     c.getContext("2d").drawImage(img,0,0,w,h);
+     state.settings.profile.photo=c.toDataURL("image/jpeg",0.86);
+     state.settings.profile.customPhoto=true;
+     localStorage.setItem(KEY,JSON.stringify(state));render();toast("Foto de perfil guardada");
+   };
+   img.src=reader.result;
+ };
+ reader.readAsDataURL(file);
+}
+function restoreGooglePhoto(){
+ state.settings.profile.customPhoto=false;
+ state.settings.profile.photo=state.settings.profile.googlePhoto||"";
+ localStorage.setItem(KEY,JSON.stringify(state));render();toast(state.settings.profile.photo?"Foto de Google restaurada":"Conecta Google para recuperar tu foto")
+}
 
 function saveGoogleClientId(){
  state.settings.googleClientId=($("googleClientId")?.value||"").trim();save();
@@ -453,10 +720,10 @@ async function connectGoogle(){
      scope:"openid email profile https://www.googleapis.com/auth/calendar.events",
      callback:async r=>{
        if(r.error)return toast("Google no autorizó el acceso");
-       googleAccessToken=r.access_token;state.settings.calendarConnected=true;save();toast("Google Calendar conectado");await syncCalendar();
+       googleAccessToken=r.access_token;state.settings.calendarConnected=true;save();toast("Google Calendar conectado");await loadGoogleProfile(false);await syncCalendar();
      }
    });
-   googleTokenClient.requestAccessToken({prompt:"consent"});
+   googleTokenClient.requestAccessToken({prompt:""});
  }catch(e){toast("No se pudo iniciar Google OAuth desde esta dirección")}
 }
 async function gfetch(url,opt={}){
@@ -464,20 +731,29 @@ async function gfetch(url,opt={}){
  if(!r.ok)throw new Error(await r.text()); if(r.status===204)return null; return r.json()
 }
 function calendarTitle(a){
- if(a.kind==="ensayo")return a.venue?.toLowerCase().includes("russo")?"🎵 Ensayo en casa de Russo - La Mambito Sound":"🎵 Ensayo - La Mambito Sound";
- if(a.kind==="presentacion")return`🎤 Presentación - La Mambito Sound | ${a.type||"Evento"}`;
- if(a.kind==="viaje")return`✈️ Viaje - La Mambito Sound | ${a.title||a.type||""}`;
- if(a.kind==="grabacion")return`🎙️ Grabación - La Mambito Sound | ${a.title||a.type||""}`;
- if(a.kind==="promocion")return`📣 Promoción - La Mambito Sound | ${a.title||a.type||""}`;
- return`La Mambito Sound | ${a.title||"Actividad"}`
+ const venue=a.venue||"Lugar pendiente",type=a.type||a.title||"Evento";
+ if(a.kind==="ensayo")return`🎵 Ensayo Mambito Sound | ${venue}`;
+ if(a.kind==="presentacion")return`🎤 Presentación Mambito Sound – ${type} | ${venue}`;
+ if(a.kind==="viaje")return`✈️ Viaje Mambito Sound | ${a.title||venue}`;
+ if(a.kind==="grabacion")return`🎙️ Grabación Mambito Sound | ${venue||a.title}`;
+ if(a.kind==="promocion")return`📣 Promoción Mambito Sound | ${venue||a.title}`;
+ return`Mambito Sound | ${a.title||"Actividad"}`
 }
 function eventEndDate(a){
  let d=new Date(a.date+"T12:00:00");if(a.end<a.start)d.setDate(d.getDate()+1);return d.toISOString().slice(0,10)
 }
+function nightBeforeReminderMinutes(a){
+ const start=new Date(`${a.date}T${a.start||"00:00"}:00-05:00`);
+ const prevLocal=new Date(`${a.date}T23:00:00-05:00`);
+ prevLocal.setDate(prevLocal.getDate()-1);
+ const mins=Math.round((start-prevLocal)/60000);
+ return Math.max(0,Math.min(40320,mins));
+}
 function calendarPayload(a){
  return{summary:calendarTitle(a),location:a.location||a.venue||"",description:`${a.title||a.type||"Actividad"}${a.notes?". "+a.notes:""}`,colorId:"3",
  start:{dateTime:`${a.date}T${a.start}:00-05:00`,timeZone:"America/Panama"},
- end:{dateTime:`${eventEndDate(a)}T${a.end}:00-05:00`,timeZone:"America/Panama"}}
+ end:{dateTime:`${eventEndDate(a)}T${a.end}:00-05:00`,timeZone:"America/Panama"},
+ reminders:{useDefault:false,overrides:[{method:"popup",minutes:nightBeforeReminderMinutes(a)}]}}
 }
 async function createCalendarEvent(a){
  const ev=await gfetch("https://www.googleapis.com/calendar/v3/calendars/primary/events",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(calendarPayload(a))});
@@ -487,29 +763,245 @@ async function updateCalendarEvent(a){
  return await gfetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${encodeURIComponent(a.calendarEventId)}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify(calendarPayload(a))})
 }
 function parseGoogleEvent(ev){
- const st=ev.start?.dateTime||"",en=ev.end?.dateTime||"";let kind="presentacion";
- if((ev.summary||"").startsWith("🎵"))kind="ensayo";else if((ev.summary||"").startsWith("✈️"))kind="viaje";else if((ev.summary||"").startsWith("🎙️"))kind="grabacion";else if((ev.summary||"").startsWith("📣"))kind="promocion";
- let type=ev.summary?.includes("|")?ev.summary.split("|").pop().trim():(kind==="ensayo"?"Ensayo regular":"Otro");
- return{calendarEventId:ev.id,kind,type,title:type==="Otro"?((ev.location||"").split(",")[0]||"Actividad"):type,venue:(ev.location||"").split(",")[0]||"",location:ev.location||"",province:(ev.location||"").toLowerCase().includes("panamá oeste")?"Panamá Oeste":(ev.location||"").toLowerCase().includes("panamá")?"Panamá":"",date:st.slice(0,10),start:st.slice(11,16)||"00:00",end:en.slice(11,16)||"23:59",notes:"",free:kind==="ensayo",outcome:"",payments:[],expenses:{outbound:[],return:[],extras:[]},source:"calendar"}
+ const st=ev.start?.dateTime||"",en=ev.end?.dateTime||"",sum=ev.summary||"";let kind="presentacion",type="Otro",venue=(ev.location||"").split(",")[0]||"";
+ if(sum.startsWith("🎵"))kind="ensayo";else if(sum.startsWith("✈️"))kind="viaje";else if(sum.startsWith("🎙️"))kind="grabacion";else if(sum.startsWith("📣"))kind="promocion";
+ if(sum.includes("Presentación Mambito Sound")){let tail=sum.split("Presentación Mambito Sound").pop().replace(/^\s*[–-]\s*/,"");let parts=tail.split("|").map(x=>x.trim());type=parts[0]||"Otro";venue=parts[1]||venue}
+ else if(sum.includes("Ensayo Mambito Sound")){type="Ensayo regular";let parts=sum.split("|");venue=(parts[1]||venue).trim()}
+ else if(sum.includes("|")){type=sum.split("|").pop().trim()||type}
+ const loc=ev.location||"";
+ return{calendarEventId:ev.id,kind,type,title:type==="Otro"?(venue||"Actividad"):type,venue,location:loc,province:loc.toLowerCase().includes("panamá oeste")?"Panamá Oeste":loc.toLowerCase().includes("panamá")?"Panamá":"",date:st.slice(0,10),start:st.slice(11,16)||"00:00",end:en.slice(11,16)||"23:59",notes:"",free:kind==="ensayo",outcome:"",payments:[],expenses:{outbound:[],return:[],extras:[]},source:"calendar"}
 }
 async function syncCalendar(){
  if(!googleAccessToken)return toast("Conecta Google primero");
  try{
-   const url="https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&timeMin="+encodeURIComponent("2026-08-01T00:00:00-05:00")+"&maxResults=250&q="+encodeURIComponent("La Mambito Sound");
+   const since=new Date(Date.now()-365*86400000).toISOString();
+   const url="https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&timeMin="+encodeURIComponent(since)+"&maxResults=250&q="+encodeURIComponent("Mambito Sound");
    const d=await gfetch(url),found=new Set();
    for(const ev of (d.items||[])){
      found.add(ev.id);const p=parseGoogleEvent(ev);let a=state.activities.find(x=>x.calendarEventId===ev.id);
      if(!a)a=state.activities.find(x=>!x.calendarEventId&&x.date===p.date&&x.start===p.start);
+     if(!a){const near=state.activities.find(x=>!x.calendarEventId&&x.date===p.date&&(x.venue===p.venue||x.type===p.type)&&Math.abs(eventStartTime(x)-eventStartTime(p))<=90*60000);if(near&&confirm(`Calendar encontró una actividad que podría ser la misma:\n${near.title} · ${near.start}\n${p.type} · ${p.start}\n\n¿Vincularlas?`))a=near}
      if(a){
-       a.calendarEventId=ev.id;a.source="calendar";a.kind=p.kind;a.type=p.type;a.date=p.date;a.start=p.start;a.end=p.end;a.location=p.location;if(!a.venue)a.venue=p.venue;a.deletedFromCalendar=false;
-       if((a.expected==null||a.expected==="")&&!a.free){let kp=findKnownPlace(a.venue);a.expected=kp?.rate??(a.province==="Panamá Oeste"?40:50);if(a.final==null||a.final==="")a.final=a.expected}
+       const future=!a.outcome&&activityEndTime(a)>new Date();const before={date:a.date,start:a.start,end:a.end};
+       a.calendarEventId=ev.id;a.source="calendar";a.kind=p.kind;a.type=p.type;a.deletedFromCalendar=false;
+       if(future){a.date=p.date;a.start=p.start;a.end=p.end}
+       if(p.location&&p.location!==(a.location||"")){a.pendingCalendarLocation=p.location;a.pendingCalendarVenue=p.venue;addAlert("📍 Ubicación cambiada en Calendar",`${a.title}: revisa la nueva ubicación antes de aplicarla.`,`cal-location-${ev.id}-${p.location}`)}
+       if(future&&(before.date!==a.date||before.start!==a.start||before.end!==a.end))addAlert("📅 Fecha u horario actualizado",`${a.title}: Google Calendar actualizó fecha u horario.`,`cal-time-${ev.id}-${a.date}-${a.start}`);
      }else{
-       let kp=findKnownPlace(p.venue);p.expected=p.free?0:(kp?.rate??(p.province==="Panamá Oeste"?40:50));p.final=p.expected;p.paymentRule=kp?.rule||"Hasta 7 días";state.activities.push({...p,id:uid()})
+       let kp=placeConfig(p.venue);p.expected=p.free?0:(kp?.rate??(p.province==="Panamá Oeste"?40:50));p.final=p.expected;p.paymentRule=kp?.rule||"Hasta 7 días";p.expenseReviewDone=false;p.expensePromptAnswered=false;p.liveStage="";p.paidFullAdjusted=false;
+       state.activities.push({...p,id:uid()});addAlert("📅 Nuevo evento de Calendar",`${calendarTitle(p)} · ${panamaDateTime(p.date,p.start)}`,`cal-new-${ev.id}`)
      }
    }
-   state.activities.filter(a=>a.calendarEventId).forEach(a=>{if(!found.has(a.calendarEventId))a.deletedFromCalendar=true});
-   state.settings.lastCalendarSync=new Date().toISOString();save();toast(`Calendar sincronizado: ${(d.items||[]).length} eventos`)
- }catch(e){toast("No se pudo sincronizar Google Calendar")}
+   state.activities.filter(a=>a.calendarEventId).forEach(a=>{if(!found.has(a.calendarEventId)&&!a.deletedFromCalendar){a.deletedFromCalendar=true;addAlert("🗑️ Eliminado de Google Calendar",`${a.title} ya no aparece en Google Calendar.`,`cal-del-${a.calendarEventId}`)}});
+   state.settings.lastCalendarSync=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(state));render();toast(`Calendar sincronizado: ${(d.items||[]).length} eventos`);maybePromptPostActivity();maybeFireNativeNotifications()
+ }catch(e){console.error(e);toast("No se pudo sincronizar Google Calendar")}
+}
+
+
+function calendarQuickAction(){googleAccessToken?syncCalendar():connectGoogle()}
+
+function addAlert(title,body,tag){
+ if(state.alerts.some(x=>x.tag===tag))return;
+ state.alerts.unshift({id:uid(),title,body,tag,createdAt:new Date().toISOString(),read:false});
+ state.alerts=state.alerts.slice(0,80);
+}
+function notificationPermissionLabel(){
+ if(!("Notification" in window))return "No compatible";
+ if(Notification.permission==="granted")return "Activadas";
+ if(Notification.permission==="denied")return "Bloqueadas en el navegador";
+ return "Pendientes de activar";
+}
+async function enableNotifications(){
+ if(!("Notification" in window))return toast("Este navegador no admite notificaciones");
+ const p=await Notification.requestPermission();
+ renderMore();renderNotificationBadge();
+ toast(p==="granted"?"Notificaciones activadas":"No se activaron las notificaciones");
+ if(p==="granted")maybeFireNativeNotifications(true);
+}
+async function nativeNotify(title,body,tag){
+ if(!("Notification" in window)||Notification.permission!=="granted")return;
+ try{
+   const reg=await navigator.serviceWorker.ready;
+   await reg.showNotification(title,{body,tag,icon:"icon-192.png",badge:"icon-192.png"});
+ }catch(e){}
+}
+function incompleteFields(a){
+ const x=[];
+ if(!a.venue)x.push("lugar");
+ if(!a.location&&a.kind!=="ensayo")x.push("dirección");
+ if(!a.date)x.push("fecha");
+ if(!a.start)x.push("hora");
+ if(!a.free&&(a.expected==null||a.expected===""))x.push("monto esperado");
+ return x;
+}
+function notificationItems(){
+ const out=[];
+ (state.alerts||[]).filter(x=>!x.read).forEach(x=>out.push({...x,type:"alert"}));
+ state.activities.forEach(a=>{
+   if(needsConfirmation(a))out.push({id:`confirm-${a.id}`,type:"confirm",title:"⏳ Actividad pendiente de confirmar",body:`${a.title} terminó. Confirma si participaste.`,activityId:a.id});
+   if(done(a)&&!a.expenseReviewDone)out.push({id:`expense-${a.id}`,type:"expense",title:"💸 Gastos pendientes",body:`Revisa los gastos de ${a.title}.`,activityId:a.id});
+   if(a.deletedFromCalendar)out.push({id:`deleted-${a.id}`,type:"deleted",title:"🗑️ Eliminado de Google Calendar",body:`${a.title} ya no aparece en Calendar.`,activityId:a.id});
+   if(isUpcoming(a)){
+     const miss=incompleteFields(a);
+     if(miss.length)out.push({id:`incomplete-${a.id}`,type:"incomplete",title:"📝 Información pendiente",body:`${a.title}: falta ${miss.join(", ")}.`,activityId:a.id});
+   }
+   if(done(a)&&!a.free&&balance(a)>0){
+     const d=due(a);
+     if(d){
+       const diff=daysBetween(d,todayISO());
+       if(diff===1)out.push({id:`pay-tom-${a.id}-${d}`,type:"payment",title:"💰 Cobro mañana",body:`${a.title}: saldo ${money(balance(a))}.`,activityId:a.id});
+       if(diff===0)out.push({id:`pay-today-${a.id}-${d}`,type:"payment",title:"💰 Cobro previsto hoy",body:`${a.title}: saldo ${money(balance(a))}.`,activityId:a.id});
+       if(diff<0)out.push({id:`pay-over-${a.id}-${d}`,type:"payment",title:"🔴 Pago vencido",body:`${a.title}: saldo ${money(balance(a))}.`,activityId:a.id});
+     }
+   }
+ });
+ return out;
+}
+function renderNotificationBadge(){
+ const n=notificationItems().length,b=$("notifBadge");if(!b)return;
+ b.textContent=n>99?"99+":String(n);b.classList.toggle("hidden",!n);
+}
+function openNotifications(){
+ const items=notificationItems();
+ $("notificationBody").innerHTML=`<button class="iconbtn close" onclick="notificationDlg.close()">✕</button><h2>🔔 Notificaciones</h2>
+ <p class="muted">${items.length?`${items.length} aviso${items.length===1?"":"s"} pendiente${items.length===1?"":"s"}.`:"No tienes avisos pendientes."}</p>
+ ${items.map(n=>`<div class="notice"><b>${n.title}</b><small>${n.body}</small><div class="notice-actions">${n.activityId?`<button class="btn ghost small" onclick="notificationDlg.close();openDetail('${n.activityId}', '${n.type==="expense"?"expenses":"summary"}')">Abrir</button>`:""}${n.type==="alert"?`<button class="btn ghost small" onclick="markAlertRead('${n.id}')">Marcar leído</button>`:""}</div></div>`).join("")}`;
+ if(!notificationDlg.open)notificationDlg.showModal()
+}
+function markAlertRead(id){let x=state.alerts.find(a=>a.id===id);if(x)x.read=true;localStorage.setItem(KEY,JSON.stringify(state));render();openNotifications()}
+function promptSnoozed(a){return a.postPromptSnoozedUntil&&new Date(a.postPromptSnoozedUntil)>new Date()}
+function maybePromptPostActivity(force=false){
+ if(postActivityDlg.open||activityDlg.open||detailDlg.open||transportDlg.open)return;
+ const a=state.activities.filter(needsConfirmation).filter(x=>force||!promptSnoozed(x)).sort((x,y)=>activityEndTime(x)-activityEndTime(y))[0];
+ if(!a)return;
+ const rehearsal=a.kind==="ensayo";
+ $("postActivityBody").innerHTML=`<h2>${rehearsal?"🎵 ¿Asististe al ensayo?":"🎤 ¿Participaste en la actividad?"}</h2>
+ <p><b>${a.title}</b></p><p class="muted">${panamaDate(a.date)} · ${panamaRange(a)} · ${a.venue||"Lugar pendiente"}</p>
+ <div class="post-actions">
+   <button class="btn primary" onclick="confirmPostOutcome('${a.id}','${rehearsal?"asisti":"realizado"}')">${rehearsal?"✅ Sí, asistí":"✅ Sí, participé"}</button>
+   <button class="btn ghost" onclick="confirmPostOutcome('${a.id}','${rehearsal?"no-asisti":"no-participe"}')">${rehearsal?"❌ No asistí":"❌ No participé"}</button>
+   <button class="btn danger" onclick="confirmPostOutcome('${a.id}','cancelado')">🚫 Se canceló</button>
+   <button class="btn ghost" onclick="snoozePostPrompt('${a.id}')">Recordarme después</button>
+ </div>`;
+ postActivityDlg.showModal()
+}
+function snoozePostPrompt(id){
+ const a=state.activities.find(x=>x.id===id);if(a)a.postPromptSnoozedUntil=new Date(Date.now()+3*3600000).toISOString();
+ localStorage.setItem(KEY,JSON.stringify(state));postActivityDlg.close();render()
+}
+function confirmPostOutcome(id,outcome){
+ const a=state.activities.find(x=>x.id===id);if(!a)return;
+ a.outcome=outcome;a.postPromptSnoozedUntil=null;
+ if(["realizado","asisti"].includes(outcome)){a.expenseReviewDone=false;a.expensePromptAnswered=false}
+ else {a.expenseReviewDone=true;a.expensePromptAnswered=true}
+ localStorage.setItem(KEY,JSON.stringify(state));render();
+ if(["realizado","asisti"].includes(outcome))showExpenseQuestion(id);else{postActivityDlg.close();setTimeout(maybePromptPostActivity,250)}
+}
+function showExpenseQuestion(id){
+ const a=state.activities.find(x=>x.id===id);if(!a)return;
+ $("postActivityBody").innerHTML=`<h2>💸 Gastos de la actividad</h2><p><b>${a.title}</b></p>
+ <p class="muted">¿Pagaste transporte, comida, hospedaje u otro gasto?</p>
+ <div class="post-actions">
+  <button class="btn primary" onclick="expenseDecision('${id}','register')">Sí, registrar gastos ahora</button>
+  <button class="btn ghost" onclick="expenseDecision('${id}','none')">No tuve gastos</button>
+  <button class="btn ghost" onclick="expenseDecision('${id}','later')">Lo completaré después</button>
+ </div>`;
+ if(!postActivityDlg.open)postActivityDlg.showModal()
+}
+function expenseDecision(id,choice){
+ const a=state.activities.find(x=>x.id===id);if(!a)return;
+ a.expensePromptAnswered=true;
+ if(choice==="none")a.expenseReviewDone=true;
+ if(choice==="register"||choice==="later")a.expenseReviewDone=false;
+ localStorage.setItem(KEY,JSON.stringify(state));render();postActivityDlg.close();
+ if(choice==="register")openDetail(id,"expenses");
+ else setTimeout(maybePromptPostActivity,250)
+}
+function nativeReminderCandidates(){
+ const out=[];
+ state.activities.forEach(a=>{
+   if(needsConfirmation(a))out.push({tag:`post-${a.id}`,title:"Control OLMS",body:`${a.title} terminó. Confirma si participaste.`});
+   if(done(a)&&!a.expenseReviewDone)out.push({tag:`expense-${a.id}`,title:"Control OLMS · gastos",body:`Completa los gastos de ${a.title}.`});
+   if(done(a)&&!a.free&&balance(a)>0){
+     const d=due(a);if(!d)return;const diff=daysBetween(d,todayISO());
+     if(diff===1)out.push({tag:`pay-tom-${a.id}-${d}`,title:"Control OLMS · cobro mañana",body:`${a.title}: ${money(balance(a))} pendiente.`});
+     if(diff===0)out.push({tag:`pay-today-${a.id}-${d}`,title:"Control OLMS · cobro hoy",body:`${a.title}: ${money(balance(a))} pendiente.`});
+     const past=-diff;if(past===1||(past>1&&(past-1)%7===0))out.push({tag:`pay-over-${a.id}-${d}-${past}`,title:"Control OLMS · pago vencido",body:`${a.title}: ${money(balance(a))} pendiente.`});
+   }
+ });
+ return out;
+}
+async function maybeFireNativeNotifications(force=false){
+ if(!("Notification" in window)||Notification.permission!=="granted")return;
+ const today=todayISO(),seen=state.settings.notifiedTags||{};
+ for(const n of nativeReminderCandidates()){
+   const key=`${today}|${n.tag}`;
+   if(force||!seen[key]){await nativeNotify(n.title,n.body,n.tag);seen[key]=true}
+ }
+ state.settings.notifiedTags=seen;
+ Object.keys(seen).forEach(k=>{if(k.slice(0,10)<new Date(Date.now()-35*86400000).toISOString().slice(0,10))delete seen[k]});
+ localStorage.setItem(KEY,JSON.stringify(state));
+}
+
+
+
+function setLiveStage(id,stage){
+ const a=state.activities.find(x=>x.id===id);if(!a)return;a.liveStage=stage;save();
+ if(stage==="ended")showImmediatePostActivity(id)
+}
+function showImmediatePostActivity(id){
+ const a=state.activities.find(x=>x.id===id);if(!a)return;const rehearsal=a.kind==="ensayo";
+ $("postActivityBody").innerHTML=`<h2>${rehearsal?"🎵 ¿Asististe al ensayo?":"🎤 ¿Participaste en la actividad?"}</h2><p><b>${esc(a.title)}</b></p><div class="post-actions"><button class="btn primary" onclick="confirmPostOutcome('${a.id}','${rehearsal?"asisti":"realizado"}')">${rehearsal?"✅ Sí, asistí":"✅ Sí, participé"}</button><button class="btn ghost" onclick="confirmPostOutcome('${a.id}','${rehearsal?"no-asisti":"no-participe"}')">${rehearsal?"❌ No asistí":"❌ No participé"}</button><button class="btn danger" onclick="confirmPostOutcome('${a.id}','cancelado')">🚫 Se canceló</button><button class="btn ghost" onclick="postActivityDlg.close()">Cerrar por ahora</button></div>`;if(!postActivityDlg.open)postActivityDlg.showModal()
+}
+function openNavigate(id){
+ const a=state.activities.find(x=>x.id===id);if(!a)return;const d=encodeURIComponent(a.location||a.venue||"");
+ $("navBody").innerHTML=`<button class="iconbtn close close-sheet" onclick="navDlg.close()">✕</button><h2>📍 Navegar</h2><p class="muted">Elige cómo quieres abrir la ruta hacia ${esc(a.venue||"la actividad")}.</p><div class="nav-options"><a class="maps" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=${d}">Google Maps</a><a class="uber" target="_blank" href="https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[formatted_address]=${d}">Uber</a></div>`;navDlg.showModal()
+}
+let quickExpenseState=null;
+function recentAmounts(a,category,subtype="",transport=""){
+ const vals=[];state.activities.slice().sort((x,y)=>y.date.localeCompare(x.date)).forEach(x=>{
+   if(category==="Transporte"){[...(x.expenses?.outbound||[]),...(x.expenses?.return||[])].forEach(e=>{if(e.amount!=null&&(!transport||e.type===transport))vals.push(Number(e.amount))})}
+   else (x.expenses?.extras||[]).forEach(e=>{if(e.amount!=null&&e.category===category&&(!subtype||e.subtype===subtype))vals.push(Number(e.amount))})
+ });return [...new Set(vals)].slice(0,4)
+}
+function habitualTransport(a,side){const counts={};state.activities.filter(x=>x.venue===a.venue).forEach(x=>(x.expenses?.[side]||[]).forEach(t=>counts[t.type]=(counts[t.type]||0)+1));return Object.entries(counts).sort((x,y)=>y[1]-x[1])[0]?.[0]||"uber"}
+function openQuickExpense(id,category){const a=state.activities.find(x=>x.id===id),side=(a?.liveStage==="ended"||done(a))?"return":"outbound";quickExpenseState={id,category,subtype:category==="Comida"?"Cena":category==="Hospedaje"?"Noches":"",transport:a?habitualTransport(a,side):"uber",side};renderQuickExpense()}
+function renderQuickExpense(){
+ const q=quickExpenseState,a=state.activities.find(x=>x.id===q.id);if(!a)return;let choices="",extra="";
+ if(q.category==="Comida")choices=`<div class="choice-pills">${FOOD.map(x=>`<button class="choice-pill ${q.subtype===x?"active":""}" onclick="quickExpenseState.subtype='${x}';renderQuickExpense()">${x}</button>`).join("")}</div>`;
+ if(q.category==="Hospedaje")choices=`<div class="choice-pills"><button class="choice-pill ${q.subtype==="Horas"?"active":""}" onclick="quickExpenseState.subtype='Horas';renderQuickExpense()">Horas</button><button class="choice-pill ${q.subtype==="Noches"?"active":""}" onclick="quickExpenseState.subtype='Noches';renderQuickExpense()">Noches</button></div>`;
+ if(q.category==="Transporte"){
+   if(!q.side)q.side=(a.liveStage==="ended"||done(a))?"return":"outbound";
+   choices=`<div class="choice-pills"><button class="choice-pill ${q.side==="outbound"?"active":""}" onclick="quickExpenseState.side='outbound';renderQuickExpense()">Ida</button><button class="choice-pill ${q.side==="return"?"active":""}" onclick="quickExpenseState.side='return';renderQuickExpense()">Regreso</button></div><div class="transport-picker">${TRANSPORTS.map(x=>`<button class="transport-choice ${q.transport===x[0]?"active":""}" onclick="quickExpenseState.transport='${x[0]}';renderQuickExpense()"><img src="${transportIcon(x[0])}" alt="${x[1]}"><span>${x[1]}</span></button>`).join("")}</div>`
+ }
+ if(q.category==="Otro")extra=`<div class="field"><label>Detalle</label><input id="quickDetail" placeholder="Ej. Vestuario, entrada, propina..."></div>`;
+ const recent=recentAmounts(a,q.category,q.subtype,q.transport);
+ $("quickExpenseBody").innerHTML=`<div class="quick-sheet"><button class="iconbtn close" onclick="quickExpenseDlg.close()">✕</button><h2>${q.category==="Transporte"?"🚗":q.category==="Comida"?"🍽️":q.category==="Hospedaje"?"🏨":"＋"} ${q.category}</h2><p class="muted">${esc(a.title)} · gasto real de hoy</p>${choices}${extra}<div class="field"><label>Monto</label><input id="quickAmount" class="amount-box" type="number" inputmode="decimal" step=".01" min="0" placeholder="B/. 0.00"></div>${recent.length?`<div><small class="muted">Importes usados recientemente</small><div class="recent-amounts">${recent.map(v=>`<button onclick="$('quickAmount').value='${v.toFixed(2)}'">${money(v)}</button>`).join("")}</div></div>`:""}<div class="row" style="margin-top:15px"><button class="btn primary" onclick="saveQuickExpense()">Guardar gasto</button><button class="btn ghost" onclick="quickExpenseDlg.close()">Cancelar</button></div></div>`;if(!quickExpenseDlg.open)quickExpenseDlg.showModal()
+}
+function saveQuickExpense(){
+ const q=quickExpenseState,a=state.activities.find(x=>x.id===q.id);if(!a)return;const amount=Number($("quickAmount").value||0);if(!amount&&$("quickAmount").value!=="0")return toast("Escribe el monto del gasto");
+ const projected=expTotal(a)+amount;if(finalAmt(a)>0&&projected>=finalAmt(a)*.5&&!confirm(`⚠️ Con este gasto ya habrás consumido al menos la mitad de lo acordado para este evento.\n\n¿Registrar el gasto de todas formas?`))return;
+ if(q.category==="Transporte")a.expenses[q.side].push({id:uid(),type:q.transport,amount,driver:""});
+ else a.expenses.extras.push({id:uid(),category:q.category==="Otro"?"Otro":q.category,subtype:q.category==="Otro"?($("quickDetail")?.value||""):q.subtype,amount});
+ a.expensePromptAnswered=true;localStorage.setItem(KEY,JSON.stringify(state));quickExpenseDlg.close();render();toast("Gasto agregado")
+}
+function reviewCalendarLocation(id){
+ const a=state.activities.find(x=>x.id===id);if(!a?.pendingCalendarLocation)return;const loc=a.pendingCalendarLocation,venue=a.pendingCalendarVenue||loc.split(",")[0];
+ if(!confirm(`Google Calendar cambió la ubicación a:\n${loc}\n\n¿Aplicar esta nueva ubicación en Control OLMS?`))return;
+ a.location=loc;if(venue)a.venue=venue;a.pendingCalendarLocation="";a.pendingCalendarVenue="";
+ const p=placeConfig(a.venue);if(p&&isUpcoming(a)&&confirm("¿Aplicar también la tarifa y regla de pago habituales del nuevo lugar a esta actividad futura?")){a.expected=p.rate??a.expected;a.final=p.rate??a.final;a.paymentRule=p.rule||a.paymentRule}
+ save();if(detailDlg.open)openDetail(id,"summary");toast("Ubicación actualizada")
+}
+function dismissCalendarLocation(id){const a=state.activities.find(x=>x.id===id);if(!a)return;a.pendingCalendarLocation="";a.pendingCalendarVenue="";save();if(detailDlg.open)openDetail(id,"summary")}
+
+async function maybeAutoCalendarSync(){
+ if(!googleAccessToken)return;
+ const last=state.settings.lastCalendarSync?new Date(state.settings.lastCalendarSync):null;
+ const now=new Date();
+ const stale=!last||(now-last)>10*60*1000;
+ const afterFive=now.getHours()>=5;
+ const notToday=!last||last.toDateString()!==now.toDateString();
+ if(stale||(afterFive&&notToday))await syncCalendar();
 }
 
 let deferredInstallPrompt=null;
@@ -518,11 +1010,11 @@ async function installApp(){
  if(deferredInstallPrompt){deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null}
  else toast("La instalación aparecerá cuando Control OLMS esté publicado en HTTPS")
 }
-if("serviceWorker" in navigator && location.protocol.startsWith("http"))navigator.serviceWorker.register("sw.js").catch(()=>{});
+if("serviceWorker" in navigator && location.protocol.startsWith("http"))navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 function showUndo(msg,fn){undoAction=fn;let t=$("toast");t.innerHTML=`${msg} &nbsp; <button style="border:0;background:transparent;color:#e5c15a;font-weight:900" onclick="undoNow()">DESHACER</button>`;t.style.display="block";clearTimeout(window.tt);window.tt=setTimeout(()=>{t.style.display="none";undoAction=null},5000)}
 function undoNow(){if(undoAction)undoAction();$("toast").style.display="none";undoAction=null}
 function toast(msg){let t=$("toast");t.textContent=msg;t.style.display="block";clearTimeout(window.tt);window.tt=setTimeout(()=>t.style.display="none",2600)}
-function render(){renderDash();renderActivities();renderCalendar();renderPayments();renderMore()}
+function render(){renderDash();renderActivities();renderCalendar();renderPayments();renderMore();renderNotificationBadge()}
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll("main section").forEach(x=>x.classList.add("hidden"));$(b.dataset.view).classList.remove("hidden")});
 $("akind").onchange=()=>{
  if($("akind").value==="ensayo"){
@@ -540,6 +1032,11 @@ $("aexpected").addEventListener("input",()=>{if(autoFinal)$("afinal").value=$("a
 $("afinal").addEventListener("input",()=>{autoFinal=false});
 $("afree").addEventListener("change",syncFreeFields);
 render();
+setTimeout(()=>{const sp=$("splash");if(sp){sp.classList.add("hide");setTimeout(()=>sp.remove(),260)}},1000);
+setTimeout(()=>{maybeAutoCalendarSync();maybePromptPostActivity();maybeFireNativeNotifications();},1100);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){render();setTimeout(()=>{maybeAutoCalendarSync();maybePromptPostActivity();maybeFireNativeNotifications();},250)}});
+window.addEventListener("focus",()=>{render();setTimeout(()=>{maybeAutoCalendarSync();maybePromptPostActivity();maybeFireNativeNotifications();},250)});
+setInterval(()=>{render();maybeAutoCalendarSync();maybePromptPostActivity();maybeFireNativeNotifications();},60000);
 </script>
 </body>
 </html>
