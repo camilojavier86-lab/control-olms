@@ -99,6 +99,63 @@ a.btn{text-decoration:none;display:inline-block}
 .quick-savebar .btn{width:100%;min-height:48px;font-size:16px}
 .live-step{min-height:60px}
 .live-step:active{transform:scale(.97)}
+
+.pending-pay-banner{width:100%;border:1px solid #d9a62d;background:linear-gradient(135deg,#17130a,#2a210d);color:#fff;border-radius:17px;padding:14px;margin:12px 0;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;text-align:left}
+.pending-pay-banner small{display:block;color:#dec66f;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.pending-pay-banner strong{display:block;font-size:23px;margin-top:3px}
+.pending-pay-banner .cta{background:#e2b73e;color:#111;border:0;border-radius:12px;padding:11px 13px;font-weight:950}
+.pay-list-card{border:1px solid var(--line);background:#fff;border-radius:15px;padding:12px;margin:9px 0}
+.pay-list-card .pay-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.pay-list-card .pay-amount{font-size:19px;font-weight:950;color:#9a5718;white-space:nowrap}
+.pay-list-card .pay-actions{margin-top:9px}
+.pay-list-card .pay-actions button{width:100%}
+.quick-pay-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin:10px 0}
+.quick-pay-grid .box{background:#f1ebdf;border-radius:12px;padding:9px}
+.quick-pay-grid small{display:block;color:var(--muted)}
+.quick-pay-grid b{display:block;margin-top:3px}
+.latam-date-preview{font-size:12px;color:var(--muted);margin-top:3px}
+@media(max-width:520px){.pending-pay-banner{grid-template-columns:1fr}.pending-pay-banner .cta{width:100%}.quick-pay-grid{grid-template-columns:1fr 1fr}}
+
+/* ===== v6.6 refinamiento visual ===== */
+.form-section{border:1px solid var(--line);background:#fffdfa;border-radius:16px;padding:12px;margin:12px 0}
+.form-section h3{font-size:15px;margin:0 0 8px}.form-section p{margin:3px 0 9px}
+.billing-choice{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.billing-choice button{border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px 10px;font-weight:900}
+.billing-choice button.active{background:#111;color:#fff;border-color:#111}
+.sticky-form-actions{position:sticky;bottom:-15px;z-index:5;background:linear-gradient(180deg,#fffdf800,#fffdf8 25%);padding:18px 0 4px;margin-top:8px}
+.sticky-form-actions .btn.primary{min-width:150px}
+.activity{position:relative;overflow:hidden}
+.activity:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:#b6b0a5}
+.activity.type-presentacion:before{background:#c9a227}.activity.type-ensayo:before{background:#2f9e9a}.activity.type-grabacion:before{background:#8056b3}.activity.type-promocion:before{background:#e88932}.activity.type-viaje:before{background:#3976d2}
+.activity.history-card{background:#eeece7;color:#666;border-color:#d5d1c8}
+.activity.history-card .date{background:#75716a}.activity.history-card .main div{color:#858079}
+.history-lock{display:inline-flex;gap:5px;align-items:center;border-radius:999px;padding:5px 8px;background:#6f6b6418;color:#625f58;font-size:10px;font-weight:900}
+.pending-close-block{border:1px solid #e5b052;background:#fff7df;border-radius:17px;padding:12px;margin:12px 0}
+.pending-close-card{background:#fff;border:1px solid #e4c27d;border-radius:14px;padding:11px;margin-top:8px}
+.pending-close-card .actions{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:9px}
+.pending-close-card .actions button{min-height:42px}
+.more-capsule{width:100%;border:1px solid var(--line);background:#fff;border-radius:16px;padding:13px 14px;margin:8px 0;text-align:left}
+.more-cap-head{display:grid;grid-template-columns:35px 1fr auto;align-items:center;gap:8px}
+.more-cap-icon{width:35px;height:35px;border-radius:10px;background:#111;color:#d8ad37;display:grid;place-items:center}
+.more-cap-summary{font-size:11px;color:var(--muted);margin-top:2px}.more-cap-arrow{font-size:20px;color:#7a746a}
+.more-panel{padding:12px 2px 2px;border-top:1px solid var(--line);margin-top:10px}
+.deleted-row{border:1px solid var(--line);border-radius:14px;background:#fff;padding:11px;margin:8px 0}
+.deleted-row .actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.kpi.net-hero{grid-column:1/-1;background:#111;color:#fff;border-color:#111}.kpi.net-hero span{color:#d9c77f}.kpi.net-hero strong{font-size:30px;color:#66d487}
+nav button{margin:4px;border-radius:12px}nav button.active{background:#111;color:#fff}
+.today-shell.rehearsal{background:radial-gradient(circle at 82% 18%,#59d1c51c 0 14%,transparent 36%),linear-gradient(145deg,#092120,#123532 58%,#071716)}
+.today-shell.rehearsal:after{color:#8be1d315}
+.today-shell.rehearsal .today-heading small{color:#8be1d3}
+.today-shell.rehearsal .live-card{border-color:#69cfc766;background:linear-gradient(150deg,#153f3b,#0b211f)}
+.today-shell.rehearsal .event-kind{background:#55c9c022;border-color:#55c9c055;color:#a4eee7}
+.today-shell.rehearsal .nav-main{background:linear-gradient(135deg,#78ddd3,#3fb5ab)}
+.today-shell.rehearsal .live-step.active{background:#61cfc4;border-color:#87e0d8}
+.today-shell.rehearsal .live-money.net strong{color:#8be1d3}
+.cal .ev.type-presentacion{border-left:3px solid #c9a227}.cal .ev.type-ensayo{border-left:3px solid #2f9e9a}.cal .ev.type-grabacion{border-left:3px solid #8056b3}.cal .ev.type-promocion{border-left:3px solid #e88932}.cal .ev.type-viaje{border-left:3px solid #3976d2}
+.locked-note{border:1px solid #c9c4b9;background:#efede7;border-radius:13px;padding:10px;margin:10px 0;color:#625f58}
+.readonly-expense{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #eee7d7;padding:8px 0}
+@media(max-width:520px){.pending-close-card .actions{grid-template-columns:1fr 1fr}.billing-choice{grid-template-columns:1fr 1fr}}
+
 </style>
 </head>
 <body>
@@ -112,7 +169,7 @@ a.btn{text-decoration:none;display:inline-block}
   </div>
 </div>
 <header>
-  <div class="brand"><div class="logo" id="headerAvatar"><img src="mambito-logo.png" alt="Perfil"></div><div><b>Control OLMS</b><small id="headerSubtitle">La Mambito Sound · v6.5</small></div></div>
+  <div class="brand"><div class="logo" id="headerAvatar"><img src="mambito-logo.png" alt="Perfil"></div><div><b>Control OLMS</b><small id="headerSubtitle">La Mambito Sound · v6.6</small></div></div>
   <div class="header-actions">
   <button class="iconbtn bellbtn" onclick="openNotifications()" aria-label="Notificaciones">🔔<span id="notifBadge" class="notif-badge hidden">0</span></button>
   <button class="iconbtn" onclick="calendarQuickAction()" aria-label="Sincronizar Google Calendar">↻</button>
@@ -141,34 +198,73 @@ a.btn{text-decoration:none;display:inline-block}
 <button class="iconbtn close" onclick="D('activityDlg').close()">✕</button>
 <h2 id="activityTitle">Nueva actividad</h2>
 <input id="aid" type="hidden">
-<div class="grid2">
-  <div class="field"><label>Clase</label><select id="akind">
-    <option value="presentacion">Presentación / toque</option><option value="ensayo">Ensayo</option><option value="viaje">Viaje</option><option value="grabacion">Grabación</option><option value="promocion">Promoción</option>
-  </select></div>
-  <div class="field"><label>Tipo</label><select id="atype"></select></div>
+<input id="aoutcome" type="hidden">
+
+<div class="form-section">
+  <h3>🎼 Tipo de actividad</h3>
+  <div class="grid2">
+    <div class="field"><label>Clase</label><select id="akind">
+      <option value="presentacion">Presentación / toque</option><option value="ensayo">Ensayo</option><option value="viaje">Viaje</option><option value="grabacion">Grabación</option><option value="promocion">Promoción</option>
+    </select></div>
+    <div class="field"><label>Tipo</label><select id="atype"></select></div>
+  </div>
 </div>
-<div class="field"><label>Título</label><input id="atitle"></div>
-<div class="grid2"><div class="field"><label>Lugar</label><input id="avenue" list="venueList"><datalist id="venueList"><option value="Tacos La Neta"><option value="Tropicana Salsa Club"><option value="Casa de Russo"><option value="Green Village"><option value="Hotel Central"></datalist></div><div class="field"><label>Provincia</label><input id="aprovince"></div></div>
-<div class="field"><label>Dirección</label><input id="alocation"></div>
-<div class="grid3">
-  <div class="field"><label>Fecha</label><input id="adate" type="date"></div>
-  <div class="field"><label>Inicio</label><input id="astart" type="time"></div>
-  <div class="field"><label>Fin</label><input id="aend" type="time"></div>
+
+<div class="form-section">
+  <h3>💵 Cobro</h3>
+  <p class="muted">Define esto antes de completar los datos financieros. Los gastos siempre seguirán disponibles.</p>
+  <input id="afree" type="checkbox" class="hidden">
+  <div class="billing-choice">
+    <button type="button" id="billPaid" onclick="setBillingMode(false)">💰 Con cobro</button>
+    <button type="button" id="billFree" onclick="setBillingMode(true)">🎁 Sin cobro</button>
+  </div>
+  <div id="financialFields">
+    <div class="grid2">
+      <div class="field"><label>Monto esperado</label><input id="aexpected" type="number" min="0" step=".01"></div>
+      <div class="field"><label>Monto final acordado</label><input id="afinal" type="number" min="0" step=".01"></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Regla de pago</label><input id="apaymentrule" placeholder="Ej. Hasta 7 días"></div>
+      <div class="field"><label>Fecha estimada de pago</label><input id="aduepreview" readonly placeholder="Se calcula automáticamente"></div>
+    </div>
+  </div>
 </div>
-<div class="grid2">
-  <div class="field"><label>Monto esperado</label><input id="aexpected" type="number" min="0" step=".01"></div>
-  <div class="field"><label>Monto final acordado</label><input id="afinal" type="number" min="0" step=".01"></div>
+
+<div class="form-section">
+  <h3>🏷️ Identificación</h3>
+  <div class="field"><label>Título</label><input id="atitle" placeholder="Ej. Boda Green Village"></div>
 </div>
-<div class="field"><label><input id="afree" type="checkbox"> Actividad gratis / sin remuneración</label></div>
-<div class="grid2">
-  <div class="field"><label>Regla de pago</label><input id="apaymentrule" placeholder="Ej. Hasta 7 días"></div>
-  <div class="field"><label>Fecha estimada de pago</label><input id="aduepreview" readonly placeholder="Se calcula automáticamente"></div>
+
+<div class="form-section">
+  <h3>📅 Fecha y horario</h3>
+  <div class="grid3">
+    <div class="field"><label>Fecha</label><input id="adate" type="date"></div>
+    <div class="field"><label>Inicio</label><input id="astart" type="time"></div>
+    <div class="field"><label>Fin</label><input id="aend" type="time"></div>
+  </div>
 </div>
-<div class="field"><label>Estado</label><select id="aoutcome">
-<option value="">Pendiente / futura</option><option value="realizado">Realizado</option><option value="asisti">Asistí</option><option value="no-participe">No participé</option><option value="no-asisti">No asistí</option><option value="cancelado">Cancelado</option>
-</select></div>
-<div class="field"><label>Observación</label><textarea id="anotes" rows="2"></textarea></div>
-<div class="row"><button class="btn ghost" onclick="D('activityDlg').close()">Cancelar</button><button class="btn primary" onclick="saveActivity()">Guardar</button></div>
+
+<div class="form-section">
+  <h3>📍 Lugar</h3>
+  <div class="grid2"><div class="field"><label>Lugar</label><input id="avenue" list="venueList"><datalist id="venueList"><option value="Tacos La Neta"><option value="Tropicana Salsa Club"><option value="Casa de Russo"><option value="Green Village"><option value="Hotel Central"></datalist></div><div class="field"><label>Provincia</label><input id="aprovince"></div></div>
+  <div class="field"><label>Dirección</label><input id="alocation"></div>
+</div>
+
+<div class="form-section">
+  <h3>💸 Gastos</h3>
+  <p class="muted">Transporte, comida, hospedaje y otros gastos permanecen disponibles tanto en actividades con cobro como sin cobro.</p>
+  <div id="editExpenseShortcut"></div>
+</div>
+
+<div class="form-section">
+  <h3>📝 Observación</h3>
+  <div class="field"><textarea id="anotes" rows="3" placeholder="Información adicional de la actividad"></textarea></div>
+</div>
+
+<div class="sticky-form-actions row">
+  <button class="btn ghost" onclick="D('activityDlg').close()">Cancelar</button>
+  <button class="btn primary" onclick="saveActivity()">Guardar actividad</button>
+</div>
 </div>
 </dialog>
 
@@ -183,6 +279,11 @@ a.btn{text-decoration:none;display:inline-block}
 <dialog id="postActivityDlg"><div class="dlg" id="postActivityBody"></div></dialog>
 <dialog id="notificationDlg"><div class="dlg" id="notificationBody"></div></dialog>
 <dialog id="quickExpenseDlg"><div class="dlg" id="quickExpenseBody"></div></dialog>
+
+<dialog id="quickPaymentDlg">
+  <div class="dlg" id="quickPaymentBody"></div>
+</dialog>
+
 <dialog id="navDlg"><div class="dlg" id="navBody"></div></dialog>
 <dialog id="placeDlg"><div class="dlg" id="placeBody"></div></dialog>
 <div class="toast" id="toast"></div>
@@ -271,6 +372,7 @@ if(!state.settings.calendarCutoffMigrationV63){
 
 function normalizeActivity(a){
  if(!a||typeof a!=="object")a={};
+ const hadExpenseReview=Object.prototype.hasOwnProperty.call(a,"expenseReviewDone");
  const fallbackDate=(()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`})();
  const makeId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
  a.id=String(a.id||makeId());
@@ -296,11 +398,14 @@ function normalizeActivity(a){
  a.expenses.extras=(Array.isArray(a.expenses.extras)?a.expenses.extras:[]).map(e=>cleanExpense(e,false));
  a.liveStage=String(a.liveStage||"");
  a.outcome=String(a.outcome||"");
+ if(["realizado","asisti"].includes(a.outcome))a.outcome="completado";
+ if(["no-participe","no-asisti"].includes(a.outcome))a.outcome="no-asisti";
  a.paymentRule=String(a.paymentRule||"");
  a.notes=String(a.notes||"");
  a.pendingCalendarLocation=String(a.pendingCalendarLocation||"");
  a.pendingCalendarVenue=String(a.pendingCalendarVenue||"");
- a.expenseReviewDone=!!a.expenseReviewDone;
+ const legacyExpensePending=[...a.expenses.outbound,...a.expenses.return,...a.expenses.extras].some(e=>e&&(e.amount==null||e.amount===""));
+ a.expenseReviewDone=hadExpenseReview?!!a.expenseReviewDone:(!!a.outcome&&!legacyExpensePending);
  a.expensePromptAnswered=!!a.expensePromptAnswered;
  a.paidFullAdjusted=!!a.paidFullAdjusted;
  a.paymentAdjustmentNote=String(a.paymentAdjustmentNote||"");
@@ -310,9 +415,10 @@ state.activities=(Array.isArray(state.activities)?state.activities:[]).map(norma
 state.deleted=(Array.isArray(state.deleted)?state.deleted:[]).map(normalizeActivity);
 state.settings=state.settings||{};
 state.settings.profile=state.settings.profile||{name:"",email:"",photo:"",googleName:"",googlePhoto:"",customName:false,customPhoto:false};
+state.settings.permanentlyDeletedCalendarIds=Array.isArray(state.settings.permanentlyDeletedCalendarIds)?state.settings.permanentlyDeletedCalendarIds:[];
 
 const bootNow=new Date();
-let dashMode="money", periodMode="month", periodYear=bootNow.getFullYear(), periodMonth=bootNow.getMonth(), calMode="month", undoAction=null;
+let dashMode="money", periodMode="all", periodYear=bootNow.getFullYear(), periodMonth=bootNow.getMonth(), calMode="month", undoAction=null, moreOpen="";
 
 const $=id=>document.getElementById(id);
 const D=id=>document.getElementById(id);
@@ -339,6 +445,21 @@ function panamaTime(hm){
  return `${h}:${m} ${ap}`;
 }
 function panamaDateTime(date,time){return `${panamaDate(date)}  ${panamaTime(time)}`}
+function latamDateValue(iso){
+ if(!iso)return"";
+ const [y,m,d]=String(iso).slice(0,10).split("-");
+ return y&&m&&d?`${d}/${m}/${y}`:"";
+}
+function isoFromLatamDate(value){
+ const v=String(value||"").trim();
+ const m=v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+ if(!m)return null;
+ const d=Number(m[1]),mo=Number(m[2]),y=Number(m[3]);
+ const dt=new Date(`${y}-${String(mo).padStart(2,"0")}-${String(d).padStart(2,"0")}T12:00:00-05:00`);
+ if(Number.isNaN(dt.getTime())||dt.getFullYear()!==y||dt.getMonth()+1!==mo||dt.getDate()!==d)return null;
+ return `${y}-${String(mo).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+}
+
 function panamaRange(a){
  const endNext=(a.end||"")<(a.start||"");
  return `${panamaTime(a.start)} – ${panamaTime(a.end)}${endNext?" · día siguiente":""}`;
@@ -358,8 +479,15 @@ const hasEnded=a=>activityEndTime(a).getTime()<=Date.now();
 const isUpcoming=a=>!a.outcome&&!hasEnded(a);
 const needsConfirmation=a=>!a.outcome&&hasEnded(a);
 function daysBetween(a,b){return Math.floor((new Date(`${a}T12:00:00-05:00`)-new Date(`${b}T12:00:00-05:00`))/86400000)}
-const done=a=>["realizado","asisti"].includes(a.outcome);
-const closed=a=>["cancelado","no-participe","no-asisti"].includes(a.outcome);
+const done=a=>["completado","realizado","asisti"].includes(a.outcome);
+const closed=a=>["cancelado","no-asisti","no-participe"].includes(a.outcome);
+function hasOpenFinancialWork(a){
+ if(!a?.outcome)return false;
+ if(done(a)&&!a.free&&balance(a)>0)return true;
+ if(!a.expenseReviewDone||pendingExp(a)>0)return true;
+ return false;
+}
+const historyLocked=a=>!!a?.outcome&&!hasOpenFinancialWork(a);
 const finalAmt=a=>a.free?0:Number(a.final??a.expected??0);
 const received=a=>(Array.isArray(a?.payments)?a.payments:[]).reduce((s,p)=>s+Number(p?.amount||0),0);
 const balance=a=>a.paidFullAdjusted?0:Math.max(0,finalAmt(a)-received(a));
@@ -387,13 +515,19 @@ function payStatus(a){
  return "pending";
 }
 function status(a){
- if(a.free&&done(a))return["free","Gratis"];
  if(!a.outcome)return needsConfirmation(a)?["confirm","Pendiente de confirmar"]:["future","Por realizar"];
- if(closed(a))return["gray",a.outcome==="cancelado"?"Cancelado":a.outcome==="no-asisti"?"No asistí":"No participé"];
- if(a.kind==="ensayo")return["paid","Asistí"];
- const p=payStatus(a);
- if(p==="paid")return["paid","Pagado"]; if(p==="partial")return["partial","Pago parcial"]; if(p==="overdue")return["overdue","Pago vencido"]; if(p==="pending")return["pending","Pago pendiente"];
- return["paid","Realizado"]
+ if(a.outcome==="cancelado")return["gray","Cancelado"];
+ if(["no-asisti","no-participe"].includes(a.outcome))return["gray","No asistí"];
+ if(done(a)){
+   if(a.free)return["free","Completado"];
+   const p=payStatus(a);
+   if(p==="paid")return["paid","Pagado"];
+   if(p==="partial")return["partial","Pago parcial"];
+   if(p==="overdue")return["overdue","Pago vencido"];
+   if(p==="pending")return["pending","Pago pendiente"];
+   return["paid","Completado"];
+ }
+ return["gray","Cerrado"];
 }
 function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
 function periodArr(){
@@ -414,15 +548,23 @@ function periodLabel(){if(periodMode==="all")return"Acumulado desde jun 2026";if
 function periodControls(){return`<div class="period"><button onclick="movePeriod(-1)">‹</button><b>${periodLabel()}</b><button onclick="movePeriod(1)">›</button><select onchange="periodMode=this.value;render()" ><option value="month" ${periodMode==="month"?"selected":""}>Mes</option><option value="quarter" ${periodMode==="quarter"?"selected":""}>Trimestre</option><option value="year" ${periodMode==="year"?"selected":""}>Año</option><option value="all" ${periodMode==="all"?"selected":""}>Acumulado</option></select></div>`}
 function movePeriod(d){if(periodMode==="all")return;if(periodMode==="year")periodYear+=d;else if(periodMode==="quarter"){periodMonth+=d*3;while(periodMonth<0){periodMonth+=12;periodYear--}while(periodMonth>11){periodMonth-=12;periodYear++}}else{periodMonth+=d;if(periodMonth<0){periodMonth=11;periodYear--}if(periodMonth>11){periodMonth=0;periodYear++}}render()}
 function card(a){
- const dd=String(a.date||todayISO()).split("-"),mon=["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"][+dd[1]-1],s=status(a);
- return`<div class="card activity" onclick="openDetail('${a.id}')"><div class="date"><b>${dd[2]}</b><small>${mon}</small></div><div class="main"><b>${a.title}</b><div>${panamaDate(a.date)} · ${panamaRange(a)} · ${a.venue||"Lugar pendiente"}</div></div><span class="badge ${s[0]}">${s[1]}</span></div>`
+ const dd=String(a.date||todayISO()).split("-"),mon=["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"][+dd[1]-1],st=status(a);
+ const hist=!!a.outcome,lock=historyLocked(a);
+ return`<div class="card activity type-${esc(a.kind)} ${hist?"history-card":""}" onclick="openDetail('${a.id}')">
+   <div class="date"><b>${dd[2]}</b><small>${mon}</small></div>
+   <div class="main"><b>${esc(a.title)}</b><div>${panamaDate(a.date)} · ${panamaRange(a)} · ${esc(a.venue||"Lugar pendiente")}</div>
+     ${done(a)&&!a.free&&balance(a)>0?`<button class="btn primary small" style="margin-top:7px" onclick="event.stopPropagation();openQuickPayment('${a.id}')">💵 Registrar pago · ${money(balance(a))}</button>`:""}
+     ${hist?`<div style="margin-top:6px"><span class="history-lock">${lock?"🔒 Historial bloqueado":"🔒 Cerrado · pendientes por completar"}</span></div>`:""}
+   </div>
+   <span class="badge ${st[0]}">${st[1]}</span>
+ </div>`
 }
 function eventStartTime(a){const d=String(a?.date||todayISO()),t=String(a?.start||"00:00");const x=new Date(`${d}T${t}:00-05:00`);return Number.isNaN(x.getTime())?new Date(8640000000000000):x}
 function todayActivity(){
  const t=todayISO();
- return state.activities.filter(a=>String(a.date||"")===t&&!closed(a)).sort((a,b)=>String(a.start||"").localeCompare(String(b.start||"")))[0]||null;
+ return state.activities.filter(a=>String(a.date||"")===t&&!a.outcome&&!hasEnded(a)).sort((a,b)=>String(a.start||"").localeCompare(String(b.start||"")))[0]||null;
 }
-function nextActivity(){return state.activities.filter(isUpcoming).sort((a,b)=>eventStartTime(a)-eventStartTime(b))[0]||null}
+function nextActivity(excludeId=""){return state.activities.filter(a=>isUpcoming(a)&&a.id!==excludeId).sort((a,b)=>eventStartTime(a)-eventStartTime(b))[0]||null}
 function countdownText(a){
  if(!a)return"";let ms=Math.max(0,eventStartTime(a)-new Date()),d=Math.floor(ms/86400000);ms%=86400000;let h=Math.floor(ms/3600000);ms%=3600000;let mi=Math.floor(ms/60000);
  return d?`Faltan ${d} día${d===1?"":"s"} · ${h} h`:`Faltan ${h} h · ${mi} min`;
@@ -436,10 +578,13 @@ function journeyButton(a,key,label){
  return `<button class="live-step ${cl}" onclick="setLiveStage('${a.id}','${key}')">${label}</button>`
 }
 function todayHero(a){
- const income=finalAmt(a),spent=expTotal(a),net=(a.free?0:income)-spent;
- const closeout=done(a)?`<div class="closeout"><b>Cierre del toque</b><div class="closeout-grid"><div><small>Recibido</small><b>${money(received(a))}</b></div><div><small>Gastos</small><b>${money(spent)}</b></div><div><small>Neto actual</small><b>${money(earned(a)-spent)}</b></div><div><small>Pago</small><b>${status(a)[1]}</b></div></div></div>`:"";
- return `<div class="today-shell">
-   <div class="today-heading"><small>Actividad de hoy</small><h1>Hoy con<span>La Mambito Sound</span></h1></div>
+ const rehearsal=a.kind==="ensayo",income=finalAmt(a),spent=expTotal(a),net=(a.free?0:income)-spent;
+ const closeout=done(a)?`<div class="closeout"><b>${rehearsal?"Cierre del ensayo":"Cierre del toque"}</b><div class="closeout-grid">${rehearsal?`<div><small>Gastos</small><b>${money(spent)}</b></div><div><small>Estado</small><b>${status(a)[1]}</b></div>`:`<div><small>Recibido</small><b>${money(received(a))}</b></div><div><small>Gastos</small><b>${money(spent)}</b></div><div><small>Neto actual</small><b>${money(earned(a)-spent)}</b></div><div><small>Pago</small><b>${status(a)[1]}</b></div>`}</div></div>`:"";
+ const finance=rehearsal
+   ? `<div class="live-finance"><div class="live-money"><small>Tipo</small><strong>Ensayo</strong></div><div class="live-money"><small>Gastado</small><strong>${money(spent)}</strong></div><div class="live-money net"><small>Condición</small><strong>Sin cobro</strong></div></div>`
+   : `<div class="live-finance"><div class="live-money"><small>Acordado</small><strong>${money(income)}</strong></div><div class="live-money"><small>Gastado</small><strong>${money(spent)}</strong></div><div class="live-money net"><small>Ganancia provisional</small><strong>${money(net)}</strong></div></div>`;
+ return `<div class="today-shell ${rehearsal?"rehearsal":"presentation"}">
+   <div class="today-heading"><small>${rehearsal?"Ensayo de hoy":"Actividad de hoy"}</small><h1>Hoy con<span>La Mambito Sound</span></h1></div>
    <div class="live-card">
     <span class="event-kind">${kindLabel(a)}</span><div class="live-title">${esc(displayEventTitle(a))}</div>
     <div class="live-meta"><span>📅 <b>${panamaDate(a.date)}</b></span><span>🕒 <b>${panamaRange(a)}</b></span><span>📍 <span>${esc(a.venue||"Lugar pendiente")}${a.location?`<small style="display:block;color:#aaa">${esc(a.location)}</small>`:""}</span></span></div>
@@ -447,30 +592,146 @@ function todayHero(a){
     ${a.pendingCalendarLocation?`<div class="location-review" style="color:#111;margin-top:12px"><b>Google Calendar propone otra ubicación.</b><div style="margin-top:7px"><button class="btn primary small" onclick="reviewCalendarLocation('${a.id}')">Revisar cambio</button></div></div>`:""}
    </div>
    <div class="live-progress">${journeyButton(a,"going","▶ Ya voy")}${journeyButton(a,"arrived","● Llegué")}${journeyButton(a,"ended","■ Terminó")}</div>
-   <div class="live-finance">
-    <div class="live-money"><small>Acordado</small><strong>${money(income)}</strong></div>
-    <div class="live-money"><small>Gastado</small><strong>${money(spent)}</strong></div>
-    <div class="live-money net"><small>Ganancia provisional</small><strong>${money(net)}</strong></div>
-   </div>
+   ${finance}
    <div class="live-expenses"><h3>Registrar gasto</h3><div class="quick-grid">
     <button class="quick-expense" onclick="openQuickExpense('${a.id}','Transporte')"><b>🚗</b>Transporte</button>
     <button class="quick-expense" onclick="openQuickExpense('${a.id}','Comida')"><b>🍽️</b>Comida</button>
     <button class="quick-expense" onclick="openQuickExpense('${a.id}','Hospedaje')"><b>🏨</b>Hospedaje</button>
     <button class="quick-expense" onclick="openQuickExpense('${a.id}','Otro')"><b>＋</b>Otro gasto</button>
-   </div><div class="expense-running">Los gastos se suman en tiempo real. ${income>0&&spent>=income*.5?`<span class="profit-warn">Ya consumiste al menos la mitad del ingreso acordado.</span>`:""}</div>${closeout}</div>
+   </div><div class="expense-running">Los gastos se suman en tiempo real. ${!rehearsal&&income>0&&spent>=income*.5?`<span class="profit-warn">Ya consumiste al menos la mitad del ingreso acordado.</span>`:""}</div>${closeout}</div>
   </div>`
 }
 function nextCapsule(a){if(!a)return"";return `<button class="next-capsule" onclick="openDetail('${a.id}')"><div class="next-icon">${a.kind==="ensayo"?"🎵":"🎤"}</div><div><h3>Próximamente con<span>La Mambito Sound</span></h3><p><b>${esc(a.type||a.title)}</b> · ${esc(a.venue||"Lugar pendiente")}<br>${panamaDateTime(a.date,a.start)} · ${countdownText(a)}</p></div><div class="arrow">›</div></button>`}
+
+function pendingPaymentActivities(){
+ return state.activities
+   .filter(a=>done(a)&&!a.free&&balance(a)>0)
+   .slice()
+   .sort((a,b)=>{
+     const da=due(a)||"9999-12-31",db=due(b)||"9999-12-31";
+     return da.localeCompare(db)||chronological(a,b)
+   });
+}
+function pendingPaymentsBanner(){
+ const arr=pendingPaymentActivities();
+ if(!arr.length)return"";
+ const total=arr.reduce((sum,a)=>sum+balance(a),0);
+ return `<div class="pending-pay-banner">
+   <div><small>💰 Pagos pendientes</small><strong>${arr.length} pendiente${arr.length===1?"":"s"} · ${money(total)}</strong></div>
+   <button class="cta" onclick="openPendingPayments()">Registrar pago</button>
+ </div>`;
+}
+function openPendingPayments(){
+ const arr=pendingPaymentActivities();
+ $("listBody").innerHTML=`<button class="iconbtn close" onclick="D('listDlg').close()">✕</button>
+ <h2>💰 Pagos pendientes</h2>
+ <p class="muted">Registra un cobro sin tener que entrar al detalle completo de la actividad.</p>
+ ${arr.map(a=>`<div class="pay-list-card">
+   <div class="pay-head">
+     <div><b>${esc(a.title)}</b><div class="muted">${panamaDate(a.date)} · ${esc(a.venue||"Lugar pendiente")}</div>${due(a)?`<div class="muted">Pago previsto: ${panamaDate(due(a))}</div>`:""}</div>
+     <div class="pay-amount">${money(balance(a))}</div>
+   </div>
+   <div class="pay-actions"><button class="btn primary" onclick="D('listDlg').close();openQuickPayment('${a.id}')">💵 Registrar pago</button></div>
+ </div>`).join("")||'<div class="empty">No tienes pagos pendientes.</div>'}`;
+ D('listDlg').showModal();
+}
+function updateQuickPaymentDatePreview(){
+ const raw=$("quickPayDate")?.value||"";
+ const iso=isoFromLatamDate(raw);
+ const el=$("quickPayDatePreview");
+ if(el)el.textContent=iso?panamaDate(iso):"Usa el formato DD/MM/AAAA";
+}
+function setQuickPaymentFull(id){
+ const a=state.activities.find(x=>x.id===id);if(!a)return;
+ const el=$("quickPayAmount");if(el)el.value=balance(a).toFixed(2);
+}
+function openQuickPayment(id){
+ const a=state.activities.find(x=>x.id===id);if(!a)return;
+ if(!done(a)||a.free)return toast("Esta actividad no tiene un cobro pendiente");
+ if(balance(a)<=0)return toast("Este pago ya está cerrado");
+ const defaultDate=todayISO();
+ $("quickPaymentBody").innerHTML=`<button class="iconbtn close" onclick="D('quickPaymentDlg').close()">✕</button>
+ <h2>💵 Registrar pago</h2>
+ <p><b>${esc(a.title)}</b></p>
+ <p class="muted">${panamaDate(a.date)} · ${esc(a.venue||"Lugar pendiente")}</p>
+ <div class="quick-pay-grid">
+   <div class="box"><small>Acordado</small><b>${money(finalAmt(a))}</b></div>
+   <div class="box"><small>Recibido</small><b>${money(received(a))}</b></div>
+   <div class="box"><small>Pendiente</small><b>${money(balance(a))}</b></div>
+ </div>
+ <div class="field"><label>Monto recibido</label><input id="quickPayAmount" type="number" inputmode="decimal" min="0" step=".01" value="${balance(a).toFixed(2)}"></div>
+ <div class="billing-choice"><button type="button" class="active" onclick="setQuickPaymentFull('${a.id}');this.parentElement.querySelectorAll('button').forEach(x=>x.classList.remove('active'));this.classList.add('active')">✅ Pago completo</button><button type="button" onclick="$('quickPayAmount').value='';$('quickPayAmount').focus();this.parentElement.querySelectorAll('button').forEach(x=>x.classList.remove('active'));this.classList.add('active')">◐ Pago parcial</button></div>
+ <div class="field"><label>Fecha del pago (DD/MM/AAAA)</label>
+   <input id="quickPayDate" inputmode="numeric" value="${latamDateValue(defaultDate)}" placeholder="21/09/2026" oninput="updateQuickPaymentDatePreview()">
+   <div id="quickPayDatePreview" class="latam-date-preview">${panamaDate(defaultDate)}</div>
+ </div>
+ <div class="row" style="margin-top:14px"><button class="btn primary" onclick="saveQuickPayment('${a.id}')">Guardar pago</button></div>`;
+ if(!D('quickPaymentDlg').open)D('quickPaymentDlg').showModal();
+ setTimeout(()=>$("quickPayAmount")?.focus({preventScroll:true}),80);
+}
+function saveQuickPayment(id){
+ const a=state.activities.find(x=>x.id===id);if(!a)return;
+ const amount=Number($("quickPayAmount")?.value||"");
+ if(!Number.isFinite(amount)||amount<=0)return toast("Escribe un monto válido");
+ const date=isoFromLatamDate($("quickPayDate")?.value);
+ if(!date)return toast("La fecha debe ser DD/MM/AAAA");
+ a.payments=a.payments||[];
+ a.payments.push({id:uid(),date,amount});
+ a.paidFullAdjusted=false;a.paymentAdjustmentNote="";
+ const still=balance(a);
+ if(still>0&&confirm(`Quedan ${money(still)} pendientes.\n\n¿Quieres marcar este pago como COMPLETO con observación?`)){
+   let note="";
+   while(!note.trim()){
+     note=prompt("Observación obligatoria para cerrar el pago por un monto menor:","")||"";
+     if(!note.trim()&&!confirm("La observación es obligatoria. ¿Intentar de nuevo?"))break;
+   }
+   if(note.trim()){a.paidFullAdjusted=true;a.paymentAdjustmentNote=note.trim()}
+ }
+ localStorage.setItem(KEY,JSON.stringify(state));
+ D('quickPaymentDlg').close();
+ render();
+ toast(balance(a)>0?"Pago parcial registrado":"Pago registrado");
+}
+
+
+function outcomeActionButtons(a){
+ const noLabel=a.kind==="ensayo"?"No asistí":"No participé";
+ return `<div class="actions">
+   <button class="btn success small" onclick="confirmPostOutcome('${a.id}','completado')">✅ Completado</button>
+   <button class="btn ghost small" onclick="confirmPostOutcome('${a.id}','no-asisti')">❌ ${noLabel}</button>
+   <button class="btn danger small" onclick="confirmPostOutcome('${a.id}','cancelado')">🚫 Cancelado</button>
+   <button class="btn ghost small" onclick="showReprogramForm('${a.id}')">📅 Reprogramado</button>
+ </div>`;
+}
+function pendingClosuresBlock(){
+ const arr=state.activities.filter(needsConfirmation).sort((a,b)=>activityEndTime(a)-activityEndTime(b));
+ if(!arr.length)return"";
+ return `<div class="pending-close-block"><h3>⏳ Actividades por cerrar</h3><div class="muted">Estas actividades ya pasaron de su fecha y hora. Actualiza qué ocurrió.</div>
+ ${arr.map(a=>`<div class="pending-close-card"><b>${esc(a.title)}</b><div class="muted">${panamaDate(a.date)} · ${panamaRange(a)} · ${esc(a.venue||"Lugar pendiente")}</div>${outcomeActionButtons(a)}</div>`).join("")}
+ </div>`;
+}
+
 function financialDashboard(){
- let k=kpis();const cards=dashMode==="money"?[["dev","Ingresos devengados",money(k.dev),"gold"],["rec","Cobrado",money(k.rec),"green"],["pend","Pendiente",money(k.pend),"orange"],["venc","Vencido",money(k.venc),"red"],["g","Gastos",money(k.g),"blue"],["net","Ganancia neta",money(k.net),k.net>=0?"green":"red"]]:[["gigs","Toques realizados",k.gigs,"green"],["ens","Ensayos asistidos",k.ens,"blue"],["up","Próximas actividades",k.up,"gold"],["confirm","Pendientes de confirmar",k.confirm,"red"],["free","Actividades gratis",k.free,"purple"],["pexp","Gastos incompletos",k.pendingExp,"orange"]];
- const next=nextActivity();return `<div class="dash-title"><div><h2>Resumen financiero</h2><div class="muted">Todo se recalcula en tiempo real.</div></div><div class="segment"><button class="${dashMode==="money"?"active":""}" onclick="dashMode='money';renderDash()">💰 Montos</button><button class="${dashMode==="count"?"active":""}" onclick="dashMode='count';renderDash()">🔢 Cantidades</button></div></div>${periodControls()}<div class="kpis">${cards.map(c=>`<button class="kpi ${c[3]}" onclick="openKpi('${c[0]}')"><span>${c[1]}</span><strong>${c[2]}</strong></button>`).join("")}</div><button class="expense-hub-btn" onclick="openExpenseHub()">💸 Registrar / revisar gastos</button>${nextCapsule(next)}<h3 style="margin-top:16px">Próximas actividades</h3>${state.activities.filter(isUpcoming).sort(chronological).slice(0,5).map(card).join("")||'<div class="empty">Sin próximas actividades.</div>'}`
+ let k=kpis();
+ const cards=dashMode==="money"
+  ? [["net","Ganancia neta",money(k.net),"net-hero"],["rec","Cobrado",money(k.rec),"green"],["pend","Pendiente",money(k.pend),"orange"],["g","Gastos",money(k.g),"blue"],["dev","Ingresos devengados",money(k.dev),"gold"],["venc","Vencido",money(k.venc),"red"]]
+  : [["gigs","Toques realizados",k.gigs,"green"],["ens","Ensayos asistidos",k.ens,"blue"],["up","Próximas actividades",k.up,"gold"],["confirm","Pendientes de confirmar",k.confirm,"red"],["free","Actividades sin cobro",k.free,"purple"],["pexp","Gastos incompletos",k.pendingExp,"orange"]];
+ const activeToday=todayActivity(),next=nextActivity(activeToday?.id||"");
+ return `<div class="dash-title"><div><h2>Resumen</h2><div class="muted">${periodMode==="all"?"Acumulado general desde 01/06/2026":"Consulta del período seleccionado"}.</div></div><div class="segment"><button class="${dashMode==="money"?"active":""}" onclick="dashMode='money';renderDash()">💰 Montos</button><button class="${dashMode==="count"?"active":""}" onclick="dashMode='count';renderDash()">🔢 Cantidades</button></div></div>
+ ${periodControls()}
+ <div class="kpis">${cards.map(c=>`<button class="kpi ${c[3]}" onclick="openKpi('${c[0]}')"><span>${c[1]}</span><strong>${c[2]}</strong></button>`).join("")}</div>
+ ${pendingPaymentsBanner()}
+ <button class="expense-hub-btn" onclick="openExpenseHub()">💸 Registrar / revisar gastos</button>
+ ${nextCapsule(next)}
+ <h3 style="margin-top:16px">Próximas actividades</h3>
+ ${state.activities.filter(isUpcoming).sort(chronological).slice(0,5).map(card).join("")||'<div class="empty">No hay actividades próximas.</div>'}`
 }
 function renderDash(){
  const host=$("dashboard");if(!host)return;
  let hero="",finance="";
  try{const today=todayActivity();if(today)hero=todayHero(normalizeActivity(today))}catch(e){console.error("Hero de hoy",e)}
  try{finance=financialDashboard()}catch(e){console.error("Dashboard financiero",e);finance=`<div class="card"><b>Resumen financiero temporalmente no disponible.</b><div class="muted">Tus actividades siguen guardadas. Revisa Actividades o Pagos.</div></div>`}
- host.innerHTML=hero+finance;
+ host.innerHTML=hero+pendingClosuresBlock()+finance;
 }
 
 function renderActivities(){
@@ -486,65 +747,68 @@ function renderCalendar(){
  if(calMode==="month"){
   let y=periodYear,m=periodMonth,days=new Date(y,m+1,0).getDate(),first=new Date(y,m,1).getDay(),cells="";
   for(let i=0;i<first;i++)cells+="<div></div>";
-  for(let d=1;d<=days;d++){let iso=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`,ev=state.activities.filter(a=>a.date===iso);cells+=`<div class="day"><div class="n">${d}</div>${ev.map(a=>`<button class="ev" onclick="openDetail('${a.id}')">${a.kind==="ensayo"?"🎵":"🎤"} ${a.title}</button>`).join("")}</div>`}
+  for(let d=1;d<=days;d++){let iso=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`,ev=state.activities.filter(a=>a.date===iso);cells+=`<div class="day"><div class="n">${d}</div>${ev.map(a=>`<button class="ev type-${esc(a.kind)}" onclick="openDetail('${a.id}')">${a.kind==="ensayo"?"🎵":"🎤"} ${a.title}</button>`).join("")}</div>`}
   $("calendar").innerHTML=controls+periodControls()+`<div class="cal">${["D","L","M","M","J","V","S"].map(x=>`<div class="dayhead">${x}</div>`).join("")}${cells}</div>`;
  } else if(calMode==="week"){
   const now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),now.getDate()-now.getDay()),rows=[];for(let i=0;i<7;i++){let d=new Date(start);d.setDate(start.getDate()+i);let iso=d.toISOString().slice(0,10),ev=state.activities.filter(a=>a.date===iso);rows.push(`<div class="card"><b>${panamaDate(iso)}</b><div style="margin-top:8px">${ev.length?ev.map(card).join(""):'<span class="muted">Sin actividades</span>'}</div></div>`)}$("calendar").innerHTML=controls+rows.join("");
  } else $("calendar").innerHTML=controls+state.activities.slice().sort(chronological).map(card).join("");
 }
+function toggleMore(id){moreOpen=moreOpen===id?"":id;renderMore()}
+function moreCapsule(id,icon,title,summary,content){
+ const open=moreOpen===id;
+ return `<div class="more-capsule">
+  <button type="button" class="more-cap-head" style="width:100%;border:0;background:transparent;text-align:left;padding:0" onclick="toggleMore('${id}')">
+   <span class="more-cap-icon">${icon}</span>
+   <span><b>${title}</b><span class="more-cap-summary">${summary||""}</span></span>
+   <span class="more-cap-arrow">${open?"⌃":"⌄"}</span>
+  </button>
+  ${open?`<div class="more-panel">${content}</div>`:""}
+ </div>`;
+}
 function renderMore(){
- const k=kpis(),places=[...new Set(state.activities.map(a=>a.venue).filter(Boolean))];
- $("more").innerHTML=`<h2>Más</h2>
- <div class="card">
-   <h3>👤 Mi perfil</h3>
-   <div class="profile-card">
-     ${state.settings.profile.photo
-       ? `<img class="profile-avatar" src="${esc(state.settings.profile.photo)}" alt="Foto de perfil">`
-       : `<div class="profile-avatar fallback">${esc((state.settings.profile.name||"OL").trim().slice(0,2).toUpperCase()||"OL")}</div>`}
-     <div class="profile-meta">
-       <h3>${esc(state.settings.profile.name||"Tu nombre")}</h3>
-       <div class="muted">${esc(state.settings.profile.email||"Correo de Google pendiente")}</div>
-       <div class="profile-actions">
-         <button class="btn ghost small" onclick="$('profilePhotoInput').click()">Cambiar foto</button>
-         <button class="btn ghost small" onclick="loadGoogleProfile(true)">Usar datos de Google</button>
-       </div>
-     </div>
-   </div>
+ const k=kpis(),places=[...new Set(state.activities.map(a=>a.venue).filter(Boolean))],p=state.settings.profile||{};
+ const profile=`<div class="profile-card">
+   ${p.photo?`<img class="profile-avatar" src="${esc(p.photo)}" alt="Foto de perfil">`:`<div class="profile-avatar fallback">${esc((p.name||"OL").trim().slice(0,2).toUpperCase()||"OL")}</div>`}
+   <div class="profile-meta"><h3>${esc(p.name||"Tu nombre")}</h3><div class="muted">${esc(p.email||"Correo de Google pendiente")}</div>
+    <div class="profile-actions"><button class="btn ghost small" onclick="$('profilePhotoInput').click()">Cambiar foto</button><button class="btn ghost small" onclick="loadGoogleProfile(true)">Usar datos de Google</button></div>
+   </div></div>
    <input id="profilePhotoInput" type="file" accept="image/*" style="display:none" onchange="handleProfilePhoto(this.files&&this.files[0])">
-   <div class="profile-edit">
-     <div class="field"><label>Nombre visible</label><input id="profileName" value="${esc(state.settings.profile.name||"")}" placeholder="Tu nombre"></div>
-     <div class="row">
-       <button class="btn primary" onclick="saveProfileName()">Guardar perfil</button>
-       ${state.settings.profile.customPhoto?`<button class="btn ghost" onclick="restoreGooglePhoto()">Usar foto de Google</button>`:""}
-     </div>
-     <p class="muted" style="font-size:12px">La foto que elijas se guarda en este dispositivo. Tu correo se toma de la cuenta de Google conectada.</p>
-   </div>
- </div>
- <div class="card"><h3>📍 Historial por lugares</h3>${places.map(p=>{let arr=state.activities.filter(a=>a.venue===p);let inc=arr.reduce((s,a)=>s+earned(a),0),ex=arr.reduce((s,a)=>s+expTotal(a),0);return`<button class="place-card" onclick="openPlaceHistory(decodeURIComponent('${encodeURIComponent(p)}'))"><div><b>${esc(p)}</b><div class="place-metrics">${arr.length} actividades · ${money(inc-ex)} neto acumulado</div></div><span class="chev">›</span></button>`}).join("")}</div>
- <div class="card"><h3>📊 KPIs</h3><div class="info"><div class="box"><small>Promedio neto por toque</small><b>${money(avgNetGig())}</b></div><div class="box"><small>Gasto promedio por ensayo</small><b>${money(avgRehearsal())}</b></div><div class="box"><small>Gastos del período</small><b>${money(k.g)}</b></div><div class="box"><small>Ganancia neta</small><b>${money(k.net)}</b></div></div></div>
- <div class="card"><h3>🗑️ Historial de eliminados</h3>${state.deleted.length?[...state.deleted].sort(chronological).map(a=>`<div style="margin:7px 0"><b>${a.title}</b><div class="muted" style="font-size:11px">${panamaDateTime(a.date,a.start)}</div><button class="btn ghost small" onclick="restoreDeleted('${a.id}')">Restaurar</button> <button class="btn ghost small" onclick="reuseDeleted('${a.id}')">Reutilizar</button></div>`).join(""):'<div class="muted">Vacío</div>'}</div>
- <div class="card"><h3>🔔 Notificaciones</h3>
-   <p class="muted">Recordatorios de actividades, gastos, cobros y cambios de Google Calendar.</p>
-   <div class="row"><button class="btn primary" onclick="enableNotifications()">Activar notificaciones del teléfono</button><button class="btn ghost" onclick="openNotifications()">Ver avisos (${notificationItems().length})</button></div>
-   <p class="muted" style="font-size:12px">Estado del teléfono: <span class="native-state">${notificationPermissionLabel()}</span></p>
- </div>
- <div class="card"><h3>⚙️ Configuración</h3>
-   <div class="field"><label>Dirección de mi casa</label><input id="homeAddr" value="${state.settings.homeAddress||""}"></div>
-   <button class="btn primary" onclick="state.settings.homeAddress=$('homeAddr').value;save();toast('Dirección guardada')">Guardar dirección</button>
-   <div class="sectionline"><h3>💵 Tarifas y reglas futuras</h3><p class="muted">Los cambios hechos aquí solo afectan actividades futuras. El historial cerrado no se modifica.</p><button class="btn ghost" onclick="openPlaceDefaults()">Administrar lugares conocidos</button></div>
-   <div class="sectionline"><h3>📅 Google Calendar</h3>
-     <p class="muted">Estado: <b>${googleAccessToken?"Conectado en esta sesión":state.settings.googleClientId?"Configurado, falta conectar":"Falta configurar"}</b></p>
-     <div class="field"><label>ID de cliente OAuth de Google</label><input id="googleClientId" value="${state.settings.googleClientId||""}" placeholder="xxxxxxxx.apps.googleusercontent.com"></div>
-     <div class="row">
-       <button class="btn ghost" onclick="saveGoogleClientId()">Guardar ID</button>
-       <button class="btn primary" onclick="connectGoogle()">Conectar Google</button>
-       <button class="btn ghost" onclick="syncCalendar()">🔄 Sincronizar ahora</button>
-     </div>
-     <p class="muted" style="font-size:12px">Conectado a Google Calendar: sincroniza únicamente eventos de Mambito Sound desde el 01/06/2026 en adelante. Los eventos anteriores a esa fecha no se importan. Los eventos creados o editados desde OLMS llevan recordatorio a las 11:00 p. m. de la noche anterior.</p>
-   </div>
-   <div class="sectionline"><h3>📲 Instalación</h3><p class="muted">Cuando se abra desde una dirección HTTPS compatible, podrás instalar Control OLMS como aplicación.</p><button class="btn primary" onclick="installApp()">Instalar aplicación</button></div>
-   <div class="sectionline"><button class="btn ghost" onclick="if(confirm('¿Restaurar datos de ejemplo?')){state=structuredClone(seed);state.settings.googleClientId='';save()}">Restaurar datos de ejemplo</button></div>
- </div>`
+   <div class="profile-edit"><div class="field"><label>Nombre visible</label><input id="profileName" value="${esc(p.name||"")}" placeholder="Tu nombre"></div>
+   <div class="row"><button class="btn primary" onclick="saveProfileName()">Guardar perfil</button>${p.customPhoto?`<button class="btn ghost" onclick="restoreGooglePhoto()">Usar foto de Google</button>`:""}</div></div>`;
+ const placeContent=places.length?places.map(v=>{const arr=state.activities.filter(a=>a.venue===v),inc=arr.reduce((sum,a)=>sum+earned(a),0),ex=arr.reduce((sum,a)=>sum+expTotal(a),0);return`<button class="place-card" onclick="openPlaceHistory(decodeURIComponent('${encodeURIComponent(v)}'))"><div><b>${esc(v)}</b><div class="place-metrics">${arr.length} actividades · ${money(inc-ex)} neto acumulado</div></div><span class="chev">›</span></button>`}).join(""):'<div class="empty">Aún no hay lugares registrados.</div>';
+ const notif=`<p class="muted">Recordatorios de actividades, gastos, cobros y cambios de Google Calendar.</p><div class="row"><button class="btn primary" onclick="enableNotifications()">Activar notificaciones</button><button class="btn ghost" onclick="openNotifications()">Ver avisos (${notificationItems().length})</button></div><p class="muted" style="font-size:12px">Estado: <b>${notificationPermissionLabel()}</b></p>`;
+ const indicators=`<div class="info"><div class="box"><small>Promedio neto por toque</small><b>${money(avgNetGig())}</b></div><div class="box"><small>Gasto promedio por ensayo</small><b>${money(avgRehearsal())}</b></div><div class="box"><small>Gastos del período</small><b>${money(k.g)}</b></div><div class="box"><small>Ganancia neta</small><b>${money(k.net)}</b></div></div>`;
+ const tariffs=`<p class="muted">Los cambios aquí afectan actividades futuras, nunca el historial cerrado.</p><button class="btn ghost" onclick="openPlaceDefaults()">Administrar lugares conocidos</button>`;
+ const calendar=`<p class="muted">Estado: <b>${googleAccessToken?"Conectado en esta sesión":state.settings.googleClientId?"Configurado, falta conectar":"Falta configurar"}</b></p>
+   <div class="field"><label>ID de cliente OAuth de Google</label><input id="googleClientId" value="${esc(state.settings.googleClientId||"")}" placeholder="xxxxxxxx.apps.googleusercontent.com"></div>
+   <div class="row"><button class="btn ghost" onclick="saveGoogleClientId()">Guardar ID</button><button class="btn primary" onclick="connectGoogle()">Conectar Google</button><button class="btn ghost" onclick="syncCalendar()">🔄 Sincronizar ahora</button></div>
+   <p class="muted" style="font-size:12px">Sincroniza eventos de Mambito Sound desde el 01/06/2026. Las actividades ya cerradas en OLMS quedan protegidas frente a cambios posteriores de Calendar.</p>`;
+ const deleted=`<p class="muted">${state.deleted.length?`${state.deleted.length} registro${state.deleted.length===1?"":"s"} en la carpeta.`:"La carpeta está vacía."}</p><button class="btn ghost" onclick="openDeletedHistory()">🗂️ Abrir historial de eliminados</button>`;
+ const general=`<div class="field"><label>Dirección de mi casa</label><input id="homeAddr" value="${esc(state.settings.homeAddress||"")}"></div><button class="btn primary" onclick="state.settings.homeAddress=$('homeAddr').value;save();toast('Dirección guardada')">Guardar dirección</button><div class="sectionline"><button class="btn ghost" onclick="if(confirm('¿Restaurar datos de ejemplo?')){state=structuredClone(seed);state.settings.googleClientId='';save()}">Restaurar datos de ejemplo</button></div>`;
+ const install=`<p class="muted">Instala Control OLMS como aplicación desde una dirección HTTPS compatible.</p><button class="btn primary" onclick="installApp()">Instalar aplicación</button>`;
+ $("more").innerHTML=`<h2>Más</h2>
+ ${moreCapsule("profile","👤","Mi perfil",p.name||"Nombre y foto",profile)}
+ ${moreCapsule("places","📍","Lugares e historial",`${places.length} lugar${places.length===1?"":"es"}`,placeContent)}
+ ${moreCapsule("notifications","🔔","Notificaciones",`${notificationItems().length} aviso${notificationItems().length===1?"":"s"}`,notif)}
+ ${moreCapsule("indicators","📊","Indicadores","Promedios y métricas",indicators)}
+ ${moreCapsule("tariffs","💵","Tarifas y reglas","Configuración futura",tariffs)}
+ ${moreCapsule("calendar","📅","Google Calendar",googleAccessToken?"Conectado":"Configuración",calendar)}
+ ${moreCapsule("deleted","🗑️","Historial de eliminados",`${state.deleted.length} registro${state.deleted.length===1?"":"s"}`,deleted)}
+ ${moreCapsule("install","📲","Instalación","PWA / acceso directo",install)}
+ ${moreCapsule("general","⚙️","Configuración general","Dirección y datos de ejemplo",general)}`
+}
+function openDeletedHistory(){
+ const arr=[...state.deleted].sort(chronological);
+ $("listBody").innerHTML=`<button class="iconbtn close" onclick="D('listDlg').close()">✕</button><h2>🗑️ Historial de eliminados</h2><p class="muted">Esta carpeta está separada del historial normal. Eliminar para siempre no se puede deshacer.</p>
+ ${arr.map(a=>`<div class="deleted-row"><b>${esc(a.title)}</b><div class="muted">${panamaDate(a.date)} · ${panamaRange(a)} · ${esc(a.venue||"Lugar pendiente")}</div><div class="actions"><button class="btn ghost small" onclick="restoreDeleted('${a.id}');openDeletedHistory()">Restaurar</button><button class="btn ghost small" onclick="reuseDeleted('${a.id}')">Reutilizar</button><button class="btn danger small" onclick="permanentDelete('${a.id}')">Eliminar para siempre</button></div></div>`).join("")||'<div class="empty">No hay registros eliminados.</div>'}`;
+ if(!D('listDlg').open)D('listDlg').showModal();
+}
+function permanentDelete(id){
+ const a=state.deleted.find(x=>x.id===id);if(!a)return;
+ if(!confirm(`¿Eliminar para siempre "${a.title}"?\n\nEsta acción no se puede deshacer.`))return;
+ if(a.calendarEventId&&!state.settings.permanentlyDeletedCalendarIds.includes(a.calendarEventId))state.settings.permanentlyDeletedCalendarIds.push(a.calendarEventId);
+ state.deleted=state.deleted.filter(x=>x.id!==id);
+ localStorage.setItem(KEY,JSON.stringify(state));render();openDeletedHistory();toast("Registro eliminado para siempre");
 }
 function avgNetGig(){let a=periodArr().filter(x=>x.kind==="presentacion"&&done(x));return a.length?a.reduce((s,x)=>s+earned(x)-expTotal(x),0)/a.length:0}
 function avgRehearsal(){let a=periodArr().filter(x=>x.kind==="ensayo"&&done(x));return a.length?a.reduce((s,x)=>s+expTotal(x),0)/a.length:0}
@@ -612,7 +876,7 @@ function openPlaceHistory(venue){
  const avgReceived=avg(doneArr.map(received)),avgExp=avg(doneArr.map(expTotal)),avgNet=avg(doneArr.map(a=>earned(a)-expTotal(a)));
  const transports={};arr.forEach(a=>[...(a.expenses?.outbound||[]),...(a.expenses?.return||[])].forEach(t=>transports[t.type]=(transports[t.type]||0)+1));
  const top=Object.entries(transports).sort((a,b)=>b[1]-a[1])[0];const tname=top?(TRANSPORTS.find(x=>x[0]===top[0])?.[1]||top[0]):"Sin datos";
- $("placeBody").innerHTML=`<button class="iconbtn close" onclick="placeDlg.close()">✕</button><h2>📍 ${esc(venue)}</h2><div class="info"><div class="box"><small>Actividades</small><b>${arr.length}</b></div><div class="box"><small>Promedio cobrado</small><b>${money(avgReceived)}</b></div><div class="box"><small>Promedio gastos</small><b>${money(avgExp)}</b></div><div class="box"><small>Ganancia neta promedio</small><b>${money(avgNet)}</b></div><div class="box"><small>Transporte más usado</small><b>${esc(tname)}</b></div><div class="box"><small>Regla habitual</small><b>${esc(placeConfig(venue)?.rule||arr[0]?.paymentRule||"Sin datos")}</b></div></div><div class="sectionline"><h3>Historial</h3>${arr.map(card).join("")||'<div class="empty">Sin registros.</div>'}</div>`;placeDlg.showModal()
+ $("placeBody").innerHTML=`<button class="iconbtn close" onclick="D('placeDlg').close()">✕</button><h2>📍 ${esc(venue)}</h2><div class="info"><div class="box"><small>Actividades</small><b>${arr.length}</b></div><div class="box"><small>Promedio cobrado</small><b>${money(avgReceived)}</b></div><div class="box"><small>Promedio gastos</small><b>${money(avgExp)}</b></div><div class="box"><small>Ganancia neta promedio</small><b>${money(avgNet)}</b></div><div class="box"><small>Transporte más usado</small><b>${esc(tname)}</b></div><div class="box"><small>Regla habitual</small><b>${esc(placeConfig(venue)?.rule||arr[0]?.paymentRule||"Sin datos")}</b></div></div><div class="sectionline"><h3>Historial</h3>${arr.map(card).join("")||'<div class="empty">Sin registros.</div>'}</div>`;D('placeDlg').showModal()
 }
 function suggestedRate(){
  const venue=($("avenue").value||"").toLowerCase(),loc=($("alocation").value||"").toLowerCase(),prov=($("aprovince").value||"").toLowerCase();
@@ -630,11 +894,27 @@ function updateDuePreview(){
  const a={date:$("adate").value,venue:$("avenue").value,free:$("afree").checked,paymentRule:$("apaymentrule").value};
  $("aduepreview").value=a.free?"No aplica":(due(a)?panamaDate(due(a)):"");
 }
+function setBillingMode(free){
+ const chk=$("afree");if(!chk)return;
+ chk.checked=!!free;
+ syncFreeFields();
+}
 function syncFreeFields(){
- const fr=$("afree").checked;
- $("aexpected").disabled=fr;$("afinal").disabled=fr;
- if(fr){$("aexpected").value="0";$("afinal").value="0";$("apaymentrule").value="Sin remuneración"}
- else applyRateSuggestion(false);
+ const fr=$("afree")?.checked??false;
+ const paidBtn=$("billPaid"),freeBtn=$("billFree"),box=$("financialFields");
+ if(paidBtn)paidBtn.classList.toggle("active",!fr);
+ if(freeBtn)freeBtn.classList.toggle("active",fr);
+ if(box)box.classList.toggle("hidden",fr);
+ if($("aexpected"))$("aexpected").disabled=fr;
+ if($("afinal"))$("afinal").disabled=fr;
+ if(fr){
+   if($("aexpected"))$("aexpected").value="0";
+   if($("afinal"))$("afinal").value="0";
+   if($("apaymentrule"))$("apaymentrule").value="Sin remuneración";
+ }else{
+   if($("apaymentrule")?.value==="Sin remuneración")$("apaymentrule").value="";
+   applyRateSuggestion(false);
+ }
  updateDuePreview();
 }
 function applyRateSuggestion(force=false){
@@ -669,9 +949,31 @@ function findScheduleConflict(candidate,ignoreId=""){
 }
 function openActivityForm(id=""){
  const a=state.activities.find(x=>x.id===id);
+ if(a?.outcome){toast("Esta actividad ya está cerrada y forma parte del historial");openDetail(a.id);return}
+ if(a&&needsConfirmation(a)){promptActivityStatus(a.id);return}
  autoFinal=!a || Number(a.final??a.expected??0)===Number(a.expected??0);
- $("aid").value=a?.id||"";$("akind").value=a?.kind||"presentacion";$("atype").innerHTML=TYPES.map(x=>`<option ${x===(a?.type||"Boda")?"selected":""}>${x}</option>`).join("");$("atitle").value=a?.title||"";$("avenue").value=a?.venue||"";$("alocation").value=a?.location||"";$("aprovince").value=a?.province||"";$("adate").value=a?.date||todayISO();$("astart").value=a?.start||"20:00";$("aend").value=a?.end||"22:00";$("aexpected").value=a?.expected??"";$("afinal").value=a?.final??"";$("afree").checked=!!a?.free;$("aoutcome").value=a?.outcome||"";$("anotes").value=a?.notes||"";$("apaymentrule").value=a?.paymentRule||placeConfig(a?.venue)?.rule||"";$("activityTitle").textContent=a?"Editar actividad":"Nueva actividad";
- $("aexpected").disabled=!!a?.free;$("afinal").disabled=!!a?.free;updateDuePreview();D('activityDlg').showModal()
+ $("aid").value=a?.id||"";
+ $("akind").value=a?.kind||"presentacion";
+ $("atype").innerHTML=TYPES.map(x=>`<option ${x===(a?.type||"Boda")?"selected":""}>${x}</option>`).join("");
+ $("atitle").value=a?.title||"";
+ $("avenue").value=a?.venue||"";
+ $("alocation").value=a?.location||"";
+ $("aprovince").value=a?.province||"";
+ $("adate").value=a?.date||todayISO();
+ $("astart").value=a?.start||"20:00";
+ $("aend").value=a?.end||"22:00";
+ $("aexpected").value=a?.expected??"";
+ $("afinal").value=a?.final??"";
+ $("afree").checked=a?!!a.free:false;
+ $("aoutcome").value="";
+ $("anotes").value=a?.notes||"";
+ $("apaymentrule").value=a?.paymentRule||placeConfig(a?.venue)?.rule||"";
+ $("activityTitle").textContent=a?"Editar actividad":"Nueva actividad";
+ $("editExpenseShortcut").innerHTML=a?`<button class="btn ghost" onclick="D('activityDlg').close();openDetail('${a.id}','expenses')">💸 Abrir gastos de esta actividad</button>`:`<span class="muted">Después de guardar podrás registrar gastos desde la actividad o desde Inicio.</span>`;
+ if(!a&&$("akind").value==="ensayo")$("afree").checked=true;
+ syncFreeFields();
+ updateDuePreview();
+ D('activityDlg').showModal()
 }
 async function saveActivity(){
  let id=$("aid").value||uid(),old=state.activities.find(x=>x.id===id);
@@ -687,8 +989,11 @@ ${conflict.title} · ${panamaDate(conflict.date)} · ${panamaRange(conflict)}`);
  }
 }
 function openDetail(id,tab="summary"){
- const a=state.activities.find(x=>x.id===id);if(!a)return;let s=status(a);
- $("detailBody").innerHTML=`<button class="iconbtn close" onclick="D('detailDlg').close()">✕</button><h2>${a.title}</h2><span class="badge ${s[0]}">${s[1]}</span><p class="muted">${panamaDate(a.date)} · ${panamaRange(a)} · ${a.venue}</p><div class="tabs"><button class="${tab==="summary"?"active":""}" onclick="openDetail('${id}','summary')">Resumen</button><button class="${tab==="payments"?"active":""}" onclick="openDetail('${id}','payments')">Pagos</button><button class="${tab==="expenses"?"active":""}" onclick="openDetail('${id}','expenses')">Gastos</button><button class="${tab==="route"?"active":""}" onclick="openDetail('${id}','route')">Cómo llegar</button></div>${detailTab(a,tab)}<div class="row" style="margin-top:14px"><button class="btn ghost" onclick="D('detailDlg').close();openActivityForm('${id}')">Editar actividad</button><button class="btn danger" onclick="deleteActivity('${id}')">Mover a eliminados</button></div>`;D('detailDlg').showModal()
+ const a=state.activities.find(x=>x.id===id);if(!a)return;let st=status(a),closedOp=!!a.outcome,locked=historyLocked(a);
+ const lockNote=closedOp?`<div class="locked-note">${locked?"🔒 Esta actividad está cerrada y forma parte del historial. Sus datos principales ya no se pueden modificar.":"🔒 La actividad está cerrada. Solo quedan pendientes financieros o de gastos por completar."}</div>`:"";
+ const editBtn=!closedOp?`<button class="btn ghost" onclick="D('detailDlg').close();openActivityForm('${id}')">Editar actividad</button>`:"";
+ $("detailBody").innerHTML=`<button class="iconbtn close" onclick="D('detailDlg').close()">✕</button><h2>${esc(a.title)}</h2><span class="badge ${st[0]}">${st[1]}</span><p class="muted">${panamaDate(a.date)} · ${panamaRange(a)} · ${esc(a.venue||"Lugar pendiente")}</p>${lockNote}<div class="tabs"><button class="${tab==="summary"?"active":""}" onclick="openDetail('${id}','summary')">Resumen</button><button class="${tab==="payments"?"active":""}" onclick="openDetail('${id}','payments')">Pagos</button><button class="${tab==="expenses"?"active":""}" onclick="openDetail('${id}','expenses')">Gastos</button><button class="${tab==="route"?"active":""}" onclick="openDetail('${id}','route')">Cómo llegar</button></div>${detailTab(a,tab)}<div class="row" style="margin-top:14px">${editBtn}<button class="btn danger" onclick="deleteActivity('${id}')">Mover a eliminados</button></div>`;
+ if(!D('detailDlg').open)D('detailDlg').showModal()
 }
 function detailTab(a,tab){
  if(tab==="payments")return paymentsTab(a);
@@ -697,13 +1002,22 @@ function detailTab(a,tab){
  return`${a.pendingCalendarLocation?`<div class="location-review"><b>📍 Google Calendar propone otra ubicación</b><p>${esc(a.pendingCalendarLocation)}</p><button class="btn primary small" onclick="reviewCalendarLocation('${a.id}')">Revisar cambio</button> <button class="btn ghost small" onclick="dismissCalendarLocation('${a.id}')">Ignorar</button></div>`:""}<div class="info"><div class="box"><small>Esperado</small><b>${money(a.expected)}</b></div><div class="box"><small>Final acordado</small><b>${money(finalAmt(a))}</b></div><div class="box"><small>Recibido</small><b>${money(received(a))}</b></div><div class="box"><small>Gastos reales conocidos</small><b>${money(expTotal(a))}</b></div><div class="box"><small>Gastos con monto pendiente</small><b>${pendingExp(a)}</b></div><div class="box"><small>Neto actual</small><b>${money(earned(a)-expTotal(a))}</b></div><div class="box"><small>Regla de pago</small><b>${a.paymentRule||placeConfig(a.venue)?.rule||"Hasta 7 días"}</b></div><div class="box"><small>Fecha estimada</small><b>${due(a)?panamaDate(due(a)):"No aplica"}</b></div>${extraordinary(a)>0?`<div class="box"><small>Ingreso extraordinario</small><b>${money(extraordinary(a))}</b></div>`:""}${negativeAdjustment(a)>0?`<div class="box"><small>Ajuste negativo</small><b>-${money(negativeAdjustment(a))}</b></div>`:""}</div>${done(a)?`<div class="sectionline"><h3>📊 Cierre del toque</h3><div class="info"><div class="box"><small>Ingreso actual</small><b>${money(earned(a))}</b></div><div class="box"><small>Gastos totales</small><b>${money(expTotal(a))}</b></div><div class="box"><small>Ganancia neta</small><b>${money(earned(a)-expTotal(a))}</b></div><div class="box"><small>Estado del pago</small><b>${status(a)[1]}</b></div></div></div>`:""}${a.paymentAdjustmentNote?`<div class="sectionline"><b>Observación de ajuste de pago</b><p>${esc(a.paymentAdjustmentNote)}</p></div>`:""}${a.notes?`<div class="sectionline"><b>Observación</b><p>${esc(a.notes)}</p></div>`:""}<div class="sectionline"><button class="btn primary" onclick="openDetail('${a.id}','expenses')">💸 Registrar / revisar gastos</button></div>`
 }
 
+function expenseReadOnlyList(a){
+ const out=(a.expenses?.outbound||[]).map(x=>["🚗 Ida",TRANSPORTS.find(t=>t[0]===x.type)?.[1]||x.type,x.amount]);
+ const back=(a.expenses?.return||[]).map(x=>["🏠 Regreso",TRANSPORTS.find(t=>t[0]===x.type)?.[1]||x.type,x.amount]);
+ const extras=(a.expenses?.extras||[]).map(x=>[x.category==="Comida"?"🍽️":x.category==="Hospedaje"?"🏨":"＋",x.subtype||x.category,x.amount]);
+ const rows=[...out,...back,...extras];
+ return rows.length?rows.map(r=>`<div class="readonly-expense"><span>${r[0]} ${esc(r[1]||"Gasto")}</span><b>${r[2]==null?"Monto pendiente":money(r[2])}</b></div>`).join(""):'<div class="muted">Sin gastos registrados.</div>';
+}
 function expensesTab(a){
  const spent=expTotal(a),pending=pendingExp(a),income=done(a)?earned(a):finalAmt(a),net=income-spent;
  const outbound=(a.expenses?.outbound||[]),back=(a.expenses?.return||[]),extras=(a.expenses?.extras||[]);
+ const editable=!a.outcome||!a.expenseReviewDone||pending>0;
+ if(!editable)return `<div class="expense-summary"><div class="box"><small>Gastos registrados</small><b>${money(spent)}</b></div><div class="box"><small>Montos pendientes</small><b>${pending}</b></div><div class="box"><small>${a.free?"Resultado":"Ganancia neta"}</small><b>${a.free?money(-spent):money(net)}</b></div></div><div class="locked-note">🔒 Gastos revisados. Esta sección es solo de lectura.</div>${expenseReadOnlyList(a)}`;
  return `<div class="expense-summary">
    <div class="box"><small>Gastos registrados</small><b>${money(spent)}</b></div>
    <div class="box"><small>Montos pendientes</small><b>${pending}</b></div>
-   <div class="box"><small>${done(a)?"Ganancia neta":"Ganancia provisional"}</small><b>${money(net)}</b></div>
+   <div class="box"><small>${a.free?"Gasto total":done(a)?"Ganancia neta":"Ganancia provisional"}</small><b>${a.free?money(spent):money(net)}</b></div>
  </div>
  <div class="expense-actions">
    <button class="expense-action" onclick="openQuickExpense('${a.id}','Transporte')"><b>🚗</b>Transporte</button>
@@ -724,11 +1038,14 @@ function expensesTab(a){
    ${extras.length?extras.map((e,i)=>extraRow(a,e,i)).join(""):'<div class="muted">Sin comida, hospedaje u otros gastos registrados.</div>'}
  </div>
  ${income>0&&spent>=income*.5?`<div class="location-review"><b>⚠️ Los gastos ya alcanzaron al menos la mitad del ingreso de esta actividad.</b></div>`:""}
- ${done(a)?`<div class="expense-section"><button class="btn primary" onclick="markExpenseReviewDone('${a.id}')">${a.expenseReviewDone?"✓ Gastos revisados":"Marcar gastos como revisados"}</button></div>`:""}`
+ ${a.outcome?`<div class="expense-section"><button class="btn primary" onclick="markExpenseReviewDone('${a.id}')">${a.expenseReviewDone?"✓ Gastos revisados":"Marcar gastos como revisados"}</button></div>`:""}`
 }
 
 function paymentsTab(a){
- return`<div class="info"><div class="box"><small>Esperado</small><b>${money(a.expected)}</b></div><div class="box"><small>Final acordado</small><b>${money(finalAmt(a))}</b></div><div class="box"><small>Recibido</small><b>${money(received(a))}</b></div><div class="box"><small>Saldo</small><b>${money(balance(a))}</b></div>${extraordinary(a)>0?`<div class="box"><small>Excedente excepcional</small><b>${money(extraordinary(a))}</b></div>`:""}${negativeAdjustment(a)>0?`<div class="box"><small>Ajuste negativo</small><b>-${money(negativeAdjustment(a))}</b></div>`:""}<div class="box"><small>Regla de pago</small><b>${a.paymentRule||placeConfig(a.venue)?.rule||"Hasta 7 días"}</b></div><div class="box"><small>Fecha estimada</small><b>${due(a)?panamaDate(due(a)):"No aplica"}</b></div></div>${a.paymentAdjustmentNote?`<div class="sectionline"><b>Observación</b><p>${esc(a.paymentAdjustmentNote)}</p></div>`:""}<div class="sectionline"><div class="triphead"><h3>Abonos</h3><button class="btn ghost small" onclick="addPayment('${a.id}')">＋ Agregar abono</button></div>${(a.payments||[]).map((p,i)=>({...p,_i:i})).sort((x,y)=>String(x.date).localeCompare(String(y.date))).map(p=>`<div class="card"><div class="row" style="justify-content:space-between"><span>${panamaDate(p.date)} · <b>${money(p.amount)}</b></span><button class="mini" onclick="delPayment('${a.id}',${p._i})">✕</button></div></div>`).join("")||'<div class="muted">Sin pagos registrados.</div>'}</div>`
+ if(a.free)return `<div class="locked-note">🎁 Esta actividad fue registrada sin cobro. Los gastos siguen disponibles en su pestaña.</div>`;
+ const editable=done(a)&&balance(a)>0;
+ const rows=(a.payments||[]).map((p,i)=>({...p,_i:i})).sort((x,y)=>String(x.date).localeCompare(String(y.date))).map(p=>`<div class="card"><div class="row" style="justify-content:space-between"><span>${panamaDate(p.date)} · <b>${money(p.amount)}</b></span>${editable?`<button class="mini" onclick="delPayment('${a.id}',${p._i})">✕</button>`:"<span class='history-lock'>🔒</span>"}</div></div>`).join("")||'<div class="muted">Sin pagos registrados.</div>';
+ return`<div class="info"><div class="box"><small>Esperado</small><b>${money(a.expected)}</b></div><div class="box"><small>Final acordado</small><b>${money(finalAmt(a))}</b></div><div class="box"><small>Recibido</small><b>${money(received(a))}</b></div><div class="box"><small>Saldo</small><b>${money(balance(a))}</b></div>${extraordinary(a)>0?`<div class="box"><small>Excedente excepcional</small><b>${money(extraordinary(a))}</b></div>`:""}${negativeAdjustment(a)>0?`<div class="box"><small>Ajuste negativo</small><b>-${money(negativeAdjustment(a))}</b></div>`:""}<div class="box"><small>Regla de pago</small><b>${esc(a.paymentRule||placeConfig(a.venue)?.rule||"Hasta 7 días")}</b></div><div class="box"><small>Fecha estimada</small><b>${due(a)?panamaDate(due(a)):"No aplica"}</b></div></div>${a.paymentAdjustmentNote?`<div class="sectionline"><b>Observación</b><p>${esc(a.paymentAdjustmentNote)}</p></div>`:""}<div class="sectionline"><div class="triphead"><h3>Abonos</h3>${editable?`<button class="btn ghost small" onclick="addPayment('${a.id}')">＋ Agregar abono</button>`:`<span class="history-lock">🔒 Solo lectura</span>`}</div>${rows}</div>`
 }
 function delPayment(id,i){
  const a=state.activities.find(x=>x.id===id);if(!a||!a.payments?.[i])return;
@@ -738,17 +1055,12 @@ function delPayment(id,i){
  showUndo("Pago eliminado",()=>{a.payments.splice(i,0,old);localStorage.setItem(KEY,JSON.stringify(state));render();openDetail(id,"payments")});
 }
 
-function addPayment(id){
- let a=state.activities.find(x=>x.id===id),amt=prompt("Monto del abono (B/.)");if(amt===null)return;let d=prompt("Fecha (AAAA-MM-DD)",todayISO());if(!d)return;a.payments.push({id:uid(),date:d,amount:Number(amt||0)});a.paidFullAdjusted=false;a.paymentAdjustmentNote="";
- if(received(a)<finalAmt(a)&&confirm(`Has recibido ${money(received(a))} de ${money(finalAmt(a))}.\n\n¿Quieres marcarlo como PAGADO COMPLETO con ajuste?\n\nCancelar = mantener pago parcial.`)){
-   let note="";while(!note.trim()){note=prompt("Observación obligatoria para explicar por qué el pago menor queda cerrado:","")||"";if(!note.trim()&&!confirm("La observación es obligatoria. ¿Intentar de nuevo?"))break}
-   if(note.trim()){a.paidFullAdjusted=true;a.paymentAdjustmentNote=note.trim()}
- }
- save();openDetail(id,"payments")
-}
+function addPayment(id){openQuickPayment(id)}
+
 function markExpenseReviewDone(id){
  const a=state.activities.find(x=>x.id===id);if(!a)return;
- a.expenseReviewDone=true;a.expensePromptAnswered=true;localStorage.setItem(KEY,JSON.stringify(state));render();openDetail(id,"expenses");toast("Gastos marcados como revisados")
+ if(pendingExp(a)>0)return toast("Completa primero los gastos con monto pendiente");
+ a.expenseReviewDone=true;a.expensePromptAnswered=true;localStorage.setItem(KEY,JSON.stringify(state));render();openDetail(id,"expenses");toast("Gastos cerrados y revisados")
 }
 function transportRow(a,key,t,i){
  let meta=TRANSPORTS.find(x=>x[0]===t.type)||["taxi","Taxi"];
@@ -786,7 +1098,11 @@ function changeExtra(id,i,f,v){let a=state.activities.find(x=>x.id===id);a.expen
 function delExtra(id,i){let a=state.activities.find(x=>x.id===id),old=a.expenses.extras.splice(i,1)[0];save();openDetail(id,"expenses");showUndo("Gasto eliminado",()=>{a.expenses.extras.splice(i,0,old);save();openDetail(id,"expenses")})}
 function deleteActivity(id){if(!confirm("¿Mover esta actividad al historial de eliminados?"))return;let i=state.activities.findIndex(x=>x.id===id),a=state.activities.splice(i,1)[0];state.deleted.push(a);save();D('detailDlg').close();showUndo("Actividad movida a eliminados",()=>{state.deleted=state.deleted.filter(x=>x.id!==id);state.activities.push(a);save()})}
 function restoreDeleted(id){let i=state.deleted.findIndex(x=>x.id===id),a=state.deleted.splice(i,1)[0];state.activities.push(a);save()}
-function reuseDeleted(id){let a=state.deleted.find(x=>x.id===id),c=structuredClone(a);c.id=uid();c.date=todayISO();c.start="20:00";c.end="22:00";c.outcome="";c.payments=[];c.expenses={outbound:[],return:[],extras:[]};state.activities.push(c);save();openActivityForm(c.id)}
+function reuseDeleted(id){
+ let a=state.deleted.find(x=>x.id===id);if(!a)return;
+ let c=structuredClone(a);c.id=uid();c.date=todayISO();c.start="20:00";c.end="22:00";c.outcome="";c.liveStage="";c.payments=[];c.expenses={outbound:[],return:[],extras:[]};c.calendarEventId=null;c.source="manual";c.deletedFromCalendar=false;c.pendingCalendarLocation="";c.pendingCalendarVenue="";c.expenseReviewDone=false;c.expensePromptAnswered=false;c.paidFullAdjusted=false;c.paymentAdjustmentNote="";
+ state.activities.push(c);save();D('listDlg').close();openActivityForm(c.id)
+}
 
 
 
@@ -798,7 +1114,7 @@ function renderHeaderProfile(){
    av.innerHTML=`<img src="${esc(src)}" alt="Perfil">`;
  }
  if(sub){
-   sub.textContent=p.name?`${p.name} · La Mambito Sound · v6.5`:`La Mambito Sound · v6.5`;
+   sub.textContent=p.name?`${p.name} · La Mambito Sound · v6.6`:`La Mambito Sound · v6.6`;
  }
 }
 
@@ -930,21 +1246,26 @@ async function syncCalendar(){
    for(const ev of (d.items||[])){
      const rawStart=(ev.start?.dateTime||ev.start?.date||"").slice(0,10);
      if(rawStart && rawStart<CALENDAR_SYNC_START)continue;
+     if(state.settings.permanentlyDeletedCalendarIds.includes(ev.id))continue;
+     if(state.deleted.some(x=>x.calendarEventId===ev.id)){found.add(ev.id);continue}
      found.add(ev.id);const p=parseGoogleEvent(ev);let a=state.activities.find(x=>x.calendarEventId===ev.id);
      if(!a)a=state.activities.find(x=>!x.calendarEventId&&x.date===p.date&&x.start===p.start);
      if(!a){const near=state.activities.find(x=>!x.calendarEventId&&x.date===p.date&&(x.venue===p.venue||x.type===p.type)&&Math.abs(eventStartTime(x)-eventStartTime(p))<=90*60000);if(near&&confirm(`Calendar encontró una actividad que podría ser la misma:\n${near.title} · ${near.start}\n${p.type} · ${p.start}\n\n¿Vincularlas?`))a=near}
      if(a){
        const future=!a.outcome&&activityEndTime(a)>new Date();const before={date:a.date,start:a.start,end:a.end};
-       a.calendarEventId=ev.id;a.source="calendar";a.kind=p.kind;a.type=p.type;a.deletedFromCalendar=false;
-       if(future){a.date=p.date;a.start=p.start;a.end=p.end}
-       if(p.location&&p.location!==(a.location||"")){a.pendingCalendarLocation=p.location;a.pendingCalendarVenue=p.venue;addAlert("📍 Ubicación cambiada en Calendar",`${a.title}: revisa la nueva ubicación antes de aplicarla.`,`cal-location-${ev.id}-${p.location}`)}
-       if(future&&(before.date!==a.date||before.start!==a.start||before.end!==a.end))addAlert("📅 Fecha u horario actualizado",`${a.title}: Google Calendar actualizó fecha u horario.`,`cal-time-${ev.id}-${a.date}-${a.start}`);
+       a.calendarEventId=ev.id;a.deletedFromCalendar=false;
+       if(!a.outcome){
+         a.source="calendar";a.kind=p.kind;a.type=p.type;
+         if(future){a.date=p.date;a.start=p.start;a.end=p.end}
+         if(p.location&&p.location!==(a.location||"")){a.pendingCalendarLocation=p.location;a.pendingCalendarVenue=p.venue;addAlert("📍 Ubicación cambiada en Calendar",`${a.title}: revisa la nueva ubicación antes de aplicarla.`,`cal-location-${ev.id}-${p.location}`)}
+         if(future&&(before.date!==a.date||before.start!==a.start||before.end!==a.end))addAlert("📅 Fecha u horario actualizado",`${a.title}: Google Calendar actualizó fecha u horario.`,`cal-time-${ev.id}-${a.date}-${a.start}`);
+       }
      }else{
        let kp=placeConfig(p.venue);p.expected=p.free?0:(kp?.rate??(p.province==="Panamá Oeste"?40:50));p.final=p.expected;p.paymentRule=kp?.rule||"Hasta 7 días";p.expenseReviewDone=false;p.expensePromptAnswered=false;p.liveStage="";p.paidFullAdjusted=false;
        state.activities.push({...p,id:uid()});addAlert("📅 Nuevo evento de Calendar",`${calendarTitle(p)} · ${panamaDateTime(p.date,p.start)}`,`cal-new-${ev.id}`)
      }
    }
-   state.activities.filter(a=>a.calendarEventId&&a.date>=CALENDAR_SYNC_START).forEach(a=>{if(!found.has(a.calendarEventId)&&!a.deletedFromCalendar){a.deletedFromCalendar=true;addAlert("🗑️ Eliminado de Google Calendar",`${a.title} ya no aparece en Google Calendar.`,`cal-del-${a.calendarEventId}`)}});
+   state.activities.filter(a=>a.calendarEventId&&a.date>=CALENDAR_SYNC_START&&!a.outcome).forEach(a=>{if(!found.has(a.calendarEventId)&&!a.deletedFromCalendar){a.deletedFromCalendar=true;addAlert("🗑️ Eliminado de Google Calendar",`${a.title} ya no aparece en Google Calendar.`,`cal-del-${a.calendarEventId}`)}});
    state.settings.lastCalendarSync=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(state));render();toast(`Calendar sincronizado: ${(d.items||[]).length} eventos`);maybePromptPostActivity();maybeFireNativeNotifications()
  }catch(e){console.error(e);toast("No se pudo sincronizar Google Calendar")}
 }
@@ -990,7 +1311,7 @@ function notificationItems(){
  const out=[];
  (state.alerts||[]).filter(x=>!x.read).forEach(x=>out.push({...x,type:"alert"}));
  state.activities.forEach(a=>{
-   if(needsConfirmation(a))out.push({id:`confirm-${a.id}`,type:"confirm",title:"⏳ Actividad pendiente de confirmar",body:`${a.title} terminó. Confirma si participaste.`,activityId:a.id});
+   if(needsConfirmation(a))out.push({id:`confirm-${a.id}`,type:"confirm",title:"⏳ Actividad pendiente de confirmar",body:`${a.title} ya terminó. Actualiza qué ocurrió.`,activityId:a.id});
    if(done(a)&&!a.expenseReviewDone)out.push({id:`expense-${a.id}`,type:"expense",title:"💸 Gastos pendientes",body:`Revisa los gastos de ${a.title}.`,activityId:a.id});
    if(a.deletedFromCalendar)out.push({id:`deleted-${a.id}`,type:"deleted",title:"🗑️ Eliminado de Google Calendar",body:`${a.title} ya no aparece en Calendar.`,activityId:a.id});
    if(isUpcoming(a)){
@@ -1017,46 +1338,74 @@ function openNotifications(){
  const items=notificationItems();
  $("notificationBody").innerHTML=`<button class="iconbtn close" onclick="D('notificationDlg').close()">✕</button><h2>🔔 Notificaciones</h2>
  <p class="muted">${items.length?`${items.length} aviso${items.length===1?"":"s"} pendiente${items.length===1?"":"s"}.`:"No tienes avisos pendientes."}</p>
- ${items.map(n=>`<div class="notice"><b>${n.title}</b><small>${n.body}</small><div class="notice-actions">${n.activityId?`<button class="btn ghost small" onclick="D('notificationDlg').close();openDetail('${n.activityId}', '${n.type==="expense"?"expenses":"summary"}')">Abrir</button>`:""}${n.type==="alert"?`<button class="btn ghost small" onclick="markAlertRead('${n.id}')">Marcar leído</button>`:""}</div></div>`).join("")}`;
+ ${items.map(n=>`<div class="notice"><b>${n.title}</b><small>${n.body}</small><div class="notice-actions">
+   ${n.activityId&&n.type==="confirm"?`<button class="btn primary small" onclick="D('notificationDlg').close();promptActivityStatus('${n.activityId}')">Actualizar estado</button>`:""}
+   ${n.activityId&&n.type==="payment"?`<button class="btn primary small" onclick="D('notificationDlg').close();openQuickPayment('${n.activityId}')">Registrar pago</button>`:""}
+   ${n.activityId&&!["confirm","payment"].includes(n.type)?`<button class="btn ghost small" onclick="D('notificationDlg').close();openDetail('${n.activityId}', '${n.type==="expense"?"expenses":"summary"}')">Abrir</button>`:""}
+   ${n.type==="alert"?`<button class="btn ghost small" onclick="markAlertRead('${n.id}')">Marcar leído</button>`:""}
+ </div></div>`).join("")}`;
  if(!D('notificationDlg').open)D('notificationDlg').showModal()
 }
 function markAlertRead(id){let x=state.alerts.find(a=>a.id===id);if(x)x.read=true;localStorage.setItem(KEY,JSON.stringify(state));render();openNotifications()}
 function promptSnoozed(a){return a.postPromptSnoozedUntil&&new Date(a.postPromptSnoozedUntil)>new Date()}
+function promptActivityStatus(id){
+ const a=state.activities.find(x=>x.id===id);if(!a)return;
+ const rehearsal=a.kind==="ensayo";
+ $("postActivityBody").innerHTML=`<h2>${rehearsal?"🎵 ¿Qué ocurrió con el ensayo?":"🎤 ¿Qué ocurrió con la actividad?"}</h2>
+ <p><b>${esc(a.title)}</b></p><p class="muted">${panamaDate(a.date)} · ${panamaRange(a)} · ${esc(a.venue||"Lugar pendiente")}</p>
+ <div class="post-actions">
+   <button class="btn primary" onclick="confirmPostOutcome('${a.id}','completado')">✅ Completado</button>
+   <button class="btn ghost" onclick="confirmPostOutcome('${a.id}','no-asisti')">❌ ${rehearsal?"No asistí":"No participé"}</button>
+   <button class="btn danger" onclick="confirmPostOutcome('${a.id}','cancelado')">🚫 Cancelado</button>
+   <button class="btn ghost" onclick="showReprogramForm('${a.id}')">📅 Reprogramado</button>
+   <button class="btn ghost" onclick="snoozePostPrompt('${a.id}')">Recordarme después</button>
+ </div>`;
+ if(!D('postActivityDlg').open)D('postActivityDlg').showModal()
+}
 function maybePromptPostActivity(force=false){
  if(D('postActivityDlg').open||D('activityDlg').open||D('detailDlg').open||D('transportDlg').open)return;
  const a=state.activities.filter(needsConfirmation).filter(x=>force||!promptSnoozed(x)).sort((x,y)=>activityEndTime(x)-activityEndTime(y))[0];
- if(!a)return;
- const rehearsal=a.kind==="ensayo";
- $("postActivityBody").innerHTML=`<h2>${rehearsal?"🎵 ¿Asististe al ensayo?":"🎤 ¿Participaste en la actividad?"}</h2>
- <p><b>${a.title}</b></p><p class="muted">${panamaDate(a.date)} · ${panamaRange(a)} · ${a.venue||"Lugar pendiente"}</p>
- <div class="post-actions">
-   <button class="btn primary" onclick="confirmPostOutcome('${a.id}','${rehearsal?"asisti":"realizado"}')">${rehearsal?"✅ Sí, asistí":"✅ Sí, participé"}</button>
-   <button class="btn ghost" onclick="confirmPostOutcome('${a.id}','${rehearsal?"no-asisti":"no-participe"}')">${rehearsal?"❌ No asistí":"❌ No participé"}</button>
-   <button class="btn danger" onclick="confirmPostOutcome('${a.id}','cancelado')">🚫 Se canceló</button>
-   <button class="btn ghost" onclick="snoozePostPrompt('${a.id}')">Recordarme después</button>
- </div>`;
- D('postActivityDlg').showModal()
+ if(a)promptActivityStatus(a.id);
 }
 function snoozePostPrompt(id){
  const a=state.activities.find(x=>x.id===id);if(a)a.postPromptSnoozedUntil=new Date(Date.now()+3*3600000).toISOString();
  localStorage.setItem(KEY,JSON.stringify(state));D('postActivityDlg').close();render()
 }
+function showReprogramForm(id){
+ const a=state.activities.find(x=>x.id===id);if(!a)return;
+ $("postActivityBody").innerHTML=`<h2>📅 Reprogramar actividad</h2><p><b>${esc(a.title)}</b></p>
+ <div class="field"><label>Nueva fecha (DD/MM/AAAA)</label><input id="reprogramDate" inputmode="numeric" value="${latamDateValue(a.date)}" placeholder="21/09/2026"></div>
+ <div class="grid2"><div class="field"><label>Inicio</label><input id="reprogramStart" type="time" value="${esc(a.start||"20:00")}"></div><div class="field"><label>Fin</label><input id="reprogramEnd" type="time" value="${esc(a.end||"22:00")}"></div></div>
+ <div class="row"><button class="btn primary" onclick="saveReprogram('${a.id}')">Guardar nueva fecha</button><button class="btn ghost" onclick="promptActivityStatus('${a.id}')">Volver</button></div>`;
+ if(!D('postActivityDlg').open)D('postActivityDlg').showModal()
+}
+async function saveReprogram(id){
+ const a=state.activities.find(x=>x.id===id);if(!a)return;
+ const date=isoFromLatamDate($("reprogramDate")?.value),start=$("reprogramStart")?.value,end=$("reprogramEnd")?.value;
+ if(!date)return toast("La fecha debe ser DD/MM/AAAA");
+ if(!start||!end)return toast("Completa hora de inicio y fin");
+ const candidate={...a,date,start,end,outcome:""};
+ const conflict=findScheduleConflict(candidate,id);
+ if(conflict)return alert(`No se puede reprogramar porque se cruza con:\n${conflict.title} · ${panamaDate(conflict.date)} · ${panamaRange(conflict)}`);
+ a.date=date;a.start=start;a.end=end;a.outcome="";a.liveStage="";a.postPromptSnoozedUntil=null;a.expenseReviewDone=false;a.expensePromptAnswered=false;
+ localStorage.setItem(KEY,JSON.stringify(state));render();D('postActivityDlg').close();toast("Actividad reprogramada");
+ if(googleAccessToken&&a.calendarEventId){try{await updateCalendarEvent(a)}catch(e){toast("Reprogramada en OLMS; Calendar no pudo actualizarse")}}
+}
 function confirmPostOutcome(id,outcome){
  const a=state.activities.find(x=>x.id===id);if(!a)return;
- a.outcome=outcome;a.postPromptSnoozedUntil=null;
- if(["realizado","asisti"].includes(outcome)){a.expenseReviewDone=false;a.expensePromptAnswered=false}
- else {a.expenseReviewDone=true;a.expensePromptAnswered=true}
+ a.outcome=outcome;a.postPromptSnoozedUntil=null;a.liveStage=outcome==="completado"?"ended":a.liveStage;
+ a.expenseReviewDone=false;a.expensePromptAnswered=false;
  localStorage.setItem(KEY,JSON.stringify(state));render();
- if(["realizado","asisti"].includes(outcome))showExpenseQuestion(id);else{D('postActivityDlg').close();setTimeout(maybePromptPostActivity,250)}
+ showExpenseQuestion(id)
 }
 function showExpenseQuestion(id){
  const a=state.activities.find(x=>x.id===id);if(!a)return;
- $("postActivityBody").innerHTML=`<h2>💸 Gastos de la actividad</h2><p><b>${a.title}</b></p>
- <p class="muted">¿Pagaste transporte, comida, hospedaje u otro gasto?</p>
+ $("postActivityBody").innerHTML=`<h2>💸 Gastos de la actividad</h2><p><b>${esc(a.title)}</b></p>
+ <p class="muted">Aunque la actividad sea sin cobro, cancelada o no hayas asistido, puedes registrar cualquier gasto relacionado.</p>
  <div class="post-actions">
-  <button class="btn primary" onclick="expenseDecision('${id}','register')">Sí, registrar gastos ahora</button>
+  <button class="btn primary" onclick="expenseDecision('${id}','register')">Registrar gastos ahora</button>
   <button class="btn ghost" onclick="expenseDecision('${id}','none')">No tuve gastos</button>
-  <button class="btn ghost" onclick="expenseDecision('${id}','later')">Lo completaré después</button>
+  <button class="btn ghost" onclick="expenseDecision('${id}','later')">Completar después</button>
  </div>`;
  if(!D('postActivityDlg').open)D('postActivityDlg').showModal()
 }
@@ -1072,7 +1421,7 @@ function expenseDecision(id,choice){
 function nativeReminderCandidates(){
  const out=[];
  state.activities.forEach(a=>{
-   if(needsConfirmation(a))out.push({tag:`post-${a.id}`,title:"Control OLMS",body:`${a.title} terminó. Confirma si participaste.`});
+   if(needsConfirmation(a))out.push({tag:`post-${a.id}`,title:"Control OLMS",body:`${a.title} ya terminó. Actualiza qué ocurrió.`});
    if(done(a)&&!a.expenseReviewDone)out.push({tag:`expense-${a.id}`,title:"Control OLMS · gastos",body:`Completa los gastos de ${a.title}.`});
    if(done(a)&&!a.free&&balance(a)>0){
      const d=due(a);if(!d)return;const diff=daysBetween(d,todayISO());
@@ -1106,10 +1455,7 @@ function setLiveStage(id,stage){
  toast(`Estado actualizado: ${labels[stage]||stage}`);
  if(stage==="ended")setTimeout(()=>showImmediatePostActivity(id),120);
 }
-function showImmediatePostActivity(id){
- const a=state.activities.find(x=>x.id===id);if(!a)return;const rehearsal=a.kind==="ensayo";
- $("postActivityBody").innerHTML=`<h2>${rehearsal?"🎵 ¿Asististe al ensayo?":"🎤 ¿Participaste en la actividad?"}</h2><p><b>${esc(a.title)}</b></p><div class="post-actions"><button class="btn primary" onclick="confirmPostOutcome('${a.id}','${rehearsal?"asisti":"realizado"}')">${rehearsal?"✅ Sí, asistí":"✅ Sí, participé"}</button><button class="btn ghost" onclick="confirmPostOutcome('${a.id}','${rehearsal?"no-asisti":"no-participe"}')">${rehearsal?"❌ No asistí":"❌ No participé"}</button><button class="btn danger" onclick="confirmPostOutcome('${a.id}','cancelado')">🚫 Se canceló</button><button class="btn ghost" onclick="D('postActivityDlg').close()">Cerrar por ahora</button></div>`;if(!D('postActivityDlg').open)D('postActivityDlg').showModal()
-}
+function showImmediatePostActivity(id){promptActivityStatus(id)}
 function openNavigate(id){
  const a=state.activities.find(x=>x.id===id);if(!a)return;const d=encodeURIComponent(a.location||a.venue||"");
  $("navBody").innerHTML=`<button class="iconbtn close close-sheet" onclick="D('navDlg').close()">✕</button><h2>📍 Navegar</h2><p class="muted">Elige cómo quieres abrir la ruta hacia ${esc(a.venue||"la actividad")}.</p><div class="nav-options"><a class="maps" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=${d}">Google Maps</a><a class="uber" target="_blank" href="https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[formatted_address]=${d}">Uber</a></div>`;D('navDlg').showModal()
@@ -1122,7 +1468,12 @@ function recentAmounts(a,category,subtype="",transport=""){
  });return [...new Set(vals)].slice(0,4)
 }
 function habitualTransport(a,side){const counts={};state.activities.filter(x=>x.venue===a.venue).forEach(x=>(x.expenses?.[side]||[]).forEach(t=>counts[t.type]=(counts[t.type]||0)+1));return Object.entries(counts).sort((x,y)=>y[1]-x[1])[0]?.[0]||"uber"}
-function openQuickExpense(id,category){const a=state.activities.find(x=>x.id===id),side=(a?.liveStage==="ended"||done(a))?"return":"outbound";quickExpenseState={id,category,subtype:category==="Comida"?"Cena":category==="Hospedaje"?"Noches":"",transport:a?habitualTransport(a,side):"uber",side};renderQuickExpense()}
+function openQuickExpense(id,category){
+ const a=state.activities.find(x=>x.id===id);if(!a)return;
+ if(a.outcome&&a.expenseReviewDone&&pendingExp(a)===0)return toast("Los gastos de esta actividad ya están cerrados");
+ const side=(a.liveStage==="ended"||done(a))?"return":"outbound";
+ quickExpenseState={id,category,subtype:category==="Comida"?"Cena":category==="Hospedaje"?"Noches":"",transport:habitualTransport(a,side),side};renderQuickExpense()
+}
 function renderQuickExpense(){
  const q=quickExpenseState,a=state.activities.find(x=>x.id===q.id);if(!a)return;
  let choices="",extra="";
@@ -1202,8 +1553,16 @@ function render(){
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll("main section").forEach(x=>x.classList.add("hidden"));$(b.dataset.view).classList.remove("hidden")});
 $("akind").onchange=()=>{
  if($("akind").value==="ensayo"){
-   $("atype").value="Ensayo regular";$("avenue").value=state.settings.regularRehearsalPlace;$("alocation").value=state.settings.regularRehearsalLocation;$("aprovince").value="Panamá Oeste";$("afree").checked=true;$("apaymentrule").value="Sin remuneración";plusTwoHours();syncFreeFields()
- }else if($("afree").checked && $("atype").value==="Ensayo regular"){$("afree").checked=false;syncFreeFields()}
+   $("atype").value="Ensayo regular";
+   $("avenue").value=state.settings.regularRehearsalPlace;
+   $("alocation").value=state.settings.regularRehearsalLocation;
+   $("aprovince").value="Panamá Oeste";
+   setBillingMode(true);
+   plusTwoHours();
+ }else{
+   if($("atype").value==="Ensayo regular")$("atype").value="Boda";
+   setBillingMode(false);
+ }
 };
 $("avenue").addEventListener("change",applyKnownPlace);
 $("avenue").addEventListener("blur",applyKnownPlace);
@@ -1217,7 +1576,7 @@ $("afinal").addEventListener("input",()=>{autoFinal=false});
 $("afree").addEventListener("change",syncFreeFields);
 render();
 clearTimeout(window.__olmsBootTimer);
-setTimeout(()=>{const sp=$("splash");if(sp){sp.classList.add("hide");setTimeout(()=>sp.remove(),260)}},900);
+setTimeout(()=>{const sp=$("splash");if(sp){sp.classList.add("hide");setTimeout(()=>sp.remove(),220)}},650);
 setTimeout(()=>{maybeAutoCalendarSync();maybePromptPostActivity();maybeFireNativeNotifications();},1100);
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){render();setTimeout(()=>{maybeAutoCalendarSync();maybePromptPostActivity();maybeFireNativeNotifications();},250)}});
 window.addEventListener("focus",()=>{render();setTimeout(()=>{maybeAutoCalendarSync();maybePromptPostActivity();maybeFireNativeNotifications();},250)});
