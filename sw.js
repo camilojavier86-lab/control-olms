@@ -1,14 +1,14 @@
-const C='control-olms-v6-8-build-2026-09-23-9';
+const C='control-olms-v6-8-build-2026-09-23-11';
 const UPDATE_INFO={
   version:'6.8',
-  build:'2026.09.23-9',
+  build:'2026.09.23-11',
   kind:'maintenance',
-  title:'Ubicaciones nuevas más seguras y precisas',
+  title:'Selector inteligente de lugares habituales',
   notes:[
-    'OLMS ya no inventa GPS para casas, barriadas o direcciones ambiguas.',
-    'Los lugares públicos reconocibles pueden sugerir una ubicación para confirmar.',
-    'Los lugares guardados conservan siempre sus datos y coordenadas existentes.',
-    'Google Maps y Uber usan únicamente GPS confirmado.'
+    'Lugar ahora muestra solo sitios habituales compatibles con el tipo de actividad.',
+    'Casino ya no ofrece Casa de Russo ni lugares de categorías diferentes.',
+    'Crear nuevo lugar habilita escritura manual solo cuando realmente hace falta.',
+    'Se mantiene la corrección crítica de GPS canónico para Maps, Uber y Calendar.'
   ]
 };
 const ASSETS=[
