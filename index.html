@@ -410,13 +410,13 @@ window.addEventListener("error",e=>{
 });
 const KEY="control_olms_v2";
 const OLMS_VERSION="6.8";
-const OLMS_BUILD="2026.09.23-11";
+const OLMS_BUILD="2026.09.23-12";
 const OLMS_BUILD_TYPE="maintenance";
 const OLMS_BUILD_NOTES=[
- "El campo Lugar ahora es un selector de lugares habituales compatibles con el tipo de actividad.",
- "Casino ya no muestra Casa de Russo ni otros lugares incompatibles; cada tipo ve solamente sus lugares reutilizables.",
- "«Crear nuevo lugar» habilita la escritura manual únicamente cuando realmente necesitas registrar un sitio nuevo.",
- "Se conserva la corrección crítica anterior: el GPS canónico del lugar guardado manda para Google Maps, Uber y Google Calendar."
+ "El resumen financiero ahora muestra Cobrado como el dinero realmente recibido, incluyendo pagos extraordinarios.",
+ "Ganancia neta se calcula con Cobrado real menos Gastos; Ingresos devengados deja de mostrarse en Inicio.",
+ "Los títulos de OLMS y Google Calendar ahora usan el formato preciso: Clase Mambito Sound | Tipo/identificación en Lugar - Distrito/Ciudad.",
+ "Se conservan el selector inteligente de lugares y la prioridad absoluta del GPS canónico para Maps, Uber y Calendar."
 ];
 const OLMS_UPDATE_KEYS={last:"olms_update_last_build",pending:"olms_update_pending_install"};
 let olmsSWRegistration=null,olmsAvailableUpdate=null,olmsUpdateReloading=false;
@@ -736,8 +736,8 @@ function periodArr(){
 }
 function kpis(){
  const arr=periodArr(),comp=arr.filter(done);
- const dev=comp.reduce((s,a)=>s+earned(a),0),rec=comp.reduce((s,a)=>s+Math.min(received(a),finalAmt(a)),0),pend=comp.reduce((s,a)=>s+balance(a),0),venc=comp.filter(a=>payStatus(a)==="overdue").reduce((s,a)=>s+balance(a),0),g=arr.reduce((s,a)=>s+expTotal(a),0);
- return {arr,dev,rec,pend,venc,g,net:dev-g,gigs:comp.filter(a=>a.kind==="presentacion").length,ens:comp.filter(a=>a.kind==="ensayo").length,up:arr.filter(isUpcoming).length,confirm:arr.filter(needsConfirmation).length,free:comp.filter(a=>a.free).length,pendingExp:arr.reduce((s,a)=>s+pendingExp(a),0)}
+ const expected=comp.reduce((s,a)=>s+finalAmt(a),0),rec=comp.reduce((s,a)=>s+received(a),0),pend=comp.reduce((s,a)=>s+balance(a),0),venc=comp.filter(a=>payStatus(a)==="overdue").reduce((s,a)=>s+balance(a),0),g=arr.reduce((s,a)=>s+expTotal(a),0);
+ return {arr,expected,rec,pend,venc,g,net:rec-g,gigs:comp.filter(a=>a.kind==="presentacion").length,ens:comp.filter(a=>a.kind==="ensayo").length,up:arr.filter(isUpcoming).length,confirm:arr.filter(needsConfirmation).length,free:comp.filter(a=>a.free).length,pendingExp:arr.reduce((s,a)=>s+pendingExp(a),0)}
 }
 function periodLabel(){if(periodMode==="all")return"Acumulado desde jun 2026";if(periodMode==="year")return String(periodYear);if(periodMode==="quarter")return`T${Math.floor(periodMonth/3)+1} ${periodYear}`;return new Intl.DateTimeFormat("es-PA",{month:"long",year:"numeric"}).format(new Date(periodYear,periodMonth,1))}
 function periodControls(){return`<div class="period"><button onclick="movePeriod(-1)">‹</button><b>${periodLabel()}</b><button onclick="movePeriod(1)">›</button><select onchange="periodMode=this.value;render()" ><option value="month" ${periodMode==="month"?"selected":""}>Mes</option><option value="quarter" ${periodMode==="quarter"?"selected":""}>Trimestre</option><option value="year" ${periodMode==="year"?"selected":""}>Año</option><option value="all" ${periodMode==="all"?"selected":""}>Acumulado</option></select></div>`}
@@ -747,7 +747,7 @@ function card(a){
  const hist=!!a.outcome,lock=historyLocked(a);
  return`<div class="card activity type-${esc(a.kind)} ${hist?"history-card":""}" onclick="openDetail('${a.id}')">
    <div class="date"><b>${dd[2]}</b><small>${mon}</small></div>
-   <div class="main"><b>${esc(a.title)}</b><div>${panamaDate(a.date)} · ${panamaRange(a)} · ${esc(a.venue||"Lugar pendiente")}</div>
+   <div class="main"><b>${esc(activityDisplayTitle(a))}</b><div>${panamaDate(a.date)} · ${panamaRange(a)}</div>
      ${done(a)&&!a.free&&balance(a)>0?`<button class="btn primary small" style="margin-top:7px" onclick="event.stopPropagation();openQuickPayment('${a.id}')">💵 Registrar pago · ${money(balance(a))}</button>`:""}
      ${hist?`<div style="margin-top:6px"><span class="history-lock">${lock?"🔒 Historial bloqueado":"🔒 Cerrado · pendientes por completar"}</span></div>`:""}
    </div>
@@ -772,6 +772,28 @@ function distinctTitle(a){
  if(a?.kind==="ensayo"&&["ensayo regular","ensayo casa de russo"].includes(n))return"";
  if(a?.kind==="presentacion"&&["boda","cumpleanos","evento corporativo","evento privado"].includes(n))return"";
  return t;
+}
+function activityClassName(a){return a?.kind==="ensayo"?"Ensayo":a?.kind==="viaje"?"Viaje":a?.kind==="grabacion"?"Grabación":a?.kind==="promocion"?"Promoción":"Presentación"}
+function activityDistrict(a){
+ let city=String(a?.city||"").trim(),prov=String(a?.province||"").trim();
+ if(!city){const pc=placeConfig(a?.venue);city=String(pc?.city||"").trim();if(!prov)prov=String(pc?.province||"").trim()}
+ if(!city){const txt=normText([a?.mapsAddress,a?.location].filter(Boolean).join(" "));const all=[...new Set(Object.values(PANAMA_DISTRICTS).flat())].filter(x=>x!=="Panamá").sort((x,y)=>y.length-x.length);const hit=all.find(x=>txt.includes(normText(x)));if(hit)city=hit;if(!city&&prov==="Panamá"&&txt.includes("ciudad de panama"))city="Panamá"}
+ if(city==="Panamá"&&prov==="Panamá")return"Ciudad de Panamá";
+ return city;
+}
+function activitySubject(a){
+ const type=String(a?.type||"Actividad").trim(),venue=String(a?.venue||"").trim();let title=distinctTitle(a);
+ const nt=normText(type),nv=normText(venue);let n=normText(title);
+ if(title&&nv&&(n===nv||n===`${nt} ${nv}`||n===`ensayo ${nv}`))title="";
+ if(title&&nt==="promocion"&&/^promo(?:cion)?\s+/i.test(title))title=title.replace(/^promo(?:cion)?\s+/i,"").trim();
+ if(!title)return type;
+ n=normText(title);if(n===nt||n.startsWith(nt+" "))return title;
+ if(nt.startsWith("ensayo ")&&n.startsWith("ensayo "))return `${type} ${title.replace(/^ensayo\s+/i,"").trim()}`.trim();
+ return `${type} ${title}`.trim();
+}
+function activityDisplayTitle(a){
+ const cls=activityClassName(a),subject=activitySubject(a),venue=String(a?.venue||"").trim(),district=activityDistrict(a);let out=`${cls} Mambito Sound | ${subject}`;
+ if(venue)out+=` en ${venue}`;if(district)out+=` - ${district}`;return out;
 }
 function validGPSPair(lat,lng){if(lat==null||lng==null||lat===""||lng==="")return false;const la=Number(lat),lo=Number(lng);return Number.isFinite(la)&&Number.isFinite(lo)&&Math.abs(la)<=90&&Math.abs(lo)<=180}
 function rawGPSPoint(a){return validGPSPair(a?.gpsLat,a?.gpsLng)?{lat:Number(a.gpsLat),lng:Number(a.gpsLng),accuracy:a?.gpsAccuracy==null?null:Number(a.gpsAccuracy)}:null}
@@ -1025,7 +1047,7 @@ function expenseTimeline(a,editable=true,live=false){
 }
 function findExpenseRef(a,bucket,id){const arr=a?.expenses?.[bucket]||[];const i=arr.findIndex(e=>e.id===id);return i>=0?{arr,i,e:arr[i]}:null}
 function latestLodging(a){return expenseChronology(a).filter(r=>r.bucket==="extras"&&r.e.category==="Hospedaje").sort((x,y)=>expenseStamp(y.e)-expenseStamp(x.e))[0]?.e||null}
-function displayEventTitle(a){const t=distinctTitle(a);return `${a.type||"Actividad"}${t?`: ${t}`:""}${a.venue?` | ${a.venue}`:""}`}
+function displayEventTitle(a){return activityDisplayTitle(a)}
 function journeyButton(a,key,label){
  const order={"":0,going:1,arrived:2,ended:3},idx={going:1,arrived:2,ended:3}[key];
  let cl=order[a.liveStage]>=idx?"done":"";
@@ -1035,7 +1057,7 @@ function journeyButton(a,key,label){
 function liveStageLabel(a){return a.liveStage==="going"?"En camino":a.liveStage==="arrived"?"En el lugar":a.liveStage==="ended"?"Finalizando":"Por realizar"}
 function todayHero(a){
  const rehearsal=a.kind==="ensayo",income=finalAmt(a),spent=expTotal(a),net=(a.free?0:income)-spent;
- const closeout=done(a)?`<div class="closeout"><b>${rehearsal?"Cierre del ensayo":"Cierre del toque"}</b><div class="closeout-grid">${rehearsal?`<div><small>Gastos</small><b>${money(spent)}</b></div><div><small>Estado</small><b>${status(a)[1]}</b></div>`:`<div><small>Recibido</small><b>${money(received(a))}</b></div><div><small>Gastos</small><b>${money(spent)}</b></div><div><small>Neto actual</small><b>${money(earned(a)-spent)}</b></div><div><small>Pago</small><b>${status(a)[1]}</b></div>`}</div></div>`:"";
+ const closeout=done(a)?`<div class="closeout"><b>${rehearsal?"Cierre del ensayo":"Cierre del toque"}</b><div class="closeout-grid">${rehearsal?`<div><small>Gastos</small><b>${money(spent)}</b></div><div><small>Estado</small><b>${status(a)[1]}</b></div>`:`<div><small>Recibido</small><b>${money(received(a))}</b></div><div><small>Gastos</small><b>${money(spent)}</b></div><div><small>Neto actual</small><b>${money(received(a)-spent)}</b></div><div><small>Pago</small><b>${status(a)[1]}</b></div>`}</div></div>`:"";
  const finance=rehearsal
    ? `<div class="live-finance"><div class="live-money"><small>Tipo</small><strong>Ensayo</strong></div><div class="live-money"><small>Gastado</small><strong>${money(spent)}</strong></div><div class="live-money net"><small>Condición</small><strong>Sin cobro</strong></div></div>`
    : `<div class="live-finance"><div class="live-money"><small>Monto esperado</small><strong>${money(income)}</strong></div><div class="live-money"><small>Gastado</small><strong>${money(spent)}</strong></div><div class="live-money net"><small>Ganancia provisional</small><strong>${money(net)}</strong></div></div>`;
@@ -1059,7 +1081,7 @@ function todayHero(a){
    <div class="live-expense-log"><h3>Desglose de gastos</h3>${expenseTimeline(a,!historyLocked(a),true)}</div>
   </div>`
 }
-function nextCapsule(a){if(!a)return"";return `<button class="next-capsule" onclick="openDetail('${a.id}')"><div class="next-icon">${a.kind==="ensayo"?"🎵":"🎤"}</div><div><h3>Próximamente con<span>La Mambito Sound</span></h3><p><b>${esc(a.type||a.title)}</b> · ${esc(a.venue||"Lugar pendiente")}<br>${panamaDateTime(a.date,a.start)} · ${countdownText(a)}</p></div><div class="arrow">›</div></button>`}
+function nextCapsule(a){if(!a)return"";return `<button class="next-capsule" onclick="openDetail('${a.id}')"><div class="next-icon">${a.kind==="ensayo"?"🎵":"🎤"}</div><div><h3>Próximamente con<span>La Mambito Sound</span></h3><p><b>${esc(activityDisplayTitle(a))}</b><br>${panamaDateTime(a.date,a.start)} · ${countdownText(a)}</p></div><div class="arrow">›</div></button>`}
 
 function pendingPaymentActivities(){
  return state.activities
@@ -1086,7 +1108,7 @@ function openPendingPayments(){
  <p class="muted">Registra un cobro sin tener que entrar al detalle completo de la actividad.</p>
  ${arr.map(a=>`<div class="pay-list-card">
    <div class="pay-head">
-     <div><b>${esc(a.title)}</b><div class="muted">${panamaDate(a.date)} · ${esc(a.venue||"Lugar pendiente")}</div>${due(a)?`<div class="muted">Pago previsto: ${panamaDate(due(a))}</div>`:""}</div>
+     <div><b>${esc(activityDisplayTitle(a))}</b><div class="muted">${panamaDate(a.date)} · ${esc(a.venue||"Lugar pendiente")}</div>${due(a)?`<div class="muted">Pago previsto: ${panamaDate(due(a))}</div>`:""}</div>
      <div class="pay-amount">${money(balance(a))}</div>
    </div>
    <div class="pay-actions"><button class="btn primary" onclick="D('listDlg').close();openQuickPayment('${a.id}')">💵 Registrar pago</button></div>
@@ -1110,7 +1132,7 @@ function openQuickPayment(id){
  const defaultDate=todayISO();
  $("quickPaymentBody").innerHTML=`<button class="iconbtn close" onclick="D('quickPaymentDlg').close()">✕</button>
  <h2>💵 Registrar pago</h2>
- <p><b>${esc(a.title)}</b></p>
+ <p><b>${esc(activityDisplayTitle(a))}</b></p>
  <p class="muted">${panamaDate(a.date)} · ${esc(a.venue||"Lugar pendiente")}</p>
  <div class="quick-pay-grid">
    <div class="box"><small>Monto esperado</small><b>${money(finalAmt(a))}</b></div>
@@ -1165,14 +1187,14 @@ function pendingClosuresBlock(){
  const arr=state.activities.filter(needsConfirmation).sort((a,b)=>activityEndTime(a)-activityEndTime(b));
  if(!arr.length)return"";
  return `<div class="pending-close-block"><h3>⏳ Actividades por cerrar</h3><div class="muted">Estas actividades ya pasaron de su fecha y hora. Actualiza qué ocurrió.</div>
- ${arr.map(a=>`<div class="pending-close-card"><b>${esc(a.title)}</b><div class="muted">${panamaDate(a.date)} · ${panamaRange(a)} · ${esc(a.venue||"Lugar pendiente")}</div>${outcomeActionButtons(a)}</div>`).join("")}
+ ${arr.map(a=>`<div class="pending-close-card"><b>${esc(activityDisplayTitle(a))}</b><div class="muted">${panamaDate(a.date)} · ${panamaRange(a)}</div>${outcomeActionButtons(a)}</div>`).join("")}
  </div>`;
 }
 
 function financialDashboard(){
  let k=kpis();
  const cards=dashMode==="money"
-  ? [["net","Ganancia neta",money(k.net),"net-hero"],["rec","Cobrado",money(k.rec),"green"],["pend","Pendiente",money(k.pend),"orange"],["g","Gastos",money(k.g),"blue"],["dev","Ingresos devengados",money(k.dev),"gold"],["venc","Vencido",money(k.venc),"red"]]
+  ? [["net","Ganancia neta",money(k.net),"net-hero"],["rec","Cobrado",money(k.rec),"green"],["pend","Pendiente",money(k.pend),"orange"],["g","Gastos",money(k.g),"blue"],["venc","Vencido",money(k.venc),"red"]]
   : [["gigs","Toques realizados",k.gigs,"green"],["ens","Ensayos asistidos",k.ens,"blue"],["up","Próximas actividades",k.up,"gold"],["confirm","Pendientes de confirmar",k.confirm,"red"],["free","Actividades sin cobro",k.free,"purple"],["pexp","Gastos incompletos",k.pendingExp,"orange"]];
  const activeToday=todayActivity(),next=nextActivity(activeToday?.id||"");
  return `<div class="dash-title"><div><h2>Resumen</h2><div class="muted">${periodMode==="all"?"Acumulado general desde 01/06/2026":"Consulta del período seleccionado"}.</div></div><div class="segment"><button class="${dashMode==="money"?"active":""}" onclick="dashMode='money';renderDash()">💰 Montos</button><button class="${dashMode==="count"?"active":""}" onclick="dashMode='count';renderDash()">🔢 Cantidades</button></div></div>
@@ -1197,14 +1219,14 @@ function renderActivities(){
 function filterActs(q){q=q.toLowerCase();$("actList").innerHTML=state.activities.filter(a=>JSON.stringify(a).toLowerCase().includes(q)).sort(chronological).map(card).join("")||'<div class="empty">Sin resultados.</div>'}
 function renderPayments(){
  const arr=state.activities.filter(a=>done(a)&&!a.free).sort(chronological);
- $("payments").innerHTML=`<h2>Pagos</h2><div class="muted" style="margin-bottom:10px">Monto esperado → Recibido → Saldo</div><div class="tablewrap"><table><tr><th>Fecha</th><th>Actividad</th><th>Monto esperado</th><th>Recibido</th><th>Saldo</th><th>Estado</th></tr>${arr.map(a=>{let st=status(a);return`<tr onclick="openDetail('${a.id}','payments')"><td>${panamaDate(a.date,false)}</td><td>${esc(a.title)}</td><td>${money(finalAmt(a))}</td><td>${money(received(a))}</td><td>${money(balance(a))}</td><td><span class="badge ${st[0]}">${st[1]}</span></td></tr>`}).join("")}</table></div>`
+ $("payments").innerHTML=`<h2>Pagos</h2><div class="muted" style="margin-bottom:10px">Monto esperado → Recibido → Saldo</div><div class="tablewrap"><table><tr><th>Fecha</th><th>Actividad</th><th>Monto esperado</th><th>Recibido</th><th>Saldo</th><th>Estado</th></tr>${arr.map(a=>{let st=status(a);return`<tr onclick="openDetail('${a.id}','payments')"><td>${panamaDate(a.date,false)}</td><td>${esc(activityDisplayTitle(a))}</td><td>${money(finalAmt(a))}</td><td>${money(received(a))}</td><td>${money(balance(a))}</td><td><span class="badge ${st[0]}">${st[1]}</span></td></tr>`}).join("")}</table></div>`
 }
 function renderCalendar(){
  let controls=`<div class="toprow"><div><h2>Calendario</h2><div class="muted">Mes / Semana / Agenda</div></div><div class="segment"><button class="${calMode==="month"?"active":""}" onclick="calMode='month';renderCalendar()">Mes</button><button class="${calMode==="week"?"active":""}" onclick="calMode='week';renderCalendar()">Semana</button><button class="${calMode==="agenda"?"active":""}" onclick="calMode='agenda';renderCalendar()">Agenda</button></div></div>`;
  if(calMode==="month"){
   let y=periodYear,m=periodMonth,days=new Date(y,m+1,0).getDate(),first=new Date(y,m,1).getDay(),cells="";
   for(let i=0;i<first;i++)cells+="<div></div>";
-  for(let d=1;d<=days;d++){let iso=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`,ev=state.activities.filter(a=>a.date===iso);cells+=`<div class="day"><div class="n">${d}</div>${ev.map(a=>`<button class="ev type-${esc(a.kind)}" onclick="openDetail('${a.id}')">${a.kind==="ensayo"?"🎵":"🎤"} ${a.title}</button>`).join("")}</div>`}
+  for(let d=1;d<=days;d++){let iso=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`,ev=state.activities.filter(a=>a.date===iso);cells+=`<div class="day"><div class="n">${d}</div>${ev.map(a=>`<button class="ev type-${esc(a.kind)}" onclick="openDetail('${a.id}')">${a.kind==="ensayo"?"🎵":"🎤"} ${activityDisplayTitle(a)}</button>`).join("")}</div>`}
   $("calendar").innerHTML=controls+periodControls()+`<div class="cal">${["D","L","M","M","J","V","S"].map(x=>`<div class="dayhead">${x}</div>`).join("")}${cells}</div>`;
  } else if(calMode==="week"){
   const now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),now.getDate()-now.getDay()),rows=[];for(let i=0;i<7;i++){let d=new Date(start);d.setDate(start.getDate()+i);let iso=d.toISOString().slice(0,10),ev=state.activities.filter(a=>a.date===iso);rows.push(`<div class="card"><b>${panamaDate(iso)}</b><div style="margin-top:8px">${ev.length?ev.map(card).join(""):'<span class="muted">Sin actividades</span>'}</div></div>`)}$("calendar").innerHTML=controls+rows.join("");
@@ -1220,7 +1242,7 @@ function renderMore(){
  const pendingSync=state.activities.filter(a=>a.calendarSyncPending).length;const syncText=pendingSync?`${pendingSync} cambio${pendingSync===1?"":"s"} pendiente${pendingSync===1?"":"s"}`:lastSync&&!Number.isNaN(lastSync.getTime())?`Actualizado: ${new Intl.DateTimeFormat("es-PA",{day:"2-digit",month:"2-digit",hour:"numeric",minute:"2-digit"}).format(lastSync)}`:"Aún no sincronizado";
  const connection=googleAccessToken?{text:"Conectado",cls:"ok",dot:"ok"}:state.settings.calendarConnected?{text:"Autorizado",cls:"warn",dot:"warn"}:{text:"Sin conectar",cls:"warn",dot:"bad"};
  const profilePanel=`<div class="field"><label>Nombre visible</label><input id="profileName" value="${esc(p.name||"")}" placeholder="Tu nombre"></div><div class="field"><label>🏠 Dirección habitual / Casa</label><input id="homeAddr" value="${esc(state.settings.homeAddress||"")}" placeholder="Calle, barriada, distrito..."><small class="form-help">Se usa como destino cuando al terminar una actividad eliges volver a casa.</small></div><div class="row"><button class="btn primary" onclick="saveProfileAndHome()">Guardar perfil</button><button class="btn ghost brand-action" onclick="loadGoogleProfile(true)"><img src="google.jpeg" alt="Google">Usar datos de Google</button><button class="btn ghost" onclick="document.getElementById('profilePhotoInput').click()">Cambiar foto</button>${p.customPhoto?`<button class="btn ghost" onclick="restoreGooglePhoto()">Usar foto de Google</button>`:""}</div><input id="profilePhotoInput" type="file" accept="image/*" style="display:none" onchange="handleProfilePhoto(this.files&&this.files[0])">`;
- const placeContent=places.length?places.map(v=>{const arr=state.activities.filter(a=>a.venue===v),inc=arr.reduce((sum,a)=>sum+earned(a),0),ex=arr.reduce((sum,a)=>sum+expTotal(a),0),pc=placeConfig(v);return`<button class="place-card" onclick="openPlaceHistory(decodeURIComponent('${encodeURIComponent(v)}'))"><div><b>${esc(v)}</b><div class="place-metrics">${arr.length} actividades · ${money(inc-ex)} neto${pc?.gpsLat!=null&&pc?.gpsLng!=null?" · GPS ✓":""}</div></div><span class="chev">›</span></button>`}).join(""):'<div class="compact-empty">Aún no hay lugares registrados.</div>';
+ const placeContent=places.length?places.map(v=>{const arr=state.activities.filter(a=>a.venue===v),inc=arr.reduce((sum,a)=>sum+received(a),0),ex=arr.reduce((sum,a)=>sum+expTotal(a),0),pc=placeConfig(v);return`<button class="place-card" onclick="openPlaceHistory(decodeURIComponent('${encodeURIComponent(v)}'))"><div><b>${esc(v)}</b><div class="place-metrics">${arr.length} actividades · ${money(inc-ex)} neto${pc?.gpsLat!=null&&pc?.gpsLng!=null?" · GPS ✓":""}</div></div><span class="chev">›</span></button>`}).join(""):'<div class="compact-empty">Aún no hay lugares registrados.</div>';
  const notif=`<p class="muted">Recordatorios de actividades, gastos y cobros.</p><div class="row"><button class="btn primary" onclick="enableNotifications()">Activar notificaciones</button><button class="btn ghost" onclick="openNotifications()">Ver avisos (${notificationItems().length})</button></div><p class="muted" style="font-size:12px">Estado: <b>${notificationPermissionLabel()}</b></p>`;
  const indicators=`<div class="info"><div class="box"><small>Promedio neto por toque</small><b>${money(avgNetGig())}</b></div><div class="box"><small>Gasto promedio por ensayo</small><b>${money(avgRehearsal())}</b></div><div class="box"><small>Gastos del período</small><b>${money(k.g)}</b></div><div class="box"><small>Ganancia neta</small><b>${money(k.net)}</b></div></div>`;
  const rr=state.settings.regionRates||{};const tariffs=`<p class="muted">Estas son las reglas base por región para actividades nuevas en Panamá. Los lugares con una regla habitual guardada pueden reemplazarlas.</p><div class="region-rates"><div class="region-rate"><label>Provincia de Panamá</label><input id="ratePanama" type="number" step=".01" value="${Number(rr.panama??50).toFixed(2)}"></div><div class="region-rate"><label>Panamá Oeste</label><input id="rateWest" type="number" step=".01" value="${Number(rr.panamaWest??40).toFixed(2)}"></div><div class="region-rate"><label>Otras provincias</label><input id="rateInterior" type="number" step=".01" value="${Number(rr.interior??60).toFixed(2)}"></div><div class="region-rate"><label>Playa / resort</label><input id="rateBeach" type="number" step=".01" value="${Number(rr.beach??100).toFixed(2)}"></div></div><div class="row" style="margin-top:9px"><button class="btn primary" onclick="saveRegionalRates()">Guardar tarifas</button><button class="btn ghost" onclick="openPlaceDefaults()">Lugares y reglas propias</button></div><p class="form-help">Los cambios no alteran actividades históricas.</p>`;
@@ -1237,7 +1259,7 @@ function renderMore(){
 function openDeletedHistory(){
  const arr=[...state.deleted].sort(chronological);
  $("listBody").innerHTML=`<button class="iconbtn close" onclick="D('listDlg').close()">✕</button><h2>🗑️ Historial de eliminados</h2><p class="muted">Esta carpeta está separada del historial normal. Eliminar para siempre no se puede deshacer.</p>
- ${arr.map(a=>`<div class="deleted-row"><b>${esc(a.title)}</b><div class="muted">${panamaDate(a.date)} · ${panamaRange(a)} · ${esc(a.venue||"Lugar pendiente")}</div><div class="actions"><button class="btn ghost small" onclick="restoreDeleted('${a.id}');openDeletedHistory()">Restaurar</button><button class="btn ghost small" onclick="reuseDeleted('${a.id}')">Reutilizar</button><button class="btn danger small" onclick="permanentDelete('${a.id}')">Eliminar para siempre</button></div></div>`).join("")||'<div class="empty">No hay registros eliminados.</div>'}`;
+ ${arr.map(a=>`<div class="deleted-row"><b>${esc(activityDisplayTitle(a))}</b><div class="muted">${panamaDate(a.date)} · ${panamaRange(a)}</div><div class="actions"><button class="btn ghost small" onclick="restoreDeleted('${a.id}');openDeletedHistory()">Restaurar</button><button class="btn ghost small" onclick="reuseDeleted('${a.id}')">Reutilizar</button><button class="btn danger small" onclick="permanentDelete('${a.id}')">Eliminar para siempre</button></div></div>`).join("")||'<div class="empty">No hay registros eliminados.</div>'}`;
  if(!D('listDlg').open)D('listDlg').showModal();
 }
 function permanentDelete(id){
@@ -1247,13 +1269,13 @@ function permanentDelete(id){
  state.deleted=state.deleted.filter(x=>x.id!==id);
  localStorage.setItem(KEY,JSON.stringify(state));render();openDeletedHistory();toast("Registro eliminado para siempre");
 }
-function avgNetGig(){let a=periodArr().filter(x=>x.kind==="presentacion"&&done(x));return a.length?a.reduce((s,x)=>s+earned(x)-expTotal(x),0)/a.length:0}
+function avgNetGig(){let a=periodArr().filter(x=>x.kind==="presentacion"&&done(x));return a.length?a.reduce((s,x)=>s+received(x)-expTotal(x),0)/a.length:0}
 function avgRehearsal(){let a=periodArr().filter(x=>x.kind==="ensayo"&&done(x));return a.length?a.reduce((s,x)=>s+expTotal(x),0)/a.length:0}
 
 function expenseListCard(a){
  const spent=expTotal(a),pending=pendingExp(a);
  return `<button class="expense-list-card" onclick="D('listDlg').close();openDetail('${a.id}','expenses')">
-   <div><b>${esc(a.title)}</b><small>${panamaDate(a.date)} · ${panamaRange(a)} · ${esc(a.venue||"Lugar pendiente")}</small></div>
+   <div><b>${esc(activityDisplayTitle(a))}</b><small>${panamaDate(a.date)} · ${panamaRange(a)} · ${esc(a.venue||"Lugar pendiente")}</small></div>
    <div class="amt">${money(spent)}<small>${pending?`${pending} pendiente${pending===1?"":"s"}`:"Abrir gastos"}</small></div>
  </button>`
 }
@@ -1309,7 +1331,7 @@ function editPlaceDefault(name){
 function openPlaceHistory(venue){
  const arr=state.activities.filter(a=>a.venue===venue).sort(chronological);const doneArr=arr.filter(done);
  const avg=x=>x.length?x.reduce((s,n)=>s+n,0)/x.length:0;
- const avgReceived=avg(doneArr.map(received)),avgExp=avg(doneArr.map(expTotal)),avgNet=avg(doneArr.map(a=>earned(a)-expTotal(a)));
+ const avgReceived=avg(doneArr.map(received)),avgExp=avg(doneArr.map(expTotal)),avgNet=avg(doneArr.map(a=>received(a)-expTotal(a)));
  const transports={};arr.forEach(a=>[...(a.expenses?.outbound||[]),...(a.expenses?.return||[])].forEach(t=>transports[t.type]=(transports[t.type]||0)+1));
  const top=Object.entries(transports).sort((a,b)=>b[1]-a[1])[0];const tname=top?(TRANSPORTS.find(x=>x[0]===top[0])?.[1]||top[0]):"Sin datos";
  $("placeBody").innerHTML=`<button class="iconbtn close" onclick="D('placeDlg').close()">✕</button><h2>📍 ${esc(venue)}</h2><div class="info"><div class="box"><small>Actividades</small><b>${arr.length}</b></div><div class="box"><small>Promedio cobrado</small><b>${money(avgReceived)}</b></div><div class="box"><small>Promedio gastos</small><b>${money(avgExp)}</b></div><div class="box"><small>Ganancia neta promedio</small><b>${money(avgNet)}</b></div><div class="box"><small>Transporte más usado</small><b>${esc(tname)}</b></div><div class="box"><small>Condición habitual</small><b>${esc(placeConfig(venue)?.rule||arr[0]?.paymentRule||"Sin datos")}</b></div></div><div class="sectionline"><h3>Historial</h3>${arr.map(card).join("")||'<div class="empty">Sin registros.</div>'}</div>`;D('placeDlg').showModal()
@@ -1616,7 +1638,7 @@ function openDetail(id,tab="summary"){
  const a=state.activities.find(x=>x.id===id);if(!a)return;let st=status(a),closedOp=!!a.outcome,locked=historyLocked(a),unlocked=unlockedHistoryIds.has(id);
  const lockNote=closedOp?(unlocked?`<div class="unlock-box">🔓 <b>Edición temporal activa.</b><div class="muted">Puedes corregir datos, pagos y gastos. Al guardar la actividad vuelve a quedar bloqueada.</div></div>`:`<div class="locked-note">${locked?"🔒 Esta actividad está cerrada y forma parte del historial.":"🔒 La actividad está cerrada. Aún puede tener pendientes financieros o de gastos."}<div><button class="btn ghost small" onclick="unlockActivity('${id}')">🔓 Desbloquear edición</button></div></div>`):"";
  const editBtn=!closedOp||unlocked?`<button class="btn ghost" onclick="D('detailDlg').close();openActivityForm('${id}')">Editar actividad</button>`:"";
- $("detailBody").innerHTML=`<button class="iconbtn close" onclick="D('detailDlg').close()">✕</button><h2>${esc(a.title)}</h2><span class="badge ${st[0]}">${st[1]}</span><p class="muted">${panamaDate(a.date)} · ${panamaRange(a)} · ${esc(a.venue||"Lugar pendiente")}</p>${lockNote}<div class="tabs"><button class="${tab==="summary"?"active":""}" onclick="openDetail('${id}','summary')">Resumen</button><button class="${tab==="payments"?"active":""}" onclick="openDetail('${id}','payments')">Pagos</button><button class="${tab==="expenses"?"active":""}" onclick="openDetail('${id}','expenses')">Gastos</button><button class="${tab==="route"?"active":""}" onclick="openDetail('${id}','route')">Cómo llegar</button></div>${detailTab(a,tab)}<div class="row" style="margin-top:14px">${editBtn}<button class="btn ghost brand-action" onclick="shareWhatsApp('${id}')"><img src="whatsapp.jpeg" alt="WhatsApp">Compartir</button><button class="btn danger" onclick="deleteActivity('${id}')">Mover a eliminados</button></div>`;
+ $("detailBody").innerHTML=`<button class="iconbtn close" onclick="D('detailDlg').close()">✕</button><h2>${esc(activityDisplayTitle(a))}</h2><span class="badge ${st[0]}">${st[1]}</span><p class="muted">${panamaDate(a.date)} · ${panamaRange(a)}</p>${lockNote}<div class="tabs"><button class="${tab==="summary"?"active":""}" onclick="openDetail('${id}','summary')">Resumen</button><button class="${tab==="payments"?"active":""}" onclick="openDetail('${id}','payments')">Pagos</button><button class="${tab==="expenses"?"active":""}" onclick="openDetail('${id}','expenses')">Gastos</button><button class="${tab==="route"?"active":""}" onclick="openDetail('${id}','route')">Cómo llegar</button></div>${detailTab(a,tab)}<div class="row" style="margin-top:14px">${editBtn}<button class="btn ghost brand-action" onclick="shareWhatsApp('${id}')"><img src="whatsapp.jpeg" alt="WhatsApp">Compartir</button><button class="btn danger" onclick="deleteActivity('${id}')">Mover a eliminados</button></div>`;
  if(!D('detailDlg').open)D('detailDlg').showModal()
 }
 function shareWhatsApp(id){
@@ -1626,12 +1648,12 @@ function detailTab(a,tab){
  if(tab==="payments")return paymentsTab(a);
  if(tab==="expenses")return expensesTab(a);
  if(tab==="route"){const d=activityDestination(a);if(!d)return`<h3>Cómo llegar</h3><div class="location-review"><b>📍 Falta confirmar el GPS exacto.</b><p class="muted">Por seguridad OLMS no navegará usando una dirección escrita. Edita la actividad y guarda el punto GPS exacto.</p><button class="btn primary" onclick="D('detailDlg').close();openActivityForm('${a.id}')">Confirmar GPS</button></div>`;const de=encodeURIComponent(d),h=encodeURIComponent(state.settings.homeAddress||"");return`<h3>Cómo llegar</h3><p class="muted">📡 Destino por coordenadas GPS exactas · ${esc(d)}</p><div class="nav-options"><a class="maps" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=${de}"><img src="google-maps.jpeg" alt="Google Maps">Google Maps · ubicación actual</a>${h?`<a class="maps" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=${h}&destination=${de}"><img src="google-maps.jpeg" alt="Google Maps">Google Maps · desde casa</a>`:""}<button class="uber" onclick="launchNavigation('${a.id}','uber')"><img src="uber-logo.jpeg" alt="Uber">Viajar con Uber</button></div>`}
- return`<div class="info"><div class="box"><small>Monto esperado</small><b>${money(finalAmt(a))}</b></div><div class="box"><small>Recibido</small><b>${money(received(a))}</b></div><div class="box"><small>Gastos reales conocidos</small><b>${money(expTotal(a))}</b></div><div class="box"><small>Gastos con monto pendiente</small><b>${pendingExp(a)}</b></div><div class="box"><small>Neto actual</small><b>${money(earned(a)-expTotal(a))}</b></div><div class="box"><small>Condición de pago</small><b>${a.paymentRule||placeConfig(a.venue)?.rule||"Hasta 7 días"}</b></div><div class="box"><small>Fecha estimada</small><b>${due(a)?panamaDate(due(a)):"No aplica"}</b></div>${extraordinary(a)>0?`<div class="box"><small>Ingreso extraordinario</small><b>${money(extraordinary(a))}</b></div>`:""}${negativeAdjustment(a)>0?`<div class="box"><small>Ajuste negativo</small><b>-${money(negativeAdjustment(a))}</b></div>`:""}</div>${done(a)?`<div class="sectionline"><h3>📊 Cierre del toque</h3><div class="info"><div class="box"><small>Ingreso actual</small><b>${money(earned(a))}</b></div><div class="box"><small>Gastos totales</small><b>${money(expTotal(a))}</b></div><div class="box"><small>Ganancia neta</small><b>${money(earned(a)-expTotal(a))}</b></div><div class="box"><small>Estado del pago</small><b>${status(a)[1]}</b></div></div></div>`:""}${a.paymentAdjustmentNote?`<div class="sectionline"><b>Observación de ajuste de pago</b><p>${esc(a.paymentAdjustmentNote)}</p></div>`:""}${a.notes?`<div class="sectionline"><b>Observación</b><p>${esc(a.notes)}</p></div>`:""}<div class="sectionline"><button class="btn primary" onclick="openDetail('${a.id}','expenses')">💸 Registrar / revisar gastos</button></div>`
+ return`<div class="info"><div class="box"><small>Monto esperado</small><b>${money(finalAmt(a))}</b></div><div class="box"><small>Recibido</small><b>${money(received(a))}</b></div><div class="box"><small>Gastos reales conocidos</small><b>${money(expTotal(a))}</b></div><div class="box"><small>Gastos con monto pendiente</small><b>${pendingExp(a)}</b></div><div class="box"><small>Neto actual</small><b>${money(received(a)-expTotal(a))}</b></div><div class="box"><small>Condición de pago</small><b>${a.paymentRule||placeConfig(a.venue)?.rule||"Hasta 7 días"}</b></div><div class="box"><small>Fecha estimada</small><b>${due(a)?panamaDate(due(a)):"No aplica"}</b></div>${extraordinary(a)>0?`<div class="box"><small>Ingreso extraordinario</small><b>${money(extraordinary(a))}</b></div>`:""}${negativeAdjustment(a)>0?`<div class="box"><small>Ajuste negativo</small><b>-${money(negativeAdjustment(a))}</b></div>`:""}</div>${done(a)?`<div class="sectionline"><h3>📊 Cierre del toque</h3><div class="info"><div class="box"><small>Cobrado</small><b>${money(received(a))}</b></div><div class="box"><small>Gastos totales</small><b>${money(expTotal(a))}</b></div><div class="box"><small>Ganancia neta</small><b>${money(received(a)-expTotal(a))}</b></div><div class="box"><small>Estado del pago</small><b>${status(a)[1]}</b></div></div></div>`:""}${a.paymentAdjustmentNote?`<div class="sectionline"><b>Observación de ajuste de pago</b><p>${esc(a.paymentAdjustmentNote)}</p></div>`:""}${a.notes?`<div class="sectionline"><b>Observación</b><p>${esc(a.notes)}</p></div>`:""}<div class="sectionline"><button class="btn primary" onclick="openDetail('${a.id}','expenses')">💸 Registrar / revisar gastos</button></div>`
 }
 
 function expenseReadOnlyList(a){return expenseTimeline(a,false,false)}
 function expensesTab(a){
- const spent=expTotal(a),pending=pendingExp(a),income=done(a)?earned(a):finalAmt(a),net=income-spent;
+ const spent=expTotal(a),pending=pendingExp(a),income=done(a)?received(a):finalAmt(a),net=income-spent;
  const editable=unlockedHistoryIds.has(a.id)||!a.outcome||!a.expenseReviewDone||pending>0;
  return `<div class="expense-summary">
    <div class="box"><small>Gastos registrados</small><b>${money(spent)}</b></div>
@@ -1803,14 +1825,7 @@ async function connectGoogle(silent=false){
  }catch(e){console.error(e);if(!silent)toast("No se pudo iniciar Google OAuth desde esta dirección");return false}
 }
 async function gfetch(url,opt={}){const r=await fetch(url,{...opt,headers:{...(opt.headers||{}),Authorization:`Bearer ${googleAccessToken}`}});if(!r.ok){if(r.status===401){googleAccessToken=null;try{sessionStorage.removeItem("olms_google_token");sessionStorage.removeItem("olms_google_token_exp")}catch(e){}}const err=new Error(await r.text());err.status=r.status;throw err}if(r.status===204)return null;return r.json()}
-function calendarTitle(a){
- const venue=a.venue||"Lugar pendiente",type=a.type||"Otro",title=distinctTitle(a);
- if(a.kind==="ensayo")return`🎵 Ensayo Mambito Sound${a.type==="Ensayo especial"&&title?` – ${title}`:""} | ${venue}`;
- if(a.kind==="presentacion")return`🎤 Presentación Mambito Sound – ${type}${title?`: ${title}`:""} | ${venue}`;
- if(a.kind==="viaje")return`✈️ Viaje Mambito Sound${title?` – ${title}`:""}${venue?` | ${venue}`:""}`;
- if(a.kind==="grabacion")return`🎙️ Grabación Mambito Sound${title?` – ${title}`:""}${venue?` | ${venue}`:""}`;
- if(a.kind==="promocion")return`📣 Promoción Mambito Sound${title?` – ${title}`:""}${venue?` | ${venue}`:""}`;return`Mambito Sound${title?` – ${title}`:""}${venue?` | ${venue}`:""}`
-}
+function calendarTitle(a){return activityDisplayTitle(a)}
 function calendarHumanLocationText(a){const maps=String(a.mapsAddress||"").trim(),loc=String(a.location||"").trim(),city=String(a.city||"").trim(),prov=String(a.province||"").trim(),country=String(a.country||"Panamá").trim();if(maps)return maps;return [loc,city,prov,country].filter((v,i,arr)=>v&&arr.findIndex(x=>normText(x)===normText(v))===i).join(", ")||a.venue||""}
 function calendarLocationText(a){const p=activityGPSPoint(a);return p?`${p.lat.toFixed(6)},${p.lng.toFixed(6)}`:""}
 function eventEndDate(a){let d=new Date(a.date+"T12:00:00");if(a.end<a.start)d.setDate(d.getDate()+1);return d.toISOString().slice(0,10)}
@@ -1867,19 +1882,19 @@ function notificationItems(){
  const out=[];
  (state.alerts||[]).filter(x=>!x.read).forEach(x=>out.push({...x,type:"alert"}));
  state.activities.forEach(a=>{
-   if(needsConfirmation(a))out.push({id:`confirm-${a.id}`,type:"confirm",title:"⏳ Actividad pendiente de confirmar",body:`${a.title} ya terminó. Actualiza qué ocurrió.`,activityId:a.id});
-   if(done(a)&&!a.expenseReviewDone)out.push({id:`expense-${a.id}`,type:"expense",title:"💸 Gastos pendientes",body:`Revisa los gastos de ${a.title}.`,activityId:a.id});
+   if(needsConfirmation(a))out.push({id:`confirm-${a.id}`,type:"confirm",title:"⏳ Actividad pendiente de confirmar",body:`${activityDisplayTitle(a)} ya terminó. Actualiza qué ocurrió.`,activityId:a.id});
+   if(done(a)&&!a.expenseReviewDone)out.push({id:`expense-${a.id}`,type:"expense",title:"💸 Gastos pendientes",body:`Revisa los gastos de ${activityDisplayTitle(a)}.`,activityId:a.id});
    if(isUpcoming(a)){
      const miss=incompleteFields(a);
-     if(miss.length)out.push({id:`incomplete-${a.id}`,type:"incomplete",title:"📝 Información pendiente",body:`${a.title}: falta ${miss.join(", ")}.`,activityId:a.id});
+     if(miss.length)out.push({id:`incomplete-${a.id}`,type:"incomplete",title:"📝 Información pendiente",body:`${activityDisplayTitle(a)}: falta ${miss.join(", ")}.`,activityId:a.id});
    }
    if(done(a)&&!a.free&&balance(a)>0){
      const d=due(a);
      if(d){
        const diff=daysBetween(d,todayISO());
-       if(diff===1)out.push({id:`pay-tom-${a.id}-${d}`,type:"payment",title:"💰 Cobro mañana",body:`${a.title}: saldo ${money(balance(a))}.`,activityId:a.id});
-       if(diff===0)out.push({id:`pay-today-${a.id}-${d}`,type:"payment",title:"💰 Cobro previsto hoy",body:`${a.title}: saldo ${money(balance(a))}.`,activityId:a.id});
-       if(diff<0)out.push({id:`pay-over-${a.id}-${d}`,type:"payment",title:"🔴 Pago vencido",body:`${a.title}: saldo ${money(balance(a))}.`,activityId:a.id});
+       if(diff===1)out.push({id:`pay-tom-${a.id}-${d}`,type:"payment",title:"💰 Cobro mañana",body:`${activityDisplayTitle(a)}: saldo ${money(balance(a))}.`,activityId:a.id});
+       if(diff===0)out.push({id:`pay-today-${a.id}-${d}`,type:"payment",title:"💰 Cobro previsto hoy",body:`${activityDisplayTitle(a)}: saldo ${money(balance(a))}.`,activityId:a.id});
+       if(diff<0)out.push({id:`pay-over-${a.id}-${d}`,type:"payment",title:"🔴 Pago vencido",body:`${activityDisplayTitle(a)}: saldo ${money(balance(a))}.`,activityId:a.id});
      }
    }
  });
@@ -1907,7 +1922,7 @@ function promptActivityStatus(id){
  const a=state.activities.find(x=>x.id===id);if(!a)return;
  const rehearsal=a.kind==="ensayo";
  $("postActivityBody").innerHTML=`<h2>${rehearsal?"🎵 ¿Qué ocurrió con el ensayo?":"🎤 ¿Qué ocurrió con la actividad?"}</h2>
- <p><b>${esc(a.title)}</b></p><p class="muted">${panamaDate(a.date)} · ${panamaRange(a)} · ${esc(a.venue||"Lugar pendiente")}</p>
+ <p><b>${esc(activityDisplayTitle(a))}</b></p><p class="muted">${panamaDate(a.date)} · ${panamaRange(a)}</p>
  <div class="post-actions">
    <button class="btn primary" onclick="confirmPostOutcome('${a.id}','completado')">✅ Completado</button>
    <button class="btn ghost" onclick="confirmPostOutcome('${a.id}','no-asisti')">❌ ${rehearsal?"No asistí":"No participé"}</button>
@@ -1928,7 +1943,7 @@ function snoozePostPrompt(id){
 }
 function showReprogramForm(id){
  const a=state.activities.find(x=>x.id===id);if(!a)return;
- $("postActivityBody").innerHTML=`<h2>📅 Reprogramar actividad</h2><p><b>${esc(a.title)}</b></p>
+ $("postActivityBody").innerHTML=`<h2>📅 Reprogramar actividad</h2><p><b>${esc(activityDisplayTitle(a))}</b></p>
  <div class="field"><label>Nueva fecha (DD/MM/AAAA)</label><input id="reprogramDate" inputmode="numeric" value="${latamDateValue(a.date)}" placeholder="21/09/2026"></div>
  <div class="grid2"><div class="field"><label>Inicio</label><input id="reprogramStart" type="time" value="${esc(a.start||"20:00")}"></div><div class="field"><label>Fin</label><input id="reprogramEnd" type="time" value="${esc(a.end||"22:00")}"></div></div>
  <div class="row"><button class="btn primary" onclick="saveReprogram('${a.id}')">Guardar nueva fecha</button><button class="btn ghost" onclick="promptActivityStatus('${a.id}')">Volver</button></div>`;
@@ -1953,7 +1968,7 @@ function confirmPostOutcome(id,outcome){
 }
 function showReturnDestinationQuestion(id){
  const a=state.activities.find(x=>x.id===id);if(!a)return;
- $("postActivityBody").innerHTML=`<h2>📍 ¿A dónde vas ahora?</h2><p><b>${esc(a.title)}</b></p><p class="muted">La participación ya quedó confirmada. Ahora OLMS puede preparar tu transporte de retorno.</p><div class="post-destination-grid"><button onclick="chooseReturnDestination('${id}','home')"><b>🏠</b>A casa</button><button onclick="chooseReturnDestination('${id}','hotel')"><b>🏨</b>Al hotel</button></div><button class="btn ghost" onclick="showExpenseQuestion('${id}')">Decidir después</button>`;
+ $("postActivityBody").innerHTML=`<h2>📍 ¿A dónde vas ahora?</h2><p><b>${esc(activityDisplayTitle(a))}</b></p><p class="muted">La participación ya quedó confirmada. Ahora OLMS puede preparar tu transporte de retorno.</p><div class="post-destination-grid"><button onclick="chooseReturnDestination('${id}','home')"><b>🏠</b>A casa</button><button onclick="chooseReturnDestination('${id}','hotel')"><b>🏨</b>Al hotel</button></div><button class="btn ghost" onclick="showExpenseQuestion('${id}')">Decidir después</button>`;
  if(!D('postActivityDlg').open)D('postActivityDlg').showModal()
 }
 function chooseReturnDestination(id,type){
@@ -1990,7 +2005,7 @@ function chooseReturnTransport(id,type,destination,destinationType){
 }
 function showExpenseQuestion(id){
  const a=state.activities.find(x=>x.id===id);if(!a)return;
- $("postActivityBody").innerHTML=`<h2>💸 Gastos de la actividad</h2><p><b>${esc(a.title)}</b></p>
+ $("postActivityBody").innerHTML=`<h2>💸 Gastos de la actividad</h2><p><b>${esc(activityDisplayTitle(a))}</b></p>
  <p class="muted">Aunque la actividad sea sin cobro, cancelada o no hayas asistido, puedes registrar cualquier gasto relacionado.</p>
  <div class="post-actions">
   <button class="btn primary" onclick="expenseDecision('${id}','register')">Registrar gastos ahora</button>
@@ -2011,13 +2026,13 @@ function expenseDecision(id,choice){
 function nativeReminderCandidates(){
  const out=[];
  state.activities.forEach(a=>{
-   if(needsConfirmation(a))out.push({tag:`post-${a.id}`,title:"Control OLMS",body:`${a.title} ya terminó. Actualiza qué ocurrió.`});
-   if(done(a)&&!a.expenseReviewDone)out.push({tag:`expense-${a.id}`,title:"Control OLMS · gastos",body:`Completa los gastos de ${a.title}.`});
+   if(needsConfirmation(a))out.push({tag:`post-${a.id}`,title:"Control OLMS",body:`${activityDisplayTitle(a)} ya terminó. Actualiza qué ocurrió.`});
+   if(done(a)&&!a.expenseReviewDone)out.push({tag:`expense-${a.id}`,title:"Control OLMS · gastos",body:`Completa los gastos de ${activityDisplayTitle(a)}.`});
    if(done(a)&&!a.free&&balance(a)>0){
      const d=due(a);if(!d)return;const diff=daysBetween(d,todayISO());
-     if(diff===1)out.push({tag:`pay-tom-${a.id}-${d}`,title:"Control OLMS · cobro mañana",body:`${a.title}: ${money(balance(a))} pendiente.`});
-     if(diff===0)out.push({tag:`pay-today-${a.id}-${d}`,title:"Control OLMS · cobro hoy",body:`${a.title}: ${money(balance(a))} pendiente.`});
-     const past=-diff;if(past===1||(past>1&&(past-1)%7===0))out.push({tag:`pay-over-${a.id}-${d}-${past}`,title:"Control OLMS · pago vencido",body:`${a.title}: ${money(balance(a))} pendiente.`});
+     if(diff===1)out.push({tag:`pay-tom-${a.id}-${d}`,title:"Control OLMS · cobro mañana",body:`${activityDisplayTitle(a)}: ${money(balance(a))} pendiente.`});
+     if(diff===0)out.push({tag:`pay-today-${a.id}-${d}`,title:"Control OLMS · cobro hoy",body:`${activityDisplayTitle(a)}: ${money(balance(a))} pendiente.`});
+     const past=-diff;if(past===1||(past>1&&(past-1)%7===0))out.push({tag:`pay-over-${a.id}-${d}-${past}`,title:"Control OLMS · pago vencido",body:`${activityDisplayTitle(a)}: ${money(balance(a))} pendiente.`});
    }
  });
  return out;
@@ -2108,7 +2123,7 @@ function renderQuickExpense(){
  if(q.category==="Otro")body=`<div class="quick-step"><h4>1 · Detalle</h4><div class="field"><label>Concepto</label><input id="quickDetail" value="${esc(q.subtype||"")}" placeholder="Ej. vestuario, estacionamiento..."></div></div>`;
  const recent=recentAmounts(a,q.category,amountKey,q.transport),step=q.category==="Transporte"?"3":q.category==="Hospedaje"?"3":"2";
  body+=`<div class="quick-step"><h4>${step} · Monto pagado</h4><div class="field"><input id="quickAmount" class="amount-box" type="number" inputmode="decimal" step=".01" min="0" placeholder="B/. 0.00" value="${esc(q.amount||"")}"></div>${recent.length?`<div><small class="muted">Montos recientes para esta opción</small><div class="recent-amounts">${recent.map(v=>`<button onclick="setQuickAmount('${v.toFixed(2)}')">${money(v)}</button>`).join("")}</div></div>`:""}${q.allowPending?`<small class="form-help">Puedes dejar el monto vacío y completarlo después.</small>`:""}</div>`;
- $("quickExpenseBody").innerHTML=`<div class="quick-sheet"><button class="iconbtn close" onclick="D('quickExpenseDlg').close()">✕</button><h2>${q.editId?"Editar":"Registrar"} ${q.category==="Transporte"?"🚗 transporte":q.category==="Comida"?"🍽️ comida":q.category==="Hospedaje"?"🏨 hospedaje":"＋ gasto"}</h2><p class="muted">${esc(a.title)} · ${panamaDate(a.date)}</p>${body}<div class="quick-savebar"><button class="btn primary" onclick="saveQuickExpense()">${q.editId?"Guardar cambios":"Guardar gasto"}</button>${q.editId?`<button class="btn danger" style="margin-top:8px" onclick="deleteCurrentExpense()">Eliminar este gasto</button>`:""}</div></div>`;
+ $("quickExpenseBody").innerHTML=`<div class="quick-sheet"><button class="iconbtn close" onclick="D('quickExpenseDlg').close()">✕</button><h2>${q.editId?"Editar":"Registrar"} ${q.category==="Transporte"?"🚗 transporte":q.category==="Comida"?"🍽️ comida":q.category==="Hospedaje"?"🏨 hospedaje":"＋ gasto"}</h2><p class="muted">${esc(activityDisplayTitle(a))} · ${panamaDate(a.date)}</p>${body}<div class="quick-savebar"><button class="btn primary" onclick="saveQuickExpense()">${q.editId?"Guardar cambios":"Guardar gasto"}</button>${q.editId?`<button class="btn danger" style="margin-top:8px" onclick="deleteCurrentExpense()">Eliminar este gasto</button>`:""}</div></div>`;
  if(!D('quickExpenseDlg').open)D('quickExpenseDlg').showModal()
 }
 function deleteCurrentExpense(){
