@@ -269,8 +269,8 @@ nav button{margin:4px;border-radius:12px}nav button.active{background:#111;color
     <button type="button" id="gpsViewBtn" class="btn ghost small hidden" onclick="viewActivityGPSInGoogleMaps()"><img src="google-maps.jpeg" alt="Maps" style="width:20px;height:20px;border-radius:5px;vertical-align:middle"> Ver en Maps</button>
     <button type="button" id="gpsClearBtn" class="btn ghost small hidden" onclick="clearActivityGPS()">Quitar GPS</button>
   </div>
-  <input id="alat" type="hidden"><input id="alng" type="hidden"><input id="aaccuracy" type="hidden">
-  <p class="form-help">GPS es el punto exacto. Cuando existe, OLMS intenta confirmar automáticamente país, provincia y distrito para evitar errores de cobro. Dirección es la referencia escrita.</p>
+  <input id="alat" type="hidden"><input id="alng" type="hidden"><input id="aaccuracy" type="hidden"><input id="amapsaddress" type="hidden">
+  <p class="form-help">GPS es el destino exacto. Cuando existe, OLMS usa únicamente las coordenadas para Google Maps y Uber; la dirección escrita queda como referencia humana. También confirma país, provincia y distrito para evitar errores de cobro.</p>
   <div id="geoResolveState" class="geo-state hidden"></div>
 </div>
 
@@ -343,7 +343,7 @@ o 3 a Nte. 101-15, La Chorrera, Provincia de Panamá Oeste"></textarea></div>
 </div></dialog>
 
 <dialog id="mapDlg"><div class="dlg">
-<button class="iconbtn close" onclick="closeMapPicker()">✕</button><h2>🗺️ Elegir punto en el mapa</h2><p class="muted">Confirma el punto sugerido o toca el punto exacto del lugar. No requiere una API pagada.</p>
+<button class="iconbtn close" onclick="closeMapPicker()">✕</button><h2>🗺️ Elegir punto en el mapa</h2><p class="muted">Si el mapa muestra una referencia aproximada, toca tú el punto exacto antes de guardar. OLMS no usará una dirección aproximada como destino.</p>
 <div id="mapPicker" class="map-picker"><div class="map-fallback">Cargando mapa…</div></div><div id="mapCoords" class="map-coords">Toca un punto para seleccionarlo.</div>
 <div class="row"><button class="btn primary" onclick="saveMapPoint()">Guardar punto</button><button class="btn ghost" onclick="closeMapPicker()">Cancelar</button></div>
 </div></dialog>
@@ -502,6 +502,7 @@ function normalizeActivity(a){
  a.end=(typeof a.end==="string"&&/^\d{1,2}:\d{2}/.test(a.end))?a.end.slice(0,5):"22:00";
  a.venue=String(a.venue||"");
  a.location=String(a.location||"");
+ a.mapsAddress=String(a.mapsAddress||"");
  a.country=String(a.country||"Panamá");
  a.city=String(a.city||"");
  a.province=String(a.province||"");
@@ -548,6 +549,13 @@ if(!state.settings.v67PlaceMigration){
  if(!c.location||c.location===oldAddr)c.location="San Nicolás, Calle 3 de Noviembre, entrando por La Seda";if(!c.province)c.province="Panamá Oeste";state.settings.placeDefaults["Casa de Russo"]=c;
  if(!state.settings.regularRehearsalLocation||state.settings.regularRehearsalLocation===oldAddr)state.settings.regularRehearsalLocation="San Nicolás, Calle 3 de Noviembre, entrando por La Seda";
  state.settings.v67PlaceMigration=true;localStorage.setItem(KEY,JSON.stringify(state));
+}
+if(!state.settings.v68MapsAddressMigration){
+ const mapsCasaRusso="3 a Nte. 101-15, La Chorrera, Provincia de Panamá Oeste, Panamá";
+ const c=state.settings.placeDefaults["Casa de Russo"]||{};if(!c.mapsAddress)c.mapsAddress=mapsCasaRusso;state.settings.placeDefaults["Casa de Russo"]=c;
+ state.activities.forEach(a=>{if(normText(a.venue)==="casa de russo"&&!a.mapsAddress)a.mapsAddress=mapsCasaRusso});
+ state.deleted.forEach(a=>{if(normText(a.venue)==="casa de russo"&&!a.mapsAddress)a.mapsAddress=mapsCasaRusso});
+ state.settings.v68MapsAddressMigration=true;localStorage.setItem(KEY,JSON.stringify(state));
 }
 if(!state.settings.v68OneWayMigration){
  Object.entries(state.settings.placeDefaults||{}).forEach(([name,c])=>{if(c&&typeof c==="object"){if(!c.country)c.country="Panamá";if(c.kind||c.type)c.habitual=true}});
@@ -719,10 +727,11 @@ function distinctTitle(a){
  if(a?.kind==="presentacion"&&["boda","cumpleanos","evento corporativo","evento privado"].includes(n))return"";
  return t;
 }
-function activityDestination(a){return Number.isFinite(Number(a?.gpsLat))&&Number.isFinite(Number(a?.gpsLng))?`${Number(a.gpsLat).toFixed(6)},${Number(a.gpsLng).toFixed(6)}`:(a?.location||a?.venue||"")}
+function hasActivityGPS(a){return Number.isFinite(Number(a?.gpsLat))&&Number.isFinite(Number(a?.gpsLng))&&Math.abs(Number(a.gpsLat))<=90&&Math.abs(Number(a.gpsLng))<=180}
+function activityDestination(a){return hasActivityGPS(a)?`${Number(a.gpsLat).toFixed(6)},${Number(a.gpsLng).toFixed(6)}`:""}
 function activityLocationSummary(a){const gps=Number.isFinite(Number(a?.gpsLat))&&Number.isFinite(Number(a?.gpsLng));return `${a?.location||"Dirección pendiente"}${gps?" · GPS guardado":""}`}
 function historicalPlaceConfig(v){
- const q=normText(v);if(!q)return null;const arr=state.activities.filter(a=>normText(a.venue)===q).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));if(!arr.length)return null;const a=arr[0];return{name:a.venue,country:a.country||"Panamá",province:a.province||"",city:a.city||"",location:a.location||"",gpsLat:a.gpsLat??null,gpsLng:a.gpsLng??null,gpsAccuracy:a.gpsAccuracy??null,historical:true}
+ const q=normText(v);if(!q)return null;const arr=state.activities.filter(a=>normText(a.venue)===q).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));if(!arr.length)return null;const a=arr[0];return{name:a.venue,country:a.country||"Panamá",province:a.province||"",city:a.city||"",location:a.location||"",mapsAddress:a.mapsAddress||"",gpsLat:a.gpsLat??null,gpsLng:a.gpsLng??null,gpsAccuracy:a.gpsAccuracy??null,historical:true}
 }
 function venueCompatible(name,kind,type){
  const q=normText(name),pc=state.settings.placeDefaults?.[name]||state.settings.placeDefaults?.[Object.keys(state.settings.placeDefaults||{}).find(k=>normText(k)===q)]||null;
@@ -738,7 +747,7 @@ function refreshVenueList(){
 }
 function resetIncompatiblePlace(){
  const v=$("avenue")?.value||"";if(!v)return;const known=placeConfig(v)||historicalPlaceConfig(v);if(!known)return;if(venueCompatible(v,$("akind")?.value||"presentacion",$("atype")?.value||"Boda"))return;
- $("avenue").value="";$("alocation").value="";$("alat").value="";$("alng").value="";$("aaccuracy").value="";populateLocationSelectors("Panamá","");if($("aforeigncity"))$("aforeigncity").value="";updateGPSStatus();toast("El lugar anterior no corresponde al nuevo tipo de actividad");
+ $("avenue").value="";$("alocation").value="";$("alat").value="";$("alng").value="";$("aaccuracy").value="";if($("amapsaddress"))$("amapsaddress").value="";populateLocationSelectors("Panamá","");if($("aforeigncity"))$("aforeigncity").value="";updateGPSStatus();toast("El lugar anterior no corresponde al nuevo tipo de actividad");
 }
 function updateGPSStatus(){
  const lat=Number($("alat")?.value),lng=Number($("alng")?.value),acc=Number($("aaccuracy")?.value),ok=Number.isFinite(lat)&&Number.isFinite(lng)&&$("alat")?.value!==""&&$("alng")?.value!=="";
@@ -754,7 +763,7 @@ async function resolveGPSAdministrative(lat,lng,{quiet=false}={}){
  if(!Number.isFinite(Number(lat))||!Number.isFinite(Number(lng)))return false;setGeoResolveState("📍 Confirmando país, provincia y distrito…","wait");
  try{
    const url=`https://nominatim.openstreetmap.org/reverse?format=jsonv2&addressdetails=1&zoom=10&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}&accept-language=es`;
-   const r=await fetch(url,{headers:{"Accept":"application/json"}});if(!r.ok)throw new Error("HTTP "+r.status);const data=await r.json(),ad=data.address||{},cc=String(ad.country_code||"").toLowerCase();
+   const r=await fetch(url,{headers:{"Accept":"application/json"}});if(!r.ok)throw new Error("HTTP "+r.status);const data=await r.json(),ad=data.address||{},cc=String(ad.country_code||"").toLowerCase();if($("amapsaddress")&&!$("amapsaddress").value.trim()&&data.display_name)$("amapsaddress").value=String(data.display_name).trim();
    if(cc==="pa"||normText(ad.country)==="panama"){
      const province=canonicalPanamaProvince(ad.state||ad.region||ad.state_district||ad.county||"");populateLocationSelectors("Panamá",province);
      const district=canonicalDistrict(province,ad.county,ad.city_district,ad.municipality,ad.city,ad.town,ad.village);populateDistricts(province,district);if(district)$("acity").value=district;
@@ -767,7 +776,7 @@ async function captureActivityLocation(){
  if(!navigator.geolocation)return toast("Este dispositivo no permite obtener ubicación GPS");toast("Obteniendo ubicación actual…");
  navigator.geolocation.getCurrentPosition(async pos=>{$("alat").value=String(pos.coords.latitude);$("alng").value=String(pos.coords.longitude);$("aaccuracy").value=String(pos.coords.accuracy||"");updateGPSStatus();await resolveGPSAdministrative(pos.coords.latitude,pos.coords.longitude);toast("Ubicación GPS guardada en el formulario")},err=>{console.warn(err);toast(err.code===1?"Debes permitir la ubicación en el navegador":"No se pudo obtener la ubicación actual")},{enableHighAccuracy:true,timeout:12000,maximumAge:30000});
 }
-function clearActivityGPS(){if($("alat"))$("alat").value="";if($("alng"))$("alng").value="";if($("aaccuracy"))$("aaccuracy").value="";setGeoResolveState("");updateGPSStatus();updateFormGuidance()}
+function clearActivityGPS(){if($("alat"))$("alat").value="";if($("alng"))$("alng").value="";if($("aaccuracy"))$("aaccuracy").value="";if($("amapsaddress"))$("amapsaddress").value="";setGeoResolveState("");updateGPSStatus();updateFormGuidance()}
 function currentProvince(){return ($("acountry")?.value||"Panamá")==="Panamá"?($("aprovince")?.value||""):($("aregion")?.value||"")}
 function currentCity(){return ($("acountry")?.value||"Panamá")==="Panamá"?($("acity")?.value||""):($("aforeigncity")?.value||"")}
 function populateDistricts(province,city=""){
@@ -784,7 +793,7 @@ function updateCountryFields(){
 }
 function rememberPlace(a,habitual=false){
  const name=String(a?.venue||"").trim();if(!name)return;const cur=state.settings.placeDefaults[name]||{};
- const base={...cur,country:a.country||cur.country||"Panamá",location:a.location||cur.location||"",province:a.province||cur.province||"",city:a.city||cur.city||"",gpsLat:a.gpsLat??cur.gpsLat??null,gpsLng:a.gpsLng??cur.gpsLng??null,gpsAccuracy:a.gpsAccuracy??cur.gpsAccuracy??null};
+ const base={...cur,country:a.country||cur.country||"Panamá",location:a.location||cur.location||"",mapsAddress:a.mapsAddress||cur.mapsAddress||"",province:a.province||cur.province||"",city:a.city||cur.city||"",gpsLat:a.gpsLat??cur.gpsLat??null,gpsLng:a.gpsLng??cur.gpsLng??null,gpsAccuracy:a.gpsAccuracy??cur.gpsAccuracy??null};
  if(habitual){Object.assign(base,{habitual:true,rate:a.free?0:Number(a.expected||0),rule:a.paymentRule||cur.rule||"7 días después",kind:a.kind||cur.kind,type:a.type||cur.type,free:!!a.free,start:a.start||cur.start,end:a.end||cur.end})}
  state.settings.placeDefaults[name]=base;
 }
@@ -811,7 +820,7 @@ function applyActivityDefaults(){
  if(kind==="ensayo"&&type==="Ensayo regular"){
    const place=placeConfig(state.settings.regularRehearsalPlace||"Casa de Russo")||findKnownPlace("Casa de Russo");
    if(!$("aid").value||!$("avenue").value||normText($("avenue").value)==="casa de russo")$("avenue").value=place?.name||"Casa de Russo";
-   if(place?.country)$("acountry").value=place.country;if(place?.location)$("alocation").value=place.location;if(place?.province){if((place.country||"Panamá")==="Panamá"){populateLocationSelectors(place.country||"Panamá",place.province,place.city||"")}else{$("aregion").value=place.province;if($("aforeigncity"))$("aforeigncity").value=place.city||""}}
+   if(place?.country)$("acountry").value=place.country;if(place?.location)$("alocation").value=place.location;if($("amapsaddress"))$("amapsaddress").value=place?.mapsAddress||"";if(place?.province){if((place.country||"Panamá")==="Panamá"){populateLocationSelectors(place.country||"Panamá",place.province,place.city||"")}else{$("aregion").value=place.province;if($("aforeigncity"))$("aforeigncity").value=place.city||""}}
    if(place?.gpsLat!=null)$("alat").value=String(place.gpsLat);if(place?.gpsLng!=null)$("alng").value=String(place.gpsLng);if(place?.gpsAccuracy!=null)$("aaccuracy").value=String(place.gpsAccuracy);
    if(!$("aid").value){$("atitle").value="";if(!$("astart").value||$("astart").value==="20:00")$("astart").value=place?.start||"09:00";$("aend").value=place?.end||$("aend").value;plusTwoHours()}
    setBillingMode(true);updateCountryFields();
@@ -1148,26 +1157,54 @@ function applyRateSuggestion(force=false){
 }
 function applyKnownPlace(){
  const p=placeConfig($("avenue").value);if(!p){applyRateSuggestion(false);updateFormGuidance();return}if(!venueCompatible(p.name,$("akind")?.value||"presentacion",$("atype")?.value||"Boda")){$("avenue").value="";toast("Ese lugar no corresponde al tipo de actividad seleccionado");applyRateSuggestion(false);updateFormGuidance();return}
- $("avenue").value=p.name;populateLocationSelectors(p.country||"Panamá",p.province||"",p.city||"");if((p.country||"Panamá")!=="Panamá"){$("aregion").value=p.province||"";if($("aforeigncity"))$("aforeigncity").value=p.city||""}if(p.location)$("alocation").value=p.location;if(p.gpsLat!=null)$("alat").value=String(p.gpsLat);if(p.gpsLng!=null)$("alng").value=String(p.gpsLng);if(p.gpsAccuracy!=null)$("aaccuracy").value=String(p.gpsAccuracy);if(p.notes&&!$("anotes").value)$("anotes").value=p.notes;
+ $("avenue").value=p.name;populateLocationSelectors(p.country||"Panamá",p.province||"",p.city||"");if((p.country||"Panamá")!=="Panamá"){$("aregion").value=p.province||"";if($("aforeigncity"))$("aforeigncity").value=p.city||""}if(p.location)$("alocation").value=p.location;if($("amapsaddress"))$("amapsaddress").value=p.mapsAddress||"";if(p.gpsLat!=null)$("alat").value=String(p.gpsLat);if(p.gpsLng!=null)$("alng").value=String(p.gpsLng);if(p.gpsAccuracy!=null)$("aaccuracy").value=String(p.gpsAccuracy);if(p.notes&&!$("anotes").value)$("anotes").value=p.notes;
  if(p.habitual){if(p.kind)$("akind").value=p.kind;if(p.type)$("atype").value=p.type;if(p.start)$("astart").value=p.start;if(p.end)$("aend").value=p.end;setBillingMode(!!p.free);if(!p.free&&p.rate!=null)$("aexpected").value=Number(p.rate).toFixed(2);if(p.rule)paymentRuleToUI(p.rule)}else if(!$("afree").checked){applyRateSuggestion(true)}
  updateGPSStatus();syncFreeFields();updateDuePreview();updateFormGuidance();if(p.gpsLat!=null&&p.gpsLng!=null)resolveGPSAdministrative(Number(p.gpsLat),Number(p.gpsLng),{quiet:true});
 }
 
 
-let olmsMap=null,olmsMapMarker=null,pendingMapPoint=null;
+let olmsMap=null,olmsMapMarker=null,pendingMapPoint=null,pendingGoogleMapsUrl='';
 function loadLeaflet(){return new Promise((resolve,reject)=>{if(window.L)return resolve();if(!document.querySelector('link[data-olms-leaflet]')){const l=document.createElement('link');l.rel='stylesheet';l.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';l.dataset.olmsLeaflet='1';document.head.appendChild(l)}const existing=document.querySelector('script[data-olms-leaflet]');if(existing){existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',reject,{once:true});return}const sc=document.createElement('script');sc.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';sc.dataset.olmsLeaflet='1';sc.onload=resolve;sc.onerror=reject;document.head.appendChild(sc)})}
-async function openMapPicker(seed=null,seedLabel=''){
+async function openMapPicker(seed=null,seedLabel='',options={}){
  if(!D('mapDlg').open)D('mapDlg').showModal();const lat=Number($('alat').value),lng=Number($('alng').value),has=$('alat').value!==''&&$('alng').value!==''&&Number.isFinite(lat)&&Number.isFinite(lng);
- const seeded=seed&&Number.isFinite(Number(seed.lat))&&Number.isFinite(Number(seed.lng));const startPoint=seeded?{lat:Number(seed.lat),lng:Number(seed.lng)}:(has?{lat,lng}:null);pendingMapPoint=startPoint?{...startPoint}:null;
- try{await loadLeaflet();setTimeout(()=>{const host=$('mapPicker');host.innerHTML='';if(olmsMap){olmsMap.remove();olmsMap=null}const center=startPoint?[startPoint.lat,startPoint.lng]:[8.9824,-79.5199];olmsMap=L.map(host).setView(center,startPoint?16:8);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(olmsMap);if(startPoint)olmsMapMarker=L.marker(center).addTo(olmsMap);olmsMap.on('click',e=>{pendingMapPoint={lat:e.latlng.lat,lng:e.latlng.lng};if(olmsMapMarker)olmsMapMarker.setLatLng(e.latlng);else olmsMapMarker=L.marker(e.latlng).addTo(olmsMap);$('mapCoords').textContent=`Punto seleccionado: ${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`});if(startPoint)$('mapCoords').textContent=seedLabel||`${seeded?'Resultado encontrado':'Punto actual'}: ${startPoint.lat.toFixed(6)}, ${startPoint.lng.toFixed(6)}`;setTimeout(()=>olmsMap.invalidateSize(),80)},50)}catch(e){console.error(e);$('mapPicker').innerHTML='<div class="map-fallback">No se pudo cargar el mapa. Puedes usar «Pegar ubicación» o «Mi ubicación».</div>'}
+ const seeded=seed&&Number.isFinite(Number(seed.lat))&&Number.isFinite(Number(seed.lng));const startPoint=seeded?{lat:Number(seed.lat),lng:Number(seed.lng)}:(has?{lat,lng}:null);const requireTap=!!options.requireTap;pendingMapPoint=startPoint&&!requireTap?{...startPoint}:null;
+ try{await loadLeaflet();setTimeout(()=>{const host=$('mapPicker');host.innerHTML='';if(olmsMap){olmsMap.remove();olmsMap=null}const center=startPoint?[startPoint.lat,startPoint.lng]:[8.9824,-79.5199];olmsMap=L.map(host).setView(center,startPoint?16:8);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(olmsMap);if(startPoint)olmsMapMarker=L.marker(center).addTo(olmsMap);olmsMap.on('click',e=>{pendingMapPoint={lat:e.latlng.lat,lng:e.latlng.lng};if(olmsMapMarker)olmsMapMarker.setLatLng(e.latlng);else olmsMapMarker=L.marker(e.latlng).addTo(olmsMap);$('mapCoords').textContent=`✓ Punto exacto seleccionado: ${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`});if(startPoint){$('mapCoords').textContent=requireTap?`${seedLabel||'Referencia aproximada'} · toca tú el punto exacto antes de guardar`:(seedLabel||`${seeded?'Punto recibido':'Punto actual'}: ${startPoint.lat.toFixed(6)}, ${startPoint.lng.toFixed(6)}`)}else $('mapCoords').textContent='Toca el punto exacto para seleccionarlo.';setTimeout(()=>olmsMap.invalidateSize(),80)},50)}catch(e){console.error(e);$('mapPicker').innerHTML='<div class="map-fallback">No se pudo cargar el mapa. Puedes usar «Pegar ubicación» o «Mi ubicación».</div>'}
 }
 function closeMapPicker(){if(D('mapDlg').open)D('mapDlg').close()}
-async function saveMapPoint(){if(!pendingMapPoint)return toast('Toca primero un punto del mapa');$('alat').value=String(pendingMapPoint.lat);$('alng').value=String(pendingMapPoint.lng);$('aaccuracy').value='';updateGPSStatus();closeMapPicker();await resolveGPSAdministrative(pendingMapPoint.lat,pendingMapPoint.lng);updateFormGuidance();toast('Punto GPS guardado')}
+async function saveMapPoint(){if(!pendingMapPoint)return toast('Toca tú el punto exacto del mapa antes de guardarlo');$('alat').value=String(pendingMapPoint.lat);$('alng').value=String(pendingMapPoint.lng);$('aaccuracy').value='';updateGPSStatus();closeMapPicker();await resolveGPSAdministrative(pendingMapPoint.lat,pendingMapPoint.lng);updateFormGuidance();toast('Punto GPS exacto guardado')}
 function viewActivityGPSInGoogleMaps(){const lat=$('alat').value,lng=$('alng').value;if(!lat||!lng)return toast('No hay GPS guardado');window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lat+','+lng)}`,'_blank')}
-let pastedAddressCandidate='';
-function openGpsPaste(){$('gpsPasteText').value='';pastedAddressCandidate='';const pv=$('gpsPastePreview');pv.textContent='';pv.classList.add('hidden');const b=$('gpsPasteUseBtn');if(b){b.disabled=false;b.textContent='Usar esta ubicación'}if(!D('gpsPasteDlg').open)D('gpsPasteDlg').showModal()}
-function parseGPSInput(text){const t=String(text||'').trim();let m=t.match(/(?:@|q=|query=|ll=)(-?\d{1,2}(?:\.\d+)?)[,%2C\s]+(-?\d{1,3}(?:\.\d+)?)/i)||t.match(/!3d(-?\d{1,2}(?:\.\d+)?)!4d(-?\d{1,3}(?:\.\d+)?)/i)||t.match(/(-?\d{1,2}(?:\.\d+)?)\s*[,;]\s*(-?\d{1,3}(?:\.\d+)?)/);if(!m)return null;const lat=Number(m[1]),lng=Number(m[2]);if(!Number.isFinite(lat)||!Number.isFinite(lng)||Math.abs(lat)>90||Math.abs(lng)>180)return null;return{lat,lng}}
+function decodeLocationText(text){let t=String(text||'').trim().replace(/&amp;/g,'&');for(let i=0;i<3;i++){try{const d=decodeURIComponent(t);if(d===t)break;t=d}catch(e){break}}return t}
+function parseGPSInput(text){
+ const variants=[String(text||'').trim(),decodeLocationText(text)];
+ for(const raw of variants){
+  const t=raw.replace(/\+/g,' ');
+  const patterns=[
+   /(?:@|q=|query=|ll=|destination=|center=|daddr=)(-?\d{1,2}(?:\.\d+)?)[,%2C\s]+(-?\d{1,3}(?:\.\d+)?)/i,
+   /!3d(-?\d{1,2}(?:\.\d+)?)!4d(-?\d{1,3}(?:\.\d+)?)/i,
+   /\/(-?\d{1,2}(?:\.\d+)?),(-?\d{1,3}(?:\.\d+)?)(?:[\/?]|$)/,
+   /(-?\d{1,2}(?:\.\d+)?)\s*[,;]\s*(-?\d{1,3}(?:\.\d+)?)/
+  ];
+  for(const re of patterns){const m=t.match(re);if(!m)continue;const lat=Number(m[1]),lng=Number(m[2]);if(Number.isFinite(lat)&&Number.isFinite(lng)&&Math.abs(lat)<=90&&Math.abs(lng)<=180)return{lat,lng}}
+ }
+ return null;
+}
 function looksLikeUrl(text){return /^https?:\/\//i.test(String(text||'').trim())}
+function googleMapsAddressFromUrl(raw){
+ try{
+  const decoded=decodeLocationText(raw),u=new URL(decoded),keys=['query','q','destination','daddr','address'];
+  for(const k of keys){const v=u.searchParams.get(k);if(v&&!parseGPSInput(v)&&v.trim())return v.replace(/\+/g,' ').trim()}
+  const m=u.pathname.match(/\/maps\/(?:place|search)\/([^/@]+)/i)||u.pathname.match(/\/place\/([^/@]+)/i);if(m&&m[1]){const v=decodeLocationText(m[1]).replace(/\+/g,' ').trim();if(v&&!parseGPSInput(v))return v}
+ }catch(e){}
+ return '';
+}
+function isGoogleMapsUrl(raw){try{const h=new URL(String(raw||'').trim()).hostname.toLowerCase();return h.includes('google.')||h==='maps.app.goo.gl'||h==='goo.gl'}catch(e){return false}}
+async function tryResolveGoogleMapsUrl(raw){
+ const direct=parseGPSInput(raw);if(direct)return{...direct,source:'url'};
+ const addr=googleMapsAddressFromUrl(raw);if(addr)return{address:addr,source:'url-address'};
+ // Some long/short Google Maps links redirect to a URL that contains @lat,lng. Browsers may block this cross-origin; when allowed, use it.
+ try{const r=await fetch(raw,{method:'GET',redirect:'follow',credentials:'omit',cache:'no-store'});const finalUrl=r?.url||'';const p=parseGPSInput(finalUrl);if(p)return{...p,source:'redirect'};const a=googleMapsAddressFromUrl(finalUrl);if(a)return{address:a,source:'redirect-address'}}catch(e){console.warn('No se pudo resolver el enlace de Maps automáticamente:',e)}
+ return null;
+}
 function addressSearchCandidates(raw){
  const t=String(raw||'').replace(/\s+/g,' ').trim();if(!t)return[];const out=[t];
  const parts=t.split(',').map(x=>x.trim()).filter(Boolean);if(parts.length>1)out.push(parts.slice(1).join(', '));
@@ -1186,23 +1223,35 @@ async function geocodeAddressForMap(raw){
  }
  return null;
 }
+function openPastedGoogleMapsLink(){if(!pendingGoogleMapsUrl)return;window.open(pendingGoogleMapsUrl,'_blank')}
+async function openMapForUnresolvedLink(){
+ const prov=$('aprovince')?.value||'',district=$('acity')?.value||'';D('gpsPasteDlg').close();
+ if(district||prov){const fallback=await geocodeAddressForMap([district,prov,'Panamá'].filter(Boolean).join(', '));if(fallback){openMapPicker({lat:fallback.lat,lng:fallback.lng},'Zona aproximada',{requireTap:true});return}}
+ openMapPicker(null,'',{requireTap:true});
+}
+function openGpsPaste(){$('gpsPasteText').value='';pendingGoogleMapsUrl='';const pv=$('gpsPastePreview');pv.textContent='';pv.classList.add('hidden');const b=$('gpsPasteUseBtn');if(b){b.disabled=false;b.textContent='Usar esta ubicación'}if(!D('gpsPasteDlg').open)D('gpsPasteDlg').showModal()}
+async function applyExactGPSPoint(p,msg='Coordenadas exactas guardadas'){$('alat').value=String(p.lat);$('alng').value=String(p.lng);$('aaccuracy').value='';updateGPSStatus();if(D('gpsPasteDlg').open)D('gpsPasteDlg').close();await resolveGPSAdministrative(p.lat,p.lng);toast(msg)}
 async function applyPastedGPS(){
  const raw=$('gpsPasteText').value.trim(),pv=$('gpsPastePreview'),btn=$('gpsPasteUseBtn');if(!raw)return toast('Pega primero una ubicación');
- const p=parseGPSInput(raw);
- if(p){$('alat').value=String(p.lat);$('alng').value=String(p.lng);$('aaccuracy').value='';updateGPSStatus();D('gpsPasteDlg').close();await resolveGPSAdministrative(p.lat,p.lng);toast('Coordenadas guardadas');return}
+ const p=parseGPSInput(raw);if(p){await applyExactGPSPoint(p);return}
  if(looksLikeUrl(raw)){
-  pv.innerHTML='<b>Enlace detectado.</b><br>Este enlace no muestra coordenadas directamente. Si Google Maps te permite copiar la dirección del lugar, pégala aquí; OLMS la buscará en el mapa para que confirmes el punto exacto.';pv.classList.remove('hidden');return;
+  pendingGoogleMapsUrl=raw;btn.disabled=true;btn.textContent='Analizando enlace…';pv.innerHTML='<b>🔗 Enlace de Google Maps detectado.</b><br>Buscando el punto GPS exacto…';pv.classList.remove('hidden');
+  const resolved=isGoogleMapsUrl(raw)?await tryResolveGoogleMapsUrl(raw):null;btn.disabled=false;btn.textContent='Usar esta ubicación';
+  if(resolved?.lat!=null){await applyExactGPSPoint(resolved,'GPS exacto extraído del enlace');return}
+  if(resolved?.address){$('gpsPasteText').value=resolved.address;return applyPastedGPS()}
+  pv.innerHTML='<b>🔗 Enlace de Google Maps reconocido.</b><br>Es un enlace que el navegador no permite resolver automáticamente hasta sus coordenadas. Puedes abrirlo para ver el punto exacto y luego marcar ese mismo punto en OLMS.<div class="row" style="margin-top:10px"><button class="btn primary small" type="button" onclick="openPastedGoogleMapsLink()">Abrir en Google Maps</button><button class="btn ghost small" type="button" onclick="openMapForUnresolvedLink()">Marcar punto exacto</button></div>';
+  return;
  }
- btn.disabled=true;btn.textContent='Buscando…';pv.innerHTML='<b>Dirección detectada.</b><br>Buscando el lugar en el mapa…';pv.classList.remove('hidden');
+ btn.disabled=true;btn.textContent='Buscando…';pv.innerHTML='<b>Dirección detectada.</b><br>Buscando una referencia aproximada en el mapa…';pv.classList.remove('hidden');
  const result=await geocodeAddressForMap(raw);btn.disabled=false;btn.textContent='Usar esta ubicación';
  if(result){
-  pastedAddressCandidate=raw;if(!$('alocation').value.trim())$('alocation').value=raw;
-  pv.innerHTML=`<b>📍 Dirección encontrada.</b><br>${esc(result.label)}<br><small>Confirma el punto exacto en el mapa antes de guardarlo.</small>`;
-  setTimeout(()=>{D('gpsPasteDlg').close();openMapPicker({lat:result.lat,lng:result.lng},'Dirección encontrada · confirma o mueve el punto exacto')},250);return;
+  if(!$('alocation').value.trim())$('alocation').value=raw;
+  pv.innerHTML=`<b>📍 Dirección encontrada como referencia.</b><br>${esc(result.label)}<br><small>Por seguridad, OLMS no guardará ese resultado como GPS hasta que tú toques el punto exacto.</small>`;
+  setTimeout(()=>{D('gpsPasteDlg').close();openMapPicker({lat:result.lat,lng:result.lng},'Referencia aproximada',{requireTap:true})},250);return;
  }
  const prov=$('aprovince')?.value||'',district=$('acity')?.value||'';
- pv.innerHTML=`<b>⚠️ No pude ubicar esa dirección automáticamente.</b><br>${district||prov?'Abriré el mapa en la zona seleccionada para que marques el punto exacto.':'Selecciona primero provincia/distrito o usa «Elegir en mapa» para marcar el punto exacto.'}`;
- if(district||prov){const fallback=await geocodeAddressForMap([district,prov,'Panamá'].filter(Boolean).join(', '));if(fallback)setTimeout(()=>{D('gpsPasteDlg').close();openMapPicker({lat:fallback.lat,lng:fallback.lng},'Zona aproximada · toca el punto exacto')},350)}
+ pv.innerHTML=`<b>⚠️ No pude ubicar esa dirección automáticamente.</b><br>${district||prov?'Abriré el mapa en la zona seleccionada para que marques tú el punto exacto.':'Selecciona primero provincia/distrito o usa «Elegir en mapa» para marcar el punto exacto.'}`;
+ if(district||prov){const fallback=await geocodeAddressForMap([district,prov,'Panamá'].filter(Boolean).join(', '));if(fallback)setTimeout(()=>{D('gpsPasteDlg').close();openMapPicker({lat:fallback.lat,lng:fallback.lng},'Zona aproximada',{requireTap:true})},350)}
 }
 function parseSpanishDate(text){const t=normText(text),now=new Date();let m=t.match(/\b(\d{1,2})[\/-](\d{1,2})(?:[\/-](\d{2,4}))?\b/);if(m){let y=m[3]?Number(m[3]):now.getFullYear();if(y<100)y+=2000;return`${y}-${String(Number(m[2])).padStart(2,'0')}-${String(Number(m[1])).padStart(2,'0')}`}const months={enero:1,febrero:2,marzo:3,abril:4,mayo:5,junio:6,julio:7,agosto:8,septiembre:9,setiembre:9,octubre:10,noviembre:11,diciembre:12};m=t.match(/\b(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|setiembre|octubre|noviembre|diciembre)(?:\s+de\s+(\d{4}))?/);if(m){const y=Number(m[3]||now.getFullYear());return`${y}-${String(months[m[2]]).padStart(2,'0')}-${String(Number(m[1])).padStart(2,'0')}`}return''}
 function parseTimeToken(h,m,ap){let hh=Number(h),mm=Number(m||0);ap=normText(ap||'');if(ap.startsWith('p')&&hh<12)hh+=12;if(ap.startsWith('a')&&hh===12)hh=0;return`${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`}
@@ -1229,7 +1278,7 @@ function openImportMessage(){$("importText").value="";if(!D("importDlg").open)D(
 function openActivityForm(id="",fromImport=false){
  const a=state.activities.find(x=>x.id===id);if(a?.outcome&&!unlockedHistoryIds.has(a.id)){toast("El evento está cerrado. Desbloquéalo desde su ficha para editarlo.");openDetail(a.id);return}if(a&&needsConfirmation(a)&&!unlockedHistoryIds.has(a.id)){promptActivityStatus(a.id);return}
  refreshVenueList();$("aid").value=a?.id||"";$("akind").value=a?.kind||"presentacion";$("atype").innerHTML=TYPES.map(x=>`<option ${x===(a?.type||"Boda")?"selected":""}>${x}</option>`).join("");
- $("atitle").value=a?.title&&a.title!==a.type?a.title:"";$("avenue").value=a?.venue||"";populateLocationSelectors(a?.country||"Panamá",a?.province||"",a?.city||"");if((a?.country||"Panamá")!=="Panamá"){$("aregion").value=a?.province||"";if($("aforeigncity"))$("aforeigncity").value=a?.city||""}$("alocation").value=a?.location||"";
+ $("atitle").value=a?.title&&a.title!==a.type?a.title:"";$("avenue").value=a?.venue||"";populateLocationSelectors(a?.country||"Panamá",a?.province||"",a?.city||"");if((a?.country||"Panamá")!=="Panamá"){$("aregion").value=a?.province||"";if($("aforeigncity"))$("aforeigncity").value=a?.city||""}$("alocation").value=a?.location||"";if($("amapsaddress"))$("amapsaddress").value=a?.mapsAddress||placeConfig(a?.venue)?.mapsAddress||"";
  $("alat").value=a?.gpsLat??"";$("alng").value=a?.gpsLng??"";$("aaccuracy").value=a?.gpsAccuracy??"";$("adate").value=a?.date||todayISO();$("astart").value=a?.start||"20:00";$("aend").value=a?.end||"22:00";$("aexpected").value=a?.expected??"";$("afree").checked=a?!!a.free:false;$("aoutcome").value=a?.outcome||"";$("anotes").value=a?.notes||"";paymentRuleToUI(a?.paymentRule||placeConfig(a?.venue)?.rule||"7 días después");
  $("activityTitle").textContent=a?(a.outcome?"Editar actividad cerrada":"Editar actividad"):"Nueva actividad";$("importReviewBanner").classList.toggle("hidden",!fromImport);
  $("editExpenseShortcut").innerHTML=a?`<button class="btn ghost small" onclick="D('activityDlg').close();openDetail('${a.id}','expenses')">Abrir gastos (${money(expTotal(a))})</button>`:`<span class="muted">No necesitas registrar gastos ahora.</span>`;
@@ -1237,12 +1286,12 @@ function openActivityForm(id="",fromImport=false){
 }
 async function saveActivity(habitual=false){
  let id=$("aid").value||uid(),old=state.activities.find(x=>x.id===id),oldSnapshot=old?structuredClone(old):null,rawTitle=String($("atitle").value||"").trim(),type=$("atype").value,country=$("acountry").value||"Panamá",province=currentProvince(),paymentRule=$("afree").checked?"Sin remuneración":buildPaymentRuleFromUI();
- let obj={id,kind:$("akind").value,type,title:rawTitle||type,venue:$("avenue").value.trim(),country,province,city:currentCity().trim(),location:$("alocation").value.trim(),gpsLat:$("alat").value===""?null:Number($("alat").value),gpsLng:$("alng").value===""?null:Number($("alng").value),gpsAccuracy:$("aaccuracy").value===""?null:Number($("aaccuracy").value),date:$("adate").value,start:$("astart").value,end:$("aend").value,expected:$("afree").checked?0:Number($("aexpected").value||0),final:$("afree").checked?0:Number($("aexpected").value||0),free:$("afree").checked,outcome:$("aoutcome").value,notes:$("anotes").value,paymentRule,payments:old?.payments||[],expenses:old?.expenses||{outbound:[],return:[],extras:[]},calendarEventId:old?.calendarEventId||null,source:"manual",expenseReviewDone:old?.expenseReviewDone??false,expensePromptAnswered:old?.expensePromptAnswered??false,postPromptSnoozedUntil:old?.postPromptSnoozedUntil||null,liveStage:old?.liveStage||"",paidFullAdjusted:old?.paidFullAdjusted||false,paymentAdjustmentNote:old?.paymentAdjustmentNote||""};
+ let obj={id,kind:$("akind").value,type,title:rawTitle||type,venue:$("avenue").value.trim(),country,province,city:currentCity().trim(),location:$("alocation").value.trim(),mapsAddress:$("amapsaddress")?.value.trim()||"",gpsLat:$("alat").value===""?null:Number($("alat").value),gpsLng:$("alng").value===""?null:Number($("alng").value),gpsAccuracy:$("aaccuracy").value===""?null:Number($("aaccuracy").value),date:$("adate").value,start:$("astart").value,end:$("aend").value,expected:$("afree").checked?0:Number($("aexpected").value||0),final:$("afree").checked?0:Number($("aexpected").value||0),free:$("afree").checked,outcome:$("aoutcome").value,notes:$("anotes").value,paymentRule,payments:old?.payments||[],expenses:old?.expenses||{outbound:[],return:[],extras:[]},calendarEventId:old?.calendarEventId||null,source:"manual",expenseReviewDone:old?.expenseReviewDone??false,expensePromptAnswered:old?.expensePromptAnswered??false,postPromptSnoozedUntil:old?.postPromptSnoozedUntil||null,liveStage:old?.liveStage||"",paidFullAdjusted:old?.paidFullAdjusted||false,paymentAdjustmentNote:old?.paymentAdjustmentNote||""};
  if(!obj.venue)return toast("Escribe el nombre del lugar");if(!obj.date)return toast("Selecciona la fecha");if(country==="Panamá"&&!province)return toast("Selecciona la provincia");if(country==="Panamá"&&!obj.city)return toast("Selecciona el distrito");
  const conflict=findScheduleConflict(obj,id);if(conflict){alert(`No se puede guardar porque se cruza con:\n${conflict.title} · ${panamaDate(conflict.date)} · ${panamaRange(conflict)}`);return}
  if(habitual)rememberPlace(obj,true);if(old)Object.assign(old,obj);else state.activities.push(normalizeActivity(obj));
  const wasUnlocked=!!oldSnapshot?.outcome&&unlockedHistoryIds.has(id);unlockedHistoryIds.delete(id);
- if(wasUnlocked&&!habitual){const fields=["venue","country","province","city","location","gpsLat","gpsLng","expected","paymentRule","type","kind"];const changed=fields.some(k=>String(oldSnapshot?.[k]??"")!==String(obj?.[k]??""));if(changed&&confirm("¿Actualizar también la información de este lugar para futuros eventos?")){rememberPlace(obj,!!placeConfig(obj.venue)?.habitual)}}
+ if(wasUnlocked&&!habitual){const fields=["venue","country","province","city","location","mapsAddress","gpsLat","gpsLng","expected","paymentRule","type","kind"];const changed=fields.some(k=>String(oldSnapshot?.[k]??"")!==String(obj?.[k]??""));if(changed&&confirm("¿Actualizar también la información de este lugar para futuros eventos?")){rememberPlace(obj,!!placeConfig(obj.venue)?.habitual)}}
  localStorage.setItem(KEY,JSON.stringify(state));render();D("activityDlg").close();toast(habitual?"Actividad guardada como habitual":"Actividad guardada en OLMS");queueCalendarSync(id);
 }
 function unlockActivity(id){const a=state.activities.find(x=>x.id===id);if(!a?.outcome)return;if(!confirm("¿Desbloquear temporalmente este evento cerrado para corregirlo?\n\nAl guardar volverá a quedar bloqueado."))return;unlockedHistoryIds.add(id);D('detailDlg').close();openActivityForm(id)}
@@ -1259,7 +1308,7 @@ function shareWhatsApp(id){
 function detailTab(a,tab){
  if(tab==="payments")return paymentsTab(a);
  if(tab==="expenses")return expensesTab(a);
- if(tab==="route"){let d=encodeURIComponent(activityDestination(a)),h=encodeURIComponent(state.settings.homeAddress||"");return`<h3>Cómo llegar</h3><p class="muted">${a.gpsLat!=null&&a.gpsLng!=null?"GPS guardado ✓":"Usando dirección escrita"}</p><div class="nav-options"><a class="maps" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=${d}"><img src="google-maps.jpeg" alt="Google Maps">Google Maps · ubicación actual</a>${h?`<a class="maps" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=${h}&destination=${d}"><img src="google-maps.jpeg" alt="Google Maps">Google Maps · desde casa</a>`:""}<button class="uber" onclick="launchNavigation('${a.id}','uber')"><img src="uber-logo.jpeg" alt="Uber">Viajar con Uber</button></div>`}
+ if(tab==="route"){const d=activityDestination(a);if(!d)return`<h3>Cómo llegar</h3><div class="location-review"><b>📍 Falta confirmar el GPS exacto.</b><p class="muted">Por seguridad OLMS no navegará usando una dirección escrita. Edita la actividad y guarda el punto GPS exacto.</p><button class="btn primary" onclick="D('detailDlg').close();openActivityForm('${a.id}')">Confirmar GPS</button></div>`;const de=encodeURIComponent(d),h=encodeURIComponent(state.settings.homeAddress||"");return`<h3>Cómo llegar</h3><p class="muted">📡 Destino por coordenadas GPS exactas · ${esc(d)}</p><div class="nav-options"><a class="maps" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=${de}"><img src="google-maps.jpeg" alt="Google Maps">Google Maps · ubicación actual</a>${h?`<a class="maps" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=${h}&destination=${de}"><img src="google-maps.jpeg" alt="Google Maps">Google Maps · desde casa</a>`:""}<button class="uber" onclick="launchNavigation('${a.id}','uber')"><img src="uber-logo.jpeg" alt="Uber">Viajar con Uber</button></div>`}
  return`<div class="info"><div class="box"><small>Monto esperado</small><b>${money(finalAmt(a))}</b></div><div class="box"><small>Recibido</small><b>${money(received(a))}</b></div><div class="box"><small>Gastos reales conocidos</small><b>${money(expTotal(a))}</b></div><div class="box"><small>Gastos con monto pendiente</small><b>${pendingExp(a)}</b></div><div class="box"><small>Neto actual</small><b>${money(earned(a)-expTotal(a))}</b></div><div class="box"><small>Condición de pago</small><b>${a.paymentRule||placeConfig(a.venue)?.rule||"Hasta 7 días"}</b></div><div class="box"><small>Fecha estimada</small><b>${due(a)?panamaDate(due(a)):"No aplica"}</b></div>${extraordinary(a)>0?`<div class="box"><small>Ingreso extraordinario</small><b>${money(extraordinary(a))}</b></div>`:""}${negativeAdjustment(a)>0?`<div class="box"><small>Ajuste negativo</small><b>-${money(negativeAdjustment(a))}</b></div>`:""}</div>${done(a)?`<div class="sectionline"><h3>📊 Cierre del toque</h3><div class="info"><div class="box"><small>Ingreso actual</small><b>${money(earned(a))}</b></div><div class="box"><small>Gastos totales</small><b>${money(expTotal(a))}</b></div><div class="box"><small>Ganancia neta</small><b>${money(earned(a)-expTotal(a))}</b></div><div class="box"><small>Estado del pago</small><b>${status(a)[1]}</b></div></div></div>`:""}${a.paymentAdjustmentNote?`<div class="sectionline"><b>Observación de ajuste de pago</b><p>${esc(a.paymentAdjustmentNote)}</p></div>`:""}${a.notes?`<div class="sectionline"><b>Observación</b><p>${esc(a.notes)}</p></div>`:""}<div class="sectionline"><button class="btn primary" onclick="openDetail('${a.id}','expenses')">💸 Registrar / revisar gastos</button></div>`
 }
 
@@ -1445,10 +1494,11 @@ function calendarTitle(a){
  if(a.kind==="grabacion")return`🎙️ Grabación Mambito Sound${title?` – ${title}`:""}${venue?` | ${venue}`:""}`;
  if(a.kind==="promocion")return`📣 Promoción Mambito Sound${title?` – ${title}`:""}${venue?` | ${venue}`:""}`;return`Mambito Sound${title?` – ${title}`:""}${venue?` | ${venue}`:""}`
 }
-function calendarLocationText(a){const loc=String(a.location||"").trim(),city=String(a.city||"").trim(),prov=String(a.province||"").trim(),country=String(a.country||"Panamá").trim();return [loc,city,prov,country].filter((v,i,arr)=>v&&arr.findIndex(x=>normText(x)===normText(v))===i).join(", ")||a.venue||""}
+function calendarHumanLocationText(a){const maps=String(a.mapsAddress||"").trim(),loc=String(a.location||"").trim(),city=String(a.city||"").trim(),prov=String(a.province||"").trim(),country=String(a.country||"Panamá").trim();if(maps)return maps;return [loc,city,prov,country].filter((v,i,arr)=>v&&arr.findIndex(x=>normText(x)===normText(v))===i).join(", ")||a.venue||""}
+function calendarLocationText(a){const human=calendarHumanLocationText(a);if(human)return human;if(hasActivityGPS(a))return`${Number(a.gpsLat).toFixed(6)},${Number(a.gpsLng).toFixed(6)}`;return""}
 function eventEndDate(a){let d=new Date(a.date+"T12:00:00");if(a.end<a.start)d.setDate(d.getDate()+1);return d.toISOString().slice(0,10)}
 function nightBeforeReminderMinutes(a){const start=new Date(`${a.date}T${a.start||"00:00"}:00-05:00`),prevLocal=new Date(`${a.date}T23:00:00-05:00`);prevLocal.setDate(prevLocal.getDate()-1);return Math.max(0,Math.min(40320,Math.round((start-prevLocal)/60000)))}
-function calendarPayload(a){return{summary:calendarTitle(a),location:calendarLocationText(a),description:`${a.type||"Actividad"}${distinctTitle(a)?`: ${distinctTitle(a)}`:""}${a.venue?` · ${a.venue}`:""}${a.location?` · ${a.location}`:""}${a.gpsLat!=null&&a.gpsLng!=null?` · GPS ${Number(a.gpsLat).toFixed(6)}, ${Number(a.gpsLng).toFixed(6)}`:""}${a.notes?`. ${a.notes}`:""}`,colorId:"3",start:{dateTime:`${a.date}T${a.start}:00-05:00`,timeZone:"America/Panama"},end:{dateTime:`${eventEndDate(a)}T${a.end}:00-05:00`,timeZone:"America/Panama"},reminders:{useDefault:false,overrides:[{method:"popup",minutes:nightBeforeReminderMinutes(a)}]}}}
+function calendarPayload(a){const gps=hasActivityGPS(a)?`${Number(a.gpsLat).toFixed(6)},${Number(a.gpsLng).toFixed(6)}`:"",human=calendarHumanLocationText(a),exactMaps=gps?`https://www.google.com/maps/dir/?api=1&destination=${gps}`:"";return{summary:calendarTitle(a),location:calendarLocationText(a),description:`${a.type||"Actividad"}${distinctTitle(a)?`: ${distinctTitle(a)}`:""}${a.venue?` · ${a.venue}`:""}${human?` · Ubicación: ${human}`:""}${gps?` · Navegación exacta GPS: ${exactMaps}`:""}${a.location&&normText(a.location)!==normText(human)?` · Referencia: ${a.location}`:""}${a.notes?`. ${a.notes}`:""}`,colorId:"3",start:{dateTime:`${a.date}T${a.start}:00-05:00`,timeZone:"America/Panama"},end:{dateTime:`${eventEndDate(a)}T${a.end}:00-05:00`,timeZone:"America/Panama"},reminders:{useDefault:false,overrides:[{method:"popup",minutes:nightBeforeReminderMinutes(a)}]}}}
 async function createCalendarEvent(a){const ev=await gfetch("https://www.googleapis.com/calendar/v3/calendars/primary/events",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(calendarPayload(a))});a.calendarEventId=ev.id;a.source="manual";localStorage.setItem(KEY,JSON.stringify(state));return ev}
 async function updateCalendarEvent(a){return await gfetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${encodeURIComponent(a.calendarEventId)}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify(calendarPayload(a))})}
 async function deleteCalendarEventById(eventId){if(!googleAccessToken||!eventId)return;try{await gfetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${encodeURIComponent(eventId)}`,{method:"DELETE"})}catch(e){if(e.status!==404)throw e}}
@@ -1686,15 +1736,16 @@ function showArrivalExpensePrompt(id,expenseId){
  const name=TRANSPORTS.find(t=>t[0]===ref.e.type)?.[1]||ref.e.type;$("postActivityBody").innerHTML=`<h2>● Llegaste</h2><p>Quedó pendiente el monto de <b>${esc(name)} · Ida</b>.</p><div class="post-actions"><button class="btn primary" onclick="D('postActivityDlg').close();openEditExpense('${id}','outbound','${expenseId}')">Completar monto</button><button class="btn ghost" onclick="D('postActivityDlg').close()">Completar después</button></div>`;if(!D('postActivityDlg').open)D('postActivityDlg').showModal()
 }
 function showImmediatePostActivity(id){promptActivityStatus(id)}
-function ensureUberOutboundPlan(a){let e=(a.expenses?.outbound||[]).find(x=>x.type==="uber"&&x.amount==null&&x.planned);if(!e){e={id:uid(),type:"uber",amount:null,driver:"",destination:a.venue||a.location||"",destinationType:"event",createdAt:new Date().toISOString(),planned:true};a.expenses.outbound.push(e)}localStorage.setItem(KEY,JSON.stringify(state));render();return e}
+function ensureUberOutboundPlan(a){let e=(a.expenses?.outbound||[]).find(x=>x.type==="uber"&&x.amount==null&&x.planned);if(!e){e={id:uid(),type:"uber",amount:null,driver:"",destination:activityDestination(a),destinationLabel:a.venue||"Evento",destinationType:"event",createdAt:new Date().toISOString(),planned:true};a.expenses.outbound.push(e)}else{e.destination=activityDestination(a);e.destinationLabel=a.venue||"Evento"}localStorage.setItem(KEY,JSON.stringify(state));render();return e}
 function launchNavigation(id,mode){
- const a=state.activities.find(x=>x.id===id);if(!a)return;const raw=activityDestination(a),d=encodeURIComponent(raw);if(!raw)return toast("Primero guarda la ubicación o dirección del evento");
+ const a=state.activities.find(x=>x.id===id);if(!a)return;if(!hasActivityGPS(a))return toast("Por seguridad, confirma primero el GPS exacto del evento");
+ const lat=Number(a.gpsLat).toFixed(6),lng=Number(a.gpsLng).toFixed(6),d=encodeURIComponent(`${lat},${lng}`);
  if(mode==="maps")window.open(`https://www.google.com/maps/dir/?api=1&destination=${d}`,"_blank");
- if(mode==="uber"){ensureUberOutboundPlan(a);window.open(`https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[formatted_address]=${d}`,"_blank");toast("Uber · Ida quedó preparado con monto pendiente")}
+ if(mode==="uber"){ensureUberOutboundPlan(a);const nick=encodeURIComponent(a.venue||"Evento Mambito Sound");window.open(`https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[latitude]=${encodeURIComponent(lat)}&dropoff[longitude]=${encodeURIComponent(lng)}&dropoff[nickname]=${nick}`,"_blank");toast("Uber · Ida preparado con destino GPS exacto")}
 }
 function openNavigate(id){
- const a=state.activities.find(x=>x.id===id);if(!a)return;const hasGPS=a.gpsLat!=null&&a.gpsLng!=null;
- $("navBody").innerHTML=`<button class="iconbtn close close-sheet" onclick="D('navDlg').close()">✕</button><h2>📍 Navegar</h2><p class="muted">Destino: <b>${esc(a.venue||"la actividad")}</b>${hasGPS?" · usando GPS guardado":""}</p><div class="nav-options"><button class="maps" onclick="launchNavigation('${id}','maps')"><img src="google-maps.jpeg" alt="Google Maps">Abrir en Google Maps</button><button class="uber" onclick="launchNavigation('${id}','uber')"><img src="uber-logo.jpeg" alt="Uber">Viajar con Uber</button></div><div class="post-note" style="margin-top:12px">Si eliges Uber, OLMS prepara automáticamente <b>Transporte ida – Uber</b>. Al marcar «Llegué» podrás completar el monto real.</div>`;D('navDlg').showModal()
+ const a=state.activities.find(x=>x.id===id);if(!a)return;const hasGPS=hasActivityGPS(a);
+ $("navBody").innerHTML=hasGPS?`<button class="iconbtn close close-sheet" onclick="D('navDlg').close()">✕</button><h2>📍 Navegar</h2><p class="muted">Destino: <b>${esc(a.venue||"la actividad")}</b> · 📡 GPS exacto ${Number(a.gpsLat).toFixed(6)}, ${Number(a.gpsLng).toFixed(6)}</p><div class="nav-options"><button class="maps" onclick="launchNavigation('${id}','maps')"><img src="google-maps.jpeg" alt="Google Maps">Abrir en Google Maps</button><button class="uber" onclick="launchNavigation('${id}','uber')"><img src="uber-logo.jpeg" alt="Uber">Viajar con Uber</button></div><div class="post-note" style="margin-top:12px">OLMS usa exclusivamente estas coordenadas como destino. La dirección escrita queda solo como referencia.</div>`:`<button class="iconbtn close close-sheet" onclick="D('navDlg').close()">✕</button><h2>📍 Navegar</h2><div class="location-review"><b>Falta el GPS exacto.</b><p class="muted">La dirección escrita no se usará para Google Maps ni Uber para evitar enviarte a un punto incorrecto.</p><button class="btn primary" onclick="D('navDlg').close();openActivityForm('${id}')">Confirmar GPS del evento</button></div>`;D('navDlg').showModal()
 }
 let quickExpenseState=null;
 function recentAmounts(a,category,subtype="",transport=""){
