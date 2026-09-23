@@ -1,4 +1,4 @@
-const C='control-olms-v6-7';
+const C='control-olms-v6-8-final';
 const ASSETS=[
   './',
   './index.html',

@@ -157,7 +157,7 @@ nav button{margin:4px;border-radius:12px}nav button.active{background:#111;color
 @media(max-width:520px){.pending-close-card .actions{grid-template-columns:1fr 1fr}.billing-choice{grid-template-columns:1fr 1fr}}
 
 
-/* ===== Control OLMS v6.7 ===== */
+/* ===== Control OLMS v6.8 FINAL ===== */
 .service-head-btn{padding:5px;overflow:hidden}.service-head-btn img{width:26px;height:26px;border-radius:7px;object-fit:cover;display:block}
 .service-logo{width:38px;height:38px;border-radius:10px;object-fit:cover;background:#080808;display:block;flex:0 0 auto}.service-logo.sm{width:24px;height:24px;border-radius:6px}.brand-action{display:inline-flex;align-items:center;justify-content:center;gap:8px}.brand-action img{width:24px;height:24px;border-radius:6px;object-fit:cover}
 .form-help{display:block;color:var(--muted);font-size:11px;line-height:1.35;margin-top:3px}.calendar-preview{margin-top:8px;border:1px dashed #ccb66d;background:#fff9e9;border-radius:11px;padding:9px;font-size:12px;color:#514830}.calendar-preview:empty{display:none}
@@ -172,6 +172,21 @@ nav button{margin:4px;border-radius:12px}nav button.active{background:#111;color
 .compact-empty{border:1px dashed #cabf9f;border-radius:12px;padding:10px 12px;color:var(--muted);background:#ffffff70;font-size:12px}
 @media(max-width:560px){.gps-panel{align-items:flex-start;flex-direction:column}.gps-panel .row{width:100%}.gps-panel .btn{flex:1}.expense-line{grid-template-columns:38px minmax(0,1fr) auto}.expense-line .expense-edit{grid-column:3}.expense-line .expense-amount{grid-column:3;grid-row:1}.expense-line .expense-edit{grid-row:2;justify-self:end}.more-profile-hero{grid-template-columns:62px 1fr}.more-profile-hero .profile-avatar{width:62px;height:62px}.more-profile-hero .btn{grid-column:1/-1}.post-transport-grid{grid-template-columns:repeat(2,1fr)}}
 
+
+/* ===== Control OLMS v6.8 ===== */
+.import-choice{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.import-choice button{min-height:110px;border:1px solid var(--line);border-radius:16px;background:#fff;font-weight:900;font-size:15px;padding:14px}.import-choice button b{display:block;font-size:30px;margin-bottom:8px}
+.location-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.gps-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.gps-actions .btn{flex:1;min-width:135px}.gps-paste-preview{border:1px solid var(--line);border-radius:12px;background:#f8f5ed;padding:10px;margin-top:8px;font-size:12px}
+.map-picker{height:min(56vh,480px);min-height:330px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#e9e6df}.map-coords{font-size:12px;color:var(--muted);margin:8px 0}.map-fallback{display:grid;place-items:center;height:100%;padding:24px;text-align:center;color:var(--muted)}
+.rule-save{display:flex;align-items:flex-start;gap:9px;padding:10px;border-radius:12px;background:#f6f0df;border:1px solid #e1d4ac;margin-top:10px}.rule-save input{margin-top:3px}.rule-save b{display:block;font-size:12px}.rule-save small{display:block;color:var(--muted);font-size:10px;margin-top:2px}
+.import-banner{border:1px solid #c9a22766;background:#fff8df;border-radius:12px;padding:10px;margin-bottom:10px}.import-banner b{display:block}.import-banner small{color:var(--muted)}
+.form-section.compact{padding:10px 12px}.form-section.compact p{margin:4px 0;font-size:11px}
+.connection-line{display:flex;align-items:center;gap:7px;font-size:12px}.dot{width:9px;height:9px;border-radius:50%;display:inline-block}.dot.ok{background:var(--green)}.dot.warn{background:var(--orange)}.dot.bad{background:var(--red)}
+.advanced-box{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}.advanced-box summary{cursor:pointer;font-size:11px;font-weight:850;color:var(--muted)}.client-id-row{display:grid;grid-template-columns:1fr auto;gap:7px;align-items:end}.client-id-row input[readonly]{background:#f2eee5;color:#777}
+.sync-state{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fbf8f1;margin:9px 0}.sync-state strong{display:block}.sync-state small{display:block;color:var(--muted);margin-top:2px}
+.region-rates{display:grid;grid-template-columns:1fr 1fr;gap:8px}.region-rate{border:1px solid var(--line);border-radius:12px;padding:9px;background:#fff}.region-rate label{font-size:10px;font-weight:850;color:var(--muted)}.region-rate input{width:100%;border:0;border-bottom:1px solid var(--line);padding:6px 0;font-weight:900;background:transparent}
+.dual-save{display:grid;grid-template-columns:1fr 1fr;gap:9px;width:100%}.dual-save .btn{min-height:45px}.habitual-save{background:linear-gradient(135deg,#c9a227,#e3bd4f);color:#111}.geo-state{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:4px 7px;background:#eee8dc;font-size:10px;font-weight:850;margin-top:5px}.geo-state.ok{background:#2e9b5718;color:#22733e}.geo-state.wait{background:#e8893218;color:#9a5718}.payment-extra.hidden{display:none}.unlock-box{border:1px solid #c9a22766;background:#fff8df;border-radius:13px;padding:11px;margin:10px 0}.unlock-box .btn{margin-top:7px}.hotel-coverage{font-size:11px;color:#22733e;font-weight:800;margin-top:5px}
+@media(max-width:560px){.import-choice,.location-grid,.region-rates{grid-template-columns:1fr}.gps-actions .btn{min-width:calc(50% - 4px)}.dual-save{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -185,7 +200,7 @@ nav button{margin:4px;border-radius:12px}nav button.active{background:#111;color
   </div>
 </div>
 <header>
-  <div class="brand"><div class="logo" id="headerAvatar"><img src="mambito-logo.png" alt="Perfil"></div><div><b>Control OLMS</b><small id="headerSubtitle">La Mambito Sound · v6.7</small></div></div>
+  <div class="brand"><div class="logo" id="headerAvatar"><img src="mambito-logo.png" alt="Perfil"></div><div><b>Control OLMS</b><small id="headerSubtitle">La Mambito Sound · v6.8</small></div></div>
   <div class="header-actions">
   <button class="iconbtn bellbtn" onclick="openNotifications()" aria-label="Notificaciones">🔔<span id="notifBadge" class="notif-badge hidden">0</span></button>
   <button class="iconbtn service-head-btn" onclick="calendarQuickAction()" aria-label="Sincronizar Google Calendar"><img src="google-calendar.jpeg" alt="Google Calendar"></button>
@@ -207,7 +222,7 @@ nav button{margin:4px;border-radius:12px}nav button.active{background:#111;color
 <button data-view="payments"><b>💰</b>Pagos</button>
 <button data-view="more"><b>☰</b>Más</button>
 </nav>
-<button class="fab" onclick="openActivityForm()">＋</button>
+<button class="fab" onclick="openNewActivityMenu()">＋</button>
 
 <dialog id="activityDlg">
 <div class="dlg">
@@ -215,6 +230,7 @@ nav button{margin:4px;border-radius:12px}nav button.active{background:#111;color
 <h2 id="activityTitle">Nueva actividad</h2>
 <input id="aid" type="hidden">
 <input id="aoutcome" type="hidden">
+<div id="importReviewBanner" class="import-banner hidden"><b>📋 Borrador creado desde un mensaje</b><small>Revisa los datos detectados antes de guardar. OLMS no inventa lo que no pudo reconocer.</small></div>
 
 <div class="form-section">
   <h3>🎼 Tipo de actividad</h3>
@@ -227,29 +243,35 @@ nav button{margin:4px;border-radius:12px}nav button.active{background:#111;color
 </div>
 
 <div class="form-section">
-  <h3>💵 Cobro</h3>
-  <p class="muted">Define esto antes de completar los datos financieros. Los gastos siempre seguirán disponibles.</p>
-  <input id="afree" type="checkbox" class="hidden">
-  <div class="billing-choice">
-    <button type="button" id="billPaid" onclick="setBillingMode(false)">💰 Con cobro</button>
-    <button type="button" id="billFree" onclick="setBillingMode(true)">🎁 Sin cobro</button>
-  </div>
-  <div id="financialFields">
-    <div class="grid2">
-      <div class="field"><label>Monto esperado</label><input id="aexpected" type="number" min="0" step=".01"></div>
-      <div class="field"><label>Monto final acordado</label><input id="afinal" type="number" min="0" step=".01"></div>
-    </div>
-    <div class="grid2">
-      <div class="field"><label>Regla de pago</label><input id="apaymentrule" placeholder="Ej. Hasta 7 días"></div>
-      <div class="field"><label>Fecha estimada de pago</label><input id="aduepreview" readonly placeholder="Se calcula automáticamente"></div>
-    </div>
-  </div>
-</div>
-
-<div class="form-section">
   <h3>🏷️ Identificación</h3>
   <div class="field"><label>Título de la actividad</label><input id="atitle" placeholder="Ej. Adrián y María"><small id="titleHelp" class="form-help">Escribe un nombre que identifique la actividad sin repetir el lugar.</small></div>
   <div id="calendarTitlePreview" class="calendar-preview"></div>
+</div>
+
+<div class="form-section">
+  <h3>📍 Lugar</h3>
+  <div class="field"><label>Lugar</label><input id="avenue" list="venueList" placeholder="Ej. Casa de Russo"><small class="form-help">Si OLMS ya conoce el lugar, seleccionarlo recupera automáticamente su ubicación y reglas habituales.</small><datalist id="venueList"></datalist></div>
+  <div class="location-grid">
+    <div class="field"><label>País</label><select id="acountry"></select></div>
+    <div class="field" id="panamaProvinceField"><label>Provincia</label><select id="aprovince"></select></div>
+    <div class="field" id="panamaDistrictField"><label>Distrito</label><select id="acity"></select></div>
+    <div class="field hidden" id="foreignRegionField"><label>Provincia / región / estado</label><input id="aregion" placeholder="Ej. Cundinamarca"></div>
+    <div class="field hidden" id="foreignCityField"><label>Ciudad / distrito</label><input id="aforeigncity" placeholder="Ej. Bogotá"></div>
+  </div>
+  <div class="field"><label>Dirección / calle y referencia</label><input id="alocation" placeholder="Ej. San Nicolás, Calle 3 de Noviembre, entrando por La Seda"></div>
+  <div class="gps-panel">
+    <div><b>📡 Ubicación GPS</b><small id="gpsStatus">Sin coordenadas guardadas</small><small id="gpsCoords" class="muted"></small></div>
+  </div>
+  <div class="gps-actions">
+    <button type="button" class="btn ghost small" onclick="captureActivityLocation()">📡 Mi ubicación</button>
+    <button type="button" class="btn ghost small" onclick="openMapPicker()">🗺️ Elegir en mapa</button>
+    <button type="button" class="btn ghost small" onclick="openGpsPaste()">📋 Pegar ubicación</button>
+    <button type="button" id="gpsViewBtn" class="btn ghost small hidden" onclick="viewActivityGPSInGoogleMaps()"><img src="google-maps.jpeg" alt="Maps" style="width:20px;height:20px;border-radius:5px;vertical-align:middle"> Ver en Maps</button>
+    <button type="button" id="gpsClearBtn" class="btn ghost small hidden" onclick="clearActivityGPS()">Quitar GPS</button>
+  </div>
+  <input id="alat" type="hidden"><input id="alng" type="hidden"><input id="aaccuracy" type="hidden">
+  <p class="form-help">GPS es el punto exacto. Cuando existe, OLMS intenta confirmar automáticamente país, provincia y distrito para evitar errores de cobro. Dirección es la referencia escrita.</p>
+  <div id="geoResolveState" class="geo-state hidden"></div>
 </div>
 
 <div class="form-section">
@@ -262,34 +284,67 @@ nav button{margin:4px;border-radius:12px}nav button.active{background:#111;color
 </div>
 
 <div class="form-section">
-  <h3>📍 Lugar</h3>
-  <div class="field"><label>Nombre del lugar</label><input id="avenue" list="venueList" placeholder="Ej. Casa de Russo"><small class="form-help">Aquí va el nombre por el que reconoces el sitio, no la dirección.</small><datalist id="venueList"></datalist></div>
-  <div class="grid2"><div class="field"><label>Provincia</label><input id="aprovince" placeholder="Ej. Panamá Oeste"></div><div class="field"><label>Dirección / calle y referencia</label><input id="alocation" placeholder="Ej. San Nicolás, Calle 3 de Noviembre, entrando por La Seda"></div></div>
-  <div class="gps-panel">
-    <div><b>📡 GPS</b><small id="gpsStatus">Sin coordenadas guardadas</small><small id="gpsCoords" class="muted"></small></div>
-    <div class="row"><button type="button" class="btn ghost small" onclick="captureActivityLocation()">📍 Usar ubicación actual</button><button type="button" id="gpsClearBtn" class="btn ghost small hidden" onclick="clearActivityGPS()">Quitar GPS</button></div>
+  <h3>💵 Cobro</h3>
+  <p class="muted">El monto esperado se propone según el lugar, la provincia y tus reglas guardadas. Siempre puedes cambiarlo para una actividad excepcional.</p>
+  <input id="afree" type="checkbox" class="hidden">
+  <div class="billing-choice">
+    <button type="button" id="billPaid" onclick="setBillingMode(false)">💰 Con cobro</button>
+    <button type="button" id="billFree" onclick="setBillingMode(true)">🎁 Sin cobro</button>
   </div>
-  <input id="alat" type="hidden"><input id="alng" type="hidden"><input id="aaccuracy" type="hidden">
-  <p class="form-help">La dirección es texto legible. El GPS guarda el punto exacto para volver a navegar aunque no conozcas la calle.</p>
+  <div id="financialFields">
+    <div class="field"><label>Monto esperado</label><input id="aexpected" type="number" min="0" step=".01"></div>
+    <div class="grid2">
+      <div class="field"><label>Condición de pago</label><select id="apaymentcondition">
+        <option value="same">Mismo día</option><option value="after">Días después</option><option value="fixed">Día fijo del mes</option><option value="before">Antes del evento</option><option value="other">Otra condición</option>
+      </select></div>
+      <div class="field payment-extra" id="paymentValueField"><label id="paymentValueLabel">Días después</label><input id="apaymentvalue" type="number" min="1" step="1" value="7"></div>
+    </div>
+    <div class="field payment-extra hidden" id="paymentOtherField"><label>Detalle de la condición</label><input id="apaymentother" placeholder="Ej. Al cierre de factura"></div>
+    <div class="field"><label>Fecha estimada de pago</label><input id="aduepreview" readonly placeholder="Se calcula automáticamente"></div>
+    <input id="apaymentrule" type="hidden">
+  </div>
 </div>
 
-<div class="form-section">
+<div class="form-section compact">
   <h3>💸 Gastos</h3>
-  <p class="muted">Transporte, comida, hospedaje y otros gastos permanecen disponibles tanto en actividades con cobro como sin cobro.</p>
+  <p class="muted">Puedes registrarlos antes, durante o después de la actividad.</p>
   <div id="editExpenseShortcut"></div>
 </div>
 
 <div class="form-section">
   <h3>📝 Observación</h3>
-  <div class="field"><textarea id="anotes" rows="3" placeholder="Información adicional de la actividad"></textarea></div>
+  <div class="field"><textarea id="anotes" rows="3" placeholder="Ej. Llevar camisa blanca, entrada por puerta lateral, llegar 30 min antes..."></textarea><small class="form-help">Úsala para información importante que no corresponda a otro campo.</small></div>
 </div>
 
-<div class="sticky-form-actions row">
-  <button class="btn ghost" onclick="D('activityDlg').close()">Cancelar</button>
-  <button class="btn primary" onclick="saveActivity()">Guardar actividad</button>
+<div class="sticky-form-actions">
+  <div class="dual-save"><button class="btn primary" onclick="saveActivity(false)">Guardar</button><button class="btn habitual-save" onclick="saveActivity(true)">⭐ Guardar como habitual</button></div>
+  <button class="btn ghost" style="width:100%;margin-top:8px" onclick="D('activityDlg').close()">Cancelar</button>
 </div>
 </div>
 </dialog>
+
+<dialog id="newActivityDlg"><div class="dlg">
+<button class="iconbtn close" onclick="D('newActivityDlg').close()">✕</button><h2>Nueva actividad</h2><p class="muted">¿Cómo quieres crearla?</p>
+<div class="import-choice"><button onclick="D('newActivityDlg').close();openActivityForm()"><b>✏️</b>Crear manualmente</button><button onclick="D('newActivityDlg').close();openImportMessage()"><b>📋</b>Importar desde mensaje</button></div>
+</div></dialog>
+
+<dialog id="importDlg"><div class="dlg">
+<button class="iconbtn close" onclick="D('importDlg').close()">✕</button><h2>📋 Importar desde mensaje</h2><p class="muted">Copia el mensaje completo de WhatsApp y pégalo aquí. OLMS detectará lo que pueda y te mostrará el formulario para revisarlo.</p>
+<div class="field"><label>Mensaje recibido</label><textarea id="importText" rows="10" placeholder="Ej. Boda Adrián y María\nSábado 26 de septiembre\nGreen Village\n8:00 pm a 10:00 pm\nPago B/. 40.00"></textarea></div>
+<div class="row"><button class="btn primary" onclick="analyzeImportedText()">Analizar mensaje</button><button class="btn ghost" onclick="D('importDlg').close()">Cancelar</button></div>
+</div></dialog>
+
+<dialog id="gpsPasteDlg"><div class="dlg">
+<button class="iconbtn close" onclick="D('gpsPasteDlg').close()">✕</button><h2>📋 Pegar ubicación GPS</h2><p class="muted">Pega coordenadas o un enlace completo de Google Maps recibido por WhatsApp.</p>
+<div class="field"><label>Coordenadas o enlace</label><textarea id="gpsPasteText" rows="5" placeholder="8.950123, -79.650456\no https://www.google.com/maps?q=8.950123,-79.650456"></textarea></div>
+<div id="gpsPastePreview" class="gps-paste-preview hidden"></div><div class="row"><button class="btn primary" onclick="applyPastedGPS()">Usar esta ubicación</button><button class="btn ghost" onclick="D('gpsPasteDlg').close()">Cancelar</button></div>
+</div></dialog>
+
+<dialog id="mapDlg"><div class="dlg">
+<button class="iconbtn close" onclick="closeMapPicker()">✕</button><h2>🗺️ Elegir punto en el mapa</h2><p class="muted">Mueve el mapa y toca el punto exacto del lugar. No requiere una API pagada.</p>
+<div id="mapPicker" class="map-picker"><div class="map-fallback">Cargando mapa…</div></div><div id="mapCoords" class="map-coords">Toca un punto para seleccionarlo.</div>
+<div class="row"><button class="btn primary" onclick="saveMapPoint()">Guardar punto</button><button class="btn ghost" onclick="closeMapPicker()">Cancelar</button></div>
+</div></dialog>
 
 <dialog id="detailDlg"><div class="dlg" id="detailBody"></div></dialog>
 <dialog id="transportDlg"><div class="dlg">
@@ -323,6 +378,21 @@ window.addEventListener("error",e=>{
   if(sp){sp.classList.add("hide");setTimeout(()=>sp.remove(),260)}
 });
 const KEY="control_olms_v2";
+const DEFAULT_GOOGLE_CLIENT_ID="339104750665-nc0vfr39r5nbhekfnlvuatarkq3hnvdi.apps.googleusercontent.com";
+const PANAMA_PROVINCES=["Bocas del Toro","Chiriquí","Coclé","Colón","Darién","Herrera","Los Santos","Panamá","Panamá Oeste","Veraguas"];
+const PANAMA_DISTRICTS={
+ "Bocas del Toro":["Almirante","Bocas del Toro","Changuinola","Chiriquí Grande"],
+ "Chiriquí":["Alanje","Barú","Boquerón","Boquete","Bugaba","David","Dolega","Gualaca","Remedios","Renacimiento","San Félix","San Lorenzo","Tierras Altas","Tolé"],
+ "Coclé":["Aguadulce","Antón","La Pintada","Natá","Olá","Penonomé"],
+ "Colón":["Chagres","Colón","Donoso","Omar Torrijos Herrera","Portobelo","Santa Isabel"],
+ "Darién":["Chepigana","Pinogana","Santa Fe"],
+ "Herrera":["Chitré","Las Minas","Los Pozos","Ocú","Parita","Pesé","Santa María"],
+ "Los Santos":["Guararé","Las Tablas","Los Santos","Macaracas","Pedasí","Pocrí","Tonosí"],
+ "Panamá":["Balboa","Chepo","Chimán","Panamá","San Miguelito","Taboga"],
+ "Panamá Oeste":["Arraiján","Capira","Chame","La Chorrera","San Carlos"],
+ "Veraguas":["Atalaya","Calobre","Cañazas","La Mesa","Las Palmas","Mariato","Montijo","Río de Jesús","San Francisco","Santa Fe","Santiago","Soná"]
+};
+const COUNTRIES=["Panamá","Afganistán","Albania","Alemania","Andorra","Angola","Antigua y Barbuda","Arabia Saudita","Argelia","Argentina","Armenia","Australia","Austria","Azerbaiyán","Bahamas","Bangladés","Barbados","Baréin","Bélgica","Belice","Benín","Bielorrusia","Birmania (Myanmar)","Bolivia","Bosnia y Herzegovina","Botsuana","Brasil","Brunéi","Bulgaria","Burkina Faso","Burundi","Bután","Cabo Verde","Camboya","Camerún","Canadá","Catar","Chad","Chile","China","Chipre","Colombia","Comoras","Corea del Norte","Corea del Sur","Costa de Marfil","Costa Rica","Croacia","Cuba","Dinamarca","Dominica","Ecuador","Egipto","El Salvador","Emiratos Árabes Unidos","Eritrea","Eslovaquia","Eslovenia","España","Estados Unidos","Estonia","Esuatini","Etiopía","Filipinas","Finlandia","Fiyi","Francia","Gabón","Gambia","Georgia","Ghana","Granada","Grecia","Guatemala","Guinea","Guinea-Bisáu","Guinea Ecuatorial","Guyana","Haití","Honduras","Hungría","India","Indonesia","Irak","Irán","Irlanda","Islandia","Islas Marshall","Islas Salomón","Israel","Italia","Jamaica","Japón","Jordania","Kazajistán","Kenia","Kirguistán","Kiribati","Kuwait","Laos","Lesoto","Letonia","Líbano","Liberia","Libia","Liechtenstein","Lituania","Luxemburgo","Macedonia del Norte","Madagascar","Malasia","Malaui","Maldivas","Malí","Malta","Marruecos","Mauricio","Mauritania","México","Micronesia","Moldavia","Mónaco","Mongolia","Montenegro","Mozambique","Namibia","Nauru","Nepal","Nicaragua","Níger","Nigeria","Noruega","Nueva Zelanda","Omán","Países Bajos","Pakistán","Palaos","Papúa Nueva Guinea","Paraguay","Perú","Polonia","Portugal","Reino Unido","República Centroafricana","República Checa","República del Congo","República Democrática del Congo","República Dominicana","Ruanda","Rumania","Rusia","Samoa","San Cristóbal y Nieves","San Marino","San Vicente y las Granadinas","Santa Lucía","Santo Tomé y Príncipe","Senegal","Serbia","Seychelles","Sierra Leona","Singapur","Siria","Somalia","Sri Lanka","Sudáfrica","Sudán","Sudán del Sur","Suecia","Suiza","Surinam","Tailandia","Tanzania","Tayikistán","Timor Oriental","Togo","Tonga","Trinidad y Tobago","Túnez","Turkmenistán","Turquía","Tuvalu","Ucrania","Uganda","Uruguay","Uzbekistán","Vanuatu","Vaticano","Venezuela","Vietnam","Yemen","Yibuti","Zambia","Zimbabue"];
 const TYPES=["Boda","Cumpleaños","Quince años","Evento corporativo","Bar/Discoteca","Hotel","Casino","Festival","Carnaval","Concierto","Evento privado","Grabación","Promoción","Ensayo regular","Ensayo especial","Viaje","Otro"];
 const TRANSPORTS=[
  ["personal","Transporte personal"],["moto","Moto"],["taxi","Taxi"],["uber","Uber"],["indrive","InDrive"],["bus-pirata","Bus pirata"],["taxi-pirata","Taxi pirata"],["metrobus","Metro Bus / MiBus"],["metro","Metro de Panamá"],["monoriel","Monoriel"],["coaster","Coaster"],["nevera","Bus nevera"],["diablo","Bus diablo rojo"],["avion","Avión / Copa Airlines"]
@@ -358,18 +428,19 @@ const TITLE_HINTS={
  "Otro":["Ej. Actividad especial","Escribe una identificación breve."]
 };
 const KNOWN_PLACES=[
- {match:["tacos la neta"],name:"Tacos La Neta",location:"Avenida B, Panamá, Panamá",province:"Panamá",rate:25,rule:"Hasta 7 días",notes:"Compartido con Zulkma"},
- {match:["tropicana","tropicana salsa club"],name:"Tropicana Salsa Club",location:"StarBay Casino, Hotel Hilton, Avenida Balboa, Panamá",province:"Panamá",rate:50,rule:"Día 25 (1–25 mismo mes; 26+ mes siguiente)"},
- {match:["casa de russo","russo"],name:"Casa de Russo",location:"San Nicolás, Calle 3 de Noviembre, entrando por La Seda",province:"Panamá Oeste",rate:0,rule:"Sin remuneración",kind:"ensayo",type:"Ensayo regular",free:true},
- {match:["green village"],name:"Green Village",location:"Manzana 130102 38-1014, Panamá Oeste, Provincia de Panamá Oeste",province:"Panamá Oeste",rate:40,rule:"Hasta 7 días"},
- {match:["hotel central"],name:"Hotel Central",location:"Casco Antiguo, Ciudad de Panamá, Panamá",province:"Panamá",rate:50,rule:"Hasta 7 días"}
+ {match:["tacos la neta"],name:"Tacos La Neta",country:"Panamá",location:"Avenida B, Panamá, Panamá",province:"Panamá",rate:25,rule:"Hasta 7 días",notes:"Compartido con Zulkma"},
+ {match:["tropicana","tropicana salsa club"],name:"Tropicana Salsa Club",country:"Panamá",location:"StarBay Casino, Hotel Hilton, Avenida Balboa, Panamá",province:"Panamá",rate:50,rule:"Día 25 (1–25 mismo mes; 26+ mes siguiente)"},
+ {match:["casa de russo","russo"],name:"Casa de Russo",country:"Panamá",location:"San Nicolás, Calle 3 de Noviembre, entrando por La Seda",province:"Panamá Oeste",city:"La Chorrera",rate:0,rule:"Sin remuneración",kind:"ensayo",type:"Ensayo regular",free:true,habitual:true,start:"09:00",end:"11:00"},
+ {match:["green village"],name:"Green Village",country:"Panamá",location:"Manzana 130102 38-1014, Panamá Oeste, Provincia de Panamá Oeste",province:"Panamá Oeste",rate:40,rule:"Hasta 7 días"},
+ {match:["hotel central"],name:"Hotel Central",country:"Panamá",location:"Casco Antiguo, Ciudad de Panamá, Panamá",province:"Panamá",rate:50,rule:"Hasta 7 días"}
 ];
 let autoFinal=true;
 let googleAccessToken=null;
+try{const t=sessionStorage.getItem("olms_google_token"),e=Number(sessionStorage.getItem("olms_google_token_exp")||0);if(t&&e>Date.now())googleAccessToken=t}catch(e){}
 let googleTokenClient=null;
 
 const seed={
- settings:{homeAddress:"",calendarConnected:false,regularRehearsalPlace:"Casa de Russo",regularRehearsalLocation:"San Nicolás, Calle 3 de Noviembre, entrando por La Seda"},
+ settings:{homeAddress:"",calendarConnected:false,googleClientId:DEFAULT_GOOGLE_CLIENT_ID,regularRehearsalPlace:"Casa de Russo",regularRehearsalLocation:"San Nicolás, Calle 3 de Noviembre, entrando por La Seda",regionRates:{panama:50,panamaWest:40,interior:60,beach:100}},
  deleted:[],
  activities:[
   {id:"a1",kind:"presentacion",type:"Evento privado",title:"Tacos La Neta",venue:"Tacos La Neta",location:"Avenida B, Panamá, Panamá",province:"Panamá",date:"2026-08-26",start:"21:00",end:"23:00",expected:25,final:25,free:false,outcome:"realizado",notes:"Compartido con Zulkma",payments:[{id:"p1",date:"2026-09-10",amount:25}],expenses:{outbound:[{id:"t1",type:"taxi",amount:2},{id:"t2",type:"bus-pirata",amount:1.5}],return:[{id:"t3",type:"taxi",amount:3}],extras:[{id:"e1",category:"Comida",subtype:"Cena",amount:4.5}]}},
@@ -386,7 +457,7 @@ const seed={
 };
 let state=JSON.parse(localStorage.getItem(KEY)||"null")||structuredClone(seed);
 state.settings=state.settings||{};
-if(state.settings.googleClientId===undefined)state.settings.googleClientId="";
+if(!state.settings.googleClientId)state.settings.googleClientId=DEFAULT_GOOGLE_CLIENT_ID;
 if(state.settings.calendarConnected===undefined)state.settings.calendarConnected=false;
 state.settings.notifiedTags=state.settings.notifiedTags||{};
 state.settings.profile=state.settings.profile||{};
@@ -398,6 +469,7 @@ if(state.settings.profile.googlePhoto===undefined)state.settings.profile.googleP
 if(state.settings.profile.customName===undefined)state.settings.profile.customName=false;
 if(state.settings.profile.customPhoto===undefined)state.settings.profile.customPhoto=false;
 state.settings.placeDefaults=state.settings.placeDefaults||{};
+state.settings.regionRates={panama:50,panamaWest:40,interior:60,beach:100,...(state.settings.regionRates||{})};
 state.alerts=Array.isArray(state.alerts)?state.alerts:[];
 state.deleted=Array.isArray(state.deleted)?state.deleted:[];
 state.activities=Array.isArray(state.activities)?state.activities:[];
@@ -428,6 +500,8 @@ function normalizeActivity(a){
  a.end=(typeof a.end==="string"&&/^\d{1,2}:\d{2}/.test(a.end))?a.end.slice(0,5):"22:00";
  a.venue=String(a.venue||"");
  a.location=String(a.location||"");
+ a.country=String(a.country||"Panamá");
+ a.city=String(a.city||"");
  a.province=String(a.province||"");
  a.payments=(Array.isArray(a.payments)?a.payments:[]).filter(p=>p&&typeof p==="object").map(p=>({
    ...p,id:String(p.id||makeId()),date:(typeof p.date==="string"&&/^\d{4}-\d{2}-\d{2}/.test(p.date))?p.date.slice(0,10):a.date,amount:(p.amount==null||p.amount==="")?0:Number(p.amount)||0
@@ -435,7 +509,7 @@ function normalizeActivity(a){
  a.expenses=(a.expenses&&typeof a.expenses==="object")?a.expenses:{};
  const cleanExpense=(e,transport=false)=>{
    if(!e||typeof e!=="object")e={};
-   return {...e,id:String(e.id||makeId()),type:transport?String(e.type||"taxi"):e.type,amount:(e.amount===undefined?null:e.amount),driver:transport?String(e.driver||""):e.driver,category:transport?e.category:String(e.category||"Otro"),subtype:transport?e.subtype:String(e.subtype||""),createdAt:String(e.createdAt||""),destination:String(e.destination||""),destinationType:String(e.destinationType||""),hotelName:String(e.hotelName||""),stayMode:String(e.stayMode||((e.category==="Hospedaje"&&/noche/i.test(e.subtype||""))?"night":(e.category==="Hospedaje"&&/hora/i.test(e.subtype||""))?"hours":"")),planned:!!e.planned};
+   return {...e,id:String(e.id||makeId()),type:transport?String(e.type||"taxi"):e.type,amount:(e.amount===undefined?null:e.amount),driver:transport?String(e.driver||""):e.driver,category:transport?e.category:String(e.category||"Otro"),subtype:transport?e.subtype:String(e.subtype||""),createdAt:String(e.createdAt||""),destination:String(e.destination||""),destinationType:String(e.destinationType||""),hotelName:String(e.hotelName||""),stayMode:String(e.stayMode||((e.category==="Hospedaje"&&/noche/i.test(e.subtype||""))?"night":(e.category==="Hospedaje"&&/hora/i.test(e.subtype||""))?"hours":"")),checkIn:String(e.checkIn||""),planned:!!e.planned};
  };
  a.expenses.outbound=(Array.isArray(a.expenses.outbound)?a.expenses.outbound:[]).map(e=>cleanExpense(e,true));
  a.expenses.return=(Array.isArray(a.expenses.return)?a.expenses.return:[]).map(e=>cleanExpense(e,true));
@@ -473,9 +547,16 @@ if(!state.settings.v67PlaceMigration){
  if(!state.settings.regularRehearsalLocation||state.settings.regularRehearsalLocation===oldAddr)state.settings.regularRehearsalLocation="San Nicolás, Calle 3 de Noviembre, entrando por La Seda";
  state.settings.v67PlaceMigration=true;localStorage.setItem(KEY,JSON.stringify(state));
 }
+if(!state.settings.v68OneWayMigration){
+ Object.entries(state.settings.placeDefaults||{}).forEach(([name,c])=>{if(c&&typeof c==="object"){if(!c.country)c.country="Panamá";if(c.kind||c.type)c.habitual=true}});
+ state.activities.forEach(a=>{a.pendingCalendarLocation="";a.pendingCalendarVenue="";a.deletedFromCalendar=false});
+ state.alerts=(state.alerts||[]).filter(x=>!String(x.tag||"").startsWith("cal-location-")&&!String(x.tag||"").startsWith("cal-time-")&&!String(x.tag||"").startsWith("cal-new-")&&!String(x.tag||"").startsWith("cal-del-"));
+ state.settings.v68OneWayMigration=true;localStorage.setItem(KEY,JSON.stringify(state));
+}
 
 const bootNow=new Date();
 let dashMode="money", periodMode="all", periodYear=bootNow.getFullYear(), periodMonth=bootNow.getMonth(), calMode="month", undoAction=null, moreOpen="";
+const unlockedHistoryIds=new Set();
 
 const $=id=>document.getElementById(id);
 const D=id=>document.getElementById(id);
@@ -545,7 +626,7 @@ function hasOpenFinancialWork(a){
  return false;
 }
 const historyLocked=a=>!!a?.outcome&&!hasOpenFinancialWork(a);
-const finalAmt=a=>a.free?0:Number(a.final??a.expected??0);
+const finalAmt=a=>a.free?0:Number(a.expected??a.final??0);
 const received=a=>(Array.isArray(a?.payments)?a.payments:[]).reduce((s,p)=>s+Number(p?.amount||0),0);
 const balance=a=>a.paidFullAdjusted?0:Math.max(0,finalAmt(a)-received(a));
 const extraordinary=a=>Math.max(0,received(a)-finalAmt(a));
@@ -554,15 +635,16 @@ function expTotal(a){let x=(a?.expenses&&typeof a.expenses==="object")?a.expense
 function pendingExp(a){let x=(a?.expenses&&typeof a.expenses==="object")?a.expenses:{};let all=[...(Array.isArray(x.outbound)?x.outbound:[]),...(Array.isArray(x.return)?x.return:[]),...(Array.isArray(x.extras)?x.extras:[])];return all.filter(e=>e&& (e.amount==null||e.amount==="")).length}
 const earned=a=>done(a)&&!a.free?(a.paidFullAdjusted?received(a):Math.max(finalAmt(a),received(a))):0;
 function due(a){
- if(a.free)return null;
+ if(!a?.date||a.free)return null;
  const rule=(a.paymentRule||"").toLowerCase(),v=(a.venue||"").toLowerCase(),d=new Date(a.date+"T12:00:00");
  if(rule.includes("sin remuneración"))return null;
  if(rule.includes("mismo día"))return a.date;
- if(rule.includes("día 25")||v.includes("tropicana")){if(d.getDate()<=25)d.setDate(25);else d.setMonth(d.getMonth()+1,25);return d.toISOString().slice(0,10)}
- let mt=rule.match(/(\d+)\s*d[ií]as/);
- if(mt){d.setDate(d.getDate()+Number(mt[1]));return d.toISOString().slice(0,10)}
+ let before=rule.match(/(\d+)\s*d[ií]as?\s*antes/);if(before){d.setDate(d.getDate()-Number(before[1]));return d.toISOString().slice(0,10)}
+ let fixed=rule.match(/d[ií]a\s*(\d{1,2})/);if(fixed){const day=Math.max(1,Math.min(31,Number(fixed[1])));if(d.getDate()<=day)d.setDate(day);else d.setMonth(d.getMonth()+1,day);return d.toISOString().slice(0,10)}
+ let after=rule.match(/(\d+)\s*d[ií]as?/);if(after){d.setDate(d.getDate()+Number(after[1]));return d.toISOString().slice(0,10)}
  if(v.includes("tacos la neta")){d.setDate(d.getDate()+7);return d.toISOString().slice(0,10)}
- d.setDate(d.getDate()+7);return d.toISOString().slice(0,10)
+ if(v.includes("tropicana")){if(d.getDate()<=25)d.setDate(25);else d.setMonth(d.getMonth()+1,25);return d.toISOString().slice(0,10)}
+ return null
 }
 function payStatus(a){
  if(a.free||!done(a))return "none";
@@ -637,45 +719,100 @@ function distinctTitle(a){
 }
 function activityDestination(a){return Number.isFinite(Number(a?.gpsLat))&&Number.isFinite(Number(a?.gpsLng))?`${Number(a.gpsLat).toFixed(6)},${Number(a.gpsLng).toFixed(6)}`:(a?.location||a?.venue||"")}
 function activityLocationSummary(a){const gps=Number.isFinite(Number(a?.gpsLat))&&Number.isFinite(Number(a?.gpsLng));return `${a?.location||"Dirección pendiente"}${gps?" · GPS guardado":""}`}
+function historicalPlaceConfig(v){
+ const q=normText(v);if(!q)return null;const arr=state.activities.filter(a=>normText(a.venue)===q).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));if(!arr.length)return null;const a=arr[0];return{name:a.venue,country:a.country||"Panamá",province:a.province||"",city:a.city||"",location:a.location||"",gpsLat:a.gpsLat??null,gpsLng:a.gpsLng??null,gpsAccuracy:a.gpsAccuracy??null,historical:true}
+}
+function venueCompatible(name,kind,type){
+ const q=normText(name),pc=state.settings.placeDefaults?.[name]||state.settings.placeDefaults?.[Object.keys(state.settings.placeDefaults||{}).find(k=>normText(k)===q)]||null;
+ if(pc?.habitual&&((pc.type&&pc.type===type)||(!pc.type&&pc.kind&&pc.kind===kind)))return true;
+ const kp=findKnownPlace(name);if(kp?.habitual&&((kp.type&&kp.type===type)||(!kp.type&&kp.kind&&kp.kind===kind)))return true;
+ const used=state.activities.filter(a=>normText(a.venue)===q);return used.some(a=>a.type===type||(type.startsWith("Ensayo")&&a.kind==="ensayo"));
+}
 function refreshVenueList(){
- const dl=$("venueList");if(!dl)return;const names=[...new Set([...KNOWN_PLACES.map(p=>p.name),...Object.keys(state.settings.placeDefaults||{}),...state.activities.map(a=>a.venue).filter(Boolean)])].sort((a,b)=>a.localeCompare(b,"es"));
+ const dl=$("venueList");if(!dl)return;const kind=$("akind")?.value||"presentacion",type=$("atype")?.value||"Boda",current=$("avenue")?.value||"";
+ const all=[...new Set([...KNOWN_PLACES.map(p=>p.name),...Object.keys(state.settings.placeDefaults||{}),...state.activities.map(a=>a.venue).filter(Boolean)])];
+ const names=all.filter(n=>venueCompatible(n,kind,type)||normText(n)===normText(current)).sort((a,b)=>a.localeCompare(b,"es"));
  dl.innerHTML=names.map(x=>`<option value="${esc(x)}"></option>`).join("");
+}
+function resetIncompatiblePlace(){
+ const v=$("avenue")?.value||"";if(!v)return;const known=placeConfig(v)||historicalPlaceConfig(v);if(!known)return;if(venueCompatible(v,$("akind")?.value||"presentacion",$("atype")?.value||"Boda"))return;
+ $("avenue").value="";$("alocation").value="";$("alat").value="";$("alng").value="";$("aaccuracy").value="";populateLocationSelectors("Panamá","");if($("aforeigncity"))$("aforeigncity").value="";updateGPSStatus();toast("El lugar anterior no corresponde al nuevo tipo de actividad");
 }
 function updateGPSStatus(){
  const lat=Number($("alat")?.value),lng=Number($("alng")?.value),acc=Number($("aaccuracy")?.value),ok=Number.isFinite(lat)&&Number.isFinite(lng)&&$("alat")?.value!==""&&$("alng")?.value!=="";
- const st=$("gpsStatus"),co=$("gpsCoords"),cl=$("gpsClearBtn");if(!st)return;
+ const st=$("gpsStatus"),co=$("gpsCoords"),cl=$("gpsClearBtn"),vw=$("gpsViewBtn");if(!st)return;
  st.textContent=ok?"✓ Ubicación GPS guardada":"Sin coordenadas guardadas";st.classList.toggle("gps-ok",ok);
  if(co)co.textContent=ok?`${lat.toFixed(6)}, ${lng.toFixed(6)}${Number.isFinite(acc)&&acc>0?` · precisión ±${Math.round(acc)} m`:""}`:"";
- if(cl)cl.classList.toggle("hidden",!ok);
+ if(cl)cl.classList.toggle("hidden",!ok);if(vw)vw.classList.toggle("hidden",!ok);
 }
-function captureActivityLocation(){
- if(!navigator.geolocation)return toast("Este dispositivo no permite obtener ubicación GPS");
- toast("Obteniendo ubicación actual…");
- navigator.geolocation.getCurrentPosition(pos=>{
-   $("alat").value=String(pos.coords.latitude);$("alng").value=String(pos.coords.longitude);$("aaccuracy").value=String(pos.coords.accuracy||"");updateGPSStatus();updateFormGuidance();toast("Ubicación GPS guardada en el formulario");
- },err=>{console.warn(err);toast(err.code===1?"Debes permitir la ubicación en el navegador":"No se pudo obtener la ubicación actual")},{enableHighAccuracy:true,timeout:12000,maximumAge:30000});
+function setGeoResolveState(text,cls="wait"){const el=$("geoResolveState");if(!el)return;if(!text){el.classList.add("hidden");el.textContent="";return}el.textContent=text;el.className=`geo-state ${cls}`}
+function canonicalPanamaProvince(v){const n=normText(v).replace(/^provincia de /,"");return PANAMA_PROVINCES.find(x=>normText(x)===n||n.includes(normText(x)))||""}
+function canonicalDistrict(province,...values){const arr=PANAMA_DISTRICTS[province]||[];for(const raw of values){const n=normText(raw).replace(/^distrito de /,"");const hit=arr.find(x=>normText(x)===n||n.includes(normText(x))||normText(x).includes(n));if(hit)return hit}return""}
+async function resolveGPSAdministrative(lat,lng,{quiet=false}={}){
+ if(!Number.isFinite(Number(lat))||!Number.isFinite(Number(lng)))return false;setGeoResolveState("📍 Confirmando país, provincia y distrito…","wait");
+ try{
+   const url=`https://nominatim.openstreetmap.org/reverse?format=jsonv2&addressdetails=1&zoom=10&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}&accept-language=es`;
+   const r=await fetch(url,{headers:{"Accept":"application/json"}});if(!r.ok)throw new Error("HTTP "+r.status);const data=await r.json(),ad=data.address||{},cc=String(ad.country_code||"").toLowerCase();
+   if(cc==="pa"||normText(ad.country)==="panama"){
+     const province=canonicalPanamaProvince(ad.state||ad.region||ad.state_district||ad.county||"");populateLocationSelectors("Panamá",province);
+     const district=canonicalDistrict(province,ad.county,ad.city_district,ad.municipality,ad.city,ad.town,ad.village);populateDistricts(province,district);if(district)$("acity").value=district;
+     setGeoResolveState(`✓ GPS confirmado · Panamá${province?` · ${province}`:""}${district?` · ${district}`:""}`,"ok");applyRateSuggestion(true);updateFormGuidance();return true;
+   }
+   const country=COUNTRIES.find(x=>normText(x)===normText(ad.country))||ad.country||"";if(country&&COUNTRIES.includes(country))$("acountry").value=country;updateCountryFields();if($("aregion"))$("aregion").value=ad.state||ad.region||"";if($("aforeigncity"))$("aforeigncity").value=ad.city||ad.town||ad.municipality||"";setGeoResolveState(`✓ GPS confirmado · ${country||"ubicación internacional"}`,"ok");applyRateSuggestion(true);updateFormGuidance();return true;
+ }catch(e){console.warn("Geocodificación inversa:",e);setGeoResolveState("GPS guardado · región pendiente de confirmar","wait");if(!quiet)toast("GPS guardado; no pude confirmar la región ahora");return false}
 }
-function clearActivityGPS(){if($("alat"))$("alat").value="";if($("alng"))$("alng").value="";if($("aaccuracy"))$("aaccuracy").value="";updateGPSStatus();updateFormGuidance()}
-function rememberPlace(a){
- const name=String(a?.venue||"").trim();if(!name)return;
- const cur=state.settings.placeDefaults[name]||{};
- state.settings.placeDefaults[name]={...cur,location:a.location||cur.location||"",province:a.province||cur.province||"",gpsLat:a.gpsLat??cur.gpsLat??null,gpsLng:a.gpsLng??cur.gpsLng??null,gpsAccuracy:a.gpsAccuracy??cur.gpsAccuracy??null,rate:a.free?(cur.rate??0):(Number.isFinite(Number(a.expected))?Number(a.expected):cur.rate),rule:a.paymentRule||cur.rule||"Hasta 7 días",kind:a.kind||cur.kind,type:a.type||cur.type,free:!!a.free};
+async function captureActivityLocation(){
+ if(!navigator.geolocation)return toast("Este dispositivo no permite obtener ubicación GPS");toast("Obteniendo ubicación actual…");
+ navigator.geolocation.getCurrentPosition(async pos=>{$("alat").value=String(pos.coords.latitude);$("alng").value=String(pos.coords.longitude);$("aaccuracy").value=String(pos.coords.accuracy||"");updateGPSStatus();await resolveGPSAdministrative(pos.coords.latitude,pos.coords.longitude);toast("Ubicación GPS guardada en el formulario")},err=>{console.warn(err);toast(err.code===1?"Debes permitir la ubicación en el navegador":"No se pudo obtener la ubicación actual")},{enableHighAccuracy:true,timeout:12000,maximumAge:30000});
+}
+function clearActivityGPS(){if($("alat"))$("alat").value="";if($("alng"))$("alng").value="";if($("aaccuracy"))$("aaccuracy").value="";setGeoResolveState("");updateGPSStatus();updateFormGuidance()}
+function currentProvince(){return ($("acountry")?.value||"Panamá")==="Panamá"?($("aprovince")?.value||""):($("aregion")?.value||"")}
+function currentCity(){return ($("acountry")?.value||"Panamá")==="Panamá"?($("acity")?.value||""):($("aforeigncity")?.value||"")}
+function populateDistricts(province,city=""){
+ const el=$("acity");if(!el)return;const list=PANAMA_DISTRICTS[province]||[];el.innerHTML=`<option value="">${province?"Selecciona un distrito":"Primero selecciona provincia"}</option>`+list.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("");if(city&&list.includes(city))el.value=city;else el.value="";
+}
+function populateLocationSelectors(country="Panamá",province="",city=""){
+ const cs=$("acountry"),ps=$("aprovince");if(cs&&!cs.options.length)cs.innerHTML=COUNTRIES.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("");
+ if(ps&&!ps.options.length)ps.innerHTML=`<option value="">Selecciona una provincia</option>`+PANAMA_PROVINCES.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("");
+ if(cs)cs.value=COUNTRIES.includes(country)?country:"Panamá";if(ps)ps.value=PANAMA_PROVINCES.includes(province)?province:"";populateDistricts(ps?.value||"",city);updateCountryFields();
+}
+function updateCountryFields(){
+ const pan=($("acountry")?.value||"Panamá")==="Panamá";$("panamaProvinceField")?.classList.toggle("hidden",!pan);$("panamaDistrictField")?.classList.toggle("hidden",!pan);$("foreignRegionField")?.classList.toggle("hidden",pan);$("foreignCityField")?.classList.toggle("hidden",pan);
+ if(pan){if($("aregion"))$("aregion").value="";if($("aforeigncity"))$("aforeigncity").value="";populateDistricts($("aprovince")?.value||"",$("acity")?.value||"")}applyRateSuggestion(true);updateFormGuidance();
+}
+function rememberPlace(a,habitual=false){
+ const name=String(a?.venue||"").trim();if(!name)return;const cur=state.settings.placeDefaults[name]||{};
+ const base={...cur,country:a.country||cur.country||"Panamá",location:a.location||cur.location||"",province:a.province||cur.province||"",city:a.city||cur.city||"",gpsLat:a.gpsLat??cur.gpsLat??null,gpsLng:a.gpsLng??cur.gpsLng??null,gpsAccuracy:a.gpsAccuracy??cur.gpsAccuracy??null};
+ if(habitual){Object.assign(base,{habitual:true,rate:a.free?0:Number(a.expected||0),rule:a.paymentRule||cur.rule||"7 días después",kind:a.kind||cur.kind,type:a.type||cur.type,free:!!a.free,start:a.start||cur.start,end:a.end||cur.end})}
+ state.settings.placeDefaults[name]=base;
 }
 function updateFormGuidance(){
- const type=$("atype")?.value||"Otro",hint=TITLE_HINTS[type]||TITLE_HINTS.Otro,ti=$("atitle"),help=$("titleHelp");
- if(ti)ti.placeholder=hint[0];if(help)help.textContent=hint[1];
- const temp={kind:$("akind")?.value||"presentacion",type,title:ti?.value||"",venue:$("avenue")?.value||"",location:$("alocation")?.value||"",province:$("aprovince")?.value||""};
- const pre=$("calendarTitlePreview");if(pre)pre.innerHTML=`<b>Así aparecerá en Calendar:</b><br>${esc(calendarTitle(temp))}`;
+ const type=$("atype")?.value||"Otro",hint=TITLE_HINTS[type]||TITLE_HINTS.Otro,ti=$("atitle"),help=$("titleHelp");if(ti)ti.placeholder=hint[0];if(help)help.textContent=hint[1];
+ const temp={kind:$("akind")?.value||"presentacion",type,title:ti?.value||"",venue:$("avenue")?.value||"",location:$("alocation")?.value||"",province:currentProvince(),city:currentCity()};const pre=$("calendarTitlePreview");if(pre)pre.innerHTML=`<b>Así aparecerá en Calendar:</b><br>${esc(calendarTitle(temp))}`;
+ refreshVenueList();
+}
+function paymentRuleToUI(rule=""){
+ const r=String(rule||"").trim(),n=normText(r);let type="after",value="7",other="";
+ if(!r||/hasta\s*7\s*dias|7\s*dias\s*despues/.test(n)){type="after";value="7"}
+ else if(n.includes("mismo dia")){type="same";value=""}
+ else{let m=n.match(/(\d+)\s*dias?\s*antes/);if(m){type="before";value=m[1]}else if((m=n.match(/dia\s*(\d{1,2})/))){type="fixed";value=m[1]}else if((m=n.match(/(\d+)\s*dias?/))){type="after";value=m[1]}else if(n.includes("sin remuneracion")){type="same";value=""}else{type="other";other=r}}
+ $("apaymentcondition").value=type;$("apaymentvalue").value=value;$("apaymentother").value=other;updatePaymentConditionFields(false);
+}
+function buildPaymentRuleFromUI(){
+ const type=$("apaymentcondition")?.value||"after",n=Math.max(1,Number($("apaymentvalue")?.value||1));if(type==="same")return"Mismo día";if(type==="after")return`${n} día${n===1?"":"s"} después`;if(type==="fixed")return`Día ${Math.min(31,n)} del mes`;if(type==="before")return`${n} día${n===1?"":"s"} antes`;return String($("apaymentother")?.value||"").trim()||"Otra condición";
+}
+function updatePaymentConditionFields(refresh=true){
+ const type=$("apaymentcondition")?.value||"after",vf=$("paymentValueField"),of=$("paymentOtherField"),lab=$("paymentValueLabel");const needs=["after","fixed","before"].includes(type);vf?.classList.toggle("hidden",!needs);of?.classList.toggle("hidden",type!=="other");if(lab)lab.textContent=type==="fixed"?"Día del mes":type==="before"?"Días antes":"Días después";if(type==="fixed"&&Number($("apaymentvalue")?.value||0)>31)$("apaymentvalue").value="25";if(refresh)updateDuePreview();
 }
 function applyActivityDefaults(){
  const kind=$("akind")?.value,type=$("atype")?.value;
  if(kind==="ensayo"&&type==="Ensayo regular"){
    const place=placeConfig(state.settings.regularRehearsalPlace||"Casa de Russo")||findKnownPlace("Casa de Russo");
    if(!$("aid").value||!$("avenue").value||normText($("avenue").value)==="casa de russo")$("avenue").value=place?.name||"Casa de Russo";
-   if(place?.location)$("alocation").value=place.location;if(place?.province)$("aprovince").value=place.province;
+   if(place?.country)$("acountry").value=place.country;if(place?.location)$("alocation").value=place.location;if(place?.province){if((place.country||"Panamá")==="Panamá"){populateLocationSelectors(place.country||"Panamá",place.province,place.city||"")}else{$("aregion").value=place.province;if($("aforeigncity"))$("aforeigncity").value=place.city||""}}
    if(place?.gpsLat!=null)$("alat").value=String(place.gpsLat);if(place?.gpsLng!=null)$("alng").value=String(place.gpsLng);if(place?.gpsAccuracy!=null)$("aaccuracy").value=String(place.gpsAccuracy);
-   if(!$("aid").value){$("atitle").value="";if(!$("astart").value||$("astart").value==="20:00")$("astart").value="09:00";plusTwoHours()}
-   setBillingMode(true);
+   if(!$("aid").value){$("atitle").value="";if(!$("astart").value||$("astart").value==="20:00")$("astart").value=place?.start||"09:00";$("aend").value=place?.end||$("aend").value;plusTwoHours()}
+   setBillingMode(true);updateCountryFields();
  }
  updateGPSStatus();updateFormGuidance();
 }
@@ -686,7 +823,7 @@ function expenseChronology(a){
 }
 function expenseVisual(row){
  const e=row.e;if(row.bucket!=="extras"){const name=TRANSPORTS.find(t=>t[0]===e.type)?.[1]||e.type;return{icon:`<img src="${transportIcon(e.type)}" alt="${esc(name)}">`,title:`Transporte ${row.bucket==="outbound"?"ida":"retorno"} – ${name}`,detail:e.destination?`Destino: ${e.destination}`:""}}
- if(e.category==="Hospedaje")return{icon:"🏨",title:`Hotel – ${e.hotelName||e.subtype||"Hospedaje"}`,detail:e.stayMode==="hours"?"3 horas":e.stayMode==="night"?"Noche completa":(e.subtype||"")};
+ if(e.category==="Hospedaje"){const base=e.stayMode==="hours"?"3 horas":e.stayMode==="night"?"Noche completa":(e.subtype||"");const end=e.stayMode==="hours"&&e.checkIn?` · hasta ${addHoursHHMM(e.checkIn,3)}`:"";return{icon:"🏨",title:`Hotel – ${e.hotelName||e.subtype||"Hospedaje"}`,detail:`${base}${e.checkIn?` · Entrada ${e.checkIn}`:""}${end}`}};
  if(e.category==="Comida")return{icon:"🍽️",title:`Comida – ${e.subtype||"Comida"}`,detail:""};
  const icons={Estacionamiento:"🅿️",Peaje:"🛣️",Equipaje:"🧳","Transporte de instrumento":"🎷","Alquiler de espacio":"🏢","Entrada/acceso":"🎟️"};return{icon:icons[e.category]||"＋",title:`${e.category||"Otro"}${e.subtype?` – ${e.subtype}`:""}`,detail:""};
 }
@@ -709,14 +846,14 @@ function todayHero(a){
  const closeout=done(a)?`<div class="closeout"><b>${rehearsal?"Cierre del ensayo":"Cierre del toque"}</b><div class="closeout-grid">${rehearsal?`<div><small>Gastos</small><b>${money(spent)}</b></div><div><small>Estado</small><b>${status(a)[1]}</b></div>`:`<div><small>Recibido</small><b>${money(received(a))}</b></div><div><small>Gastos</small><b>${money(spent)}</b></div><div><small>Neto actual</small><b>${money(earned(a)-spent)}</b></div><div><small>Pago</small><b>${status(a)[1]}</b></div>`}</div></div>`:"";
  const finance=rehearsal
    ? `<div class="live-finance"><div class="live-money"><small>Tipo</small><strong>Ensayo</strong></div><div class="live-money"><small>Gastado</small><strong>${money(spent)}</strong></div><div class="live-money net"><small>Condición</small><strong>Sin cobro</strong></div></div>`
-   : `<div class="live-finance"><div class="live-money"><small>Acordado</small><strong>${money(income)}</strong></div><div class="live-money"><small>Gastado</small><strong>${money(spent)}</strong></div><div class="live-money net"><small>Ganancia provisional</small><strong>${money(net)}</strong></div></div>`;
+   : `<div class="live-finance"><div class="live-money"><small>Monto esperado</small><strong>${money(income)}</strong></div><div class="live-money"><small>Gastado</small><strong>${money(spent)}</strong></div><div class="live-money net"><small>Ganancia provisional</small><strong>${money(net)}</strong></div></div>`;
  return `<div class="today-shell ${rehearsal?"rehearsal":"presentation"}">
    <div class="today-heading"><small>${rehearsal?"Ensayo de hoy":"Actividad de hoy"}</small><h1>Hoy con<span>La Mambito Sound</span></h1></div>
    <div class="live-card">
     <span class="event-kind">${kindLabel(a)}</span><div class="live-title">${esc(displayEventTitle(a))}</div>
     <div class="live-meta"><span>📅 <b>${panamaDate(a.date)}</b></span><span>🕒 <b>${panamaRange(a)}</b></span><span>📍 <span>${esc(a.venue||"Lugar pendiente")}${a.location?`<small style="display:block;color:#aaa">${esc(a.location)}</small>`:""}${a.gpsLat!=null&&a.gpsLng!=null?`<small style="display:block;color:#8fd5c7">GPS guardado ✓</small>`:""}</span></span></div>
     <button class="nav-main" onclick="openNavigate('${a.id}')">📍 Navegar</button>
-    ${a.pendingCalendarLocation?`<div class="location-review" style="color:#111;margin-top:12px"><b>Google Calendar propone otra ubicación.</b><div style="margin-top:7px"><button class="btn primary small" onclick="reviewCalendarLocation('${a.id}')">Revisar cambio</button></div></div>`:""}
+    
    </div>
    <div class="live-stage-note"><b>${liveStageLabel(a)}</b> · Los botones cambian el flujo del evento: transporte de ida, llegada y cierre.</div>
    <div class="live-progress">${journeyButton(a,"going","▶ Ya voy")}${journeyButton(a,"arrived","● Llegué")}${journeyButton(a,"ended","■ Terminó")}</div>
@@ -726,7 +863,7 @@ function todayHero(a){
     <button class="quick-expense" onclick="openQuickExpense('${a.id}','Comida')"><b>🍽️</b>Comida</button>
     <button class="quick-expense" onclick="openQuickExpense('${a.id}','Hospedaje')"><b>🏨</b>Hospedaje</button>
     <button class="quick-expense" onclick="openQuickExpense('${a.id}','Otro')"><b>＋</b>Otro gasto</button>
-   </div><div class="expense-running">Los gastos están disponibles antes de salir y se suman en tiempo real. ${!rehearsal&&income>0&&spent>=income*.5?`<span class="profit-warn">Ya consumiste al menos la mitad del ingreso acordado.</span>`:""}</div>${closeout}</div>
+   </div><div class="expense-running">Los gastos están disponibles antes de salir y se suman en tiempo real. ${!rehearsal&&income>0&&spent>=income*.5?`<span class="profit-warn">Ya consumiste al menos la mitad del monto esperado.</span>`:""}</div>${closeout}</div>
    <div class="live-expense-log"><h3>Desglose de gastos</h3>${expenseTimeline(a,!historyLocked(a),true)}</div>
   </div>`
 }
@@ -784,7 +921,7 @@ function openQuickPayment(id){
  <p><b>${esc(a.title)}</b></p>
  <p class="muted">${panamaDate(a.date)} · ${esc(a.venue||"Lugar pendiente")}</p>
  <div class="quick-pay-grid">
-   <div class="box"><small>Acordado</small><b>${money(finalAmt(a))}</b></div>
+   <div class="box"><small>Monto esperado</small><b>${money(finalAmt(a))}</b></div>
    <div class="box"><small>Recibido</small><b>${money(received(a))}</b></div>
    <div class="box"><small>Pendiente</small><b>${money(balance(a))}</b></div>
  </div>
@@ -863,12 +1000,12 @@ function renderDash(){
 }
 
 function renderActivities(){
- $("activities").innerHTML=`<div class="toprow"><div><h2>Actividades</h2><div class="muted">Guardar nunca bloquea un registro.</div></div><button class="btn primary" onclick="openActivityForm()">＋ Nueva</button></div><div class="field"><label>Buscar</label><input id="searchAct" placeholder="Lugar, tipo, fecha..." oninput="filterActs(this.value)"></div><div id="actList">${[...state.activities].sort(chronological).map(card).join("")}</div>`
+ $("activities").innerHTML=`<div class="toprow"><div><h2>Actividades</h2><div class="muted">Guardar nunca bloquea un registro.</div></div><button class="btn primary" onclick="openNewActivityMenu()">＋ Nueva</button></div><div class="field"><label>Buscar</label><input id="searchAct" placeholder="Lugar, tipo, fecha..." oninput="filterActs(this.value)"></div><div id="actList">${[...state.activities].sort(chronological).map(card).join("")}</div>`
 }
 function filterActs(q){q=q.toLowerCase();$("actList").innerHTML=state.activities.filter(a=>JSON.stringify(a).toLowerCase().includes(q)).sort(chronological).map(card).join("")||'<div class="empty">Sin resultados.</div>'}
 function renderPayments(){
  const arr=state.activities.filter(a=>done(a)&&!a.free).sort(chronological);
- $("payments").innerHTML=`<h2>Pagos</h2><div class="muted" style="margin-bottom:10px">Esperado → Final acordado → Recibido</div><div class="tablewrap"><table><tr><th>Fecha</th><th>Actividad</th><th>Esperado</th><th>Final</th><th>Recibido</th><th>Saldo</th><th>Estado</th></tr>${arr.map(a=>{let s=status(a);return`<tr onclick="openDetail('${a.id}','payments')"><td>${panamaDate(a.date,false)}</td><td>${a.title}</td><td>${money(a.expected)}</td><td>${money(finalAmt(a))}</td><td>${money(received(a))}</td><td>${money(balance(a))}</td><td><span class="badge ${s[0]}">${s[1]}</span></td></tr>`}).join("")}</table></div>`
+ $("payments").innerHTML=`<h2>Pagos</h2><div class="muted" style="margin-bottom:10px">Monto esperado → Recibido → Saldo</div><div class="tablewrap"><table><tr><th>Fecha</th><th>Actividad</th><th>Monto esperado</th><th>Recibido</th><th>Saldo</th><th>Estado</th></tr>${arr.map(a=>{let st=status(a);return`<tr onclick="openDetail('${a.id}','payments')"><td>${panamaDate(a.date,false)}</td><td>${esc(a.title)}</td><td>${money(finalAmt(a))}</td><td>${money(received(a))}</td><td>${money(balance(a))}</td><td><span class="badge ${st[0]}">${st[1]}</span></td></tr>`}).join("")}</table></div>`
 }
 function renderCalendar(){
  let controls=`<div class="toprow"><div><h2>Calendario</h2><div class="muted">Mes / Semana / Agenda</div></div><div class="segment"><button class="${calMode==="month"?"active":""}" onclick="calMode='month';renderCalendar()">Mes</button><button class="${calMode==="week"?"active":""}" onclick="calMode='week';renderCalendar()">Semana</button><button class="${calMode==="agenda"?"active":""}" onclick="calMode='agenda';renderCalendar()">Agenda</button></div></div>`;
@@ -888,21 +1025,20 @@ function moreSettingsRow(id,icon,title,summary,status="",statusClass="",content=
 }
 function renderMore(){
  const k=kpis(),places=[...new Set(state.activities.map(a=>a.venue).filter(Boolean))],p=state.settings.profile||{},lastSync=state.settings.lastCalendarSync?new Date(state.settings.lastCalendarSync):null;
- const syncText=lastSync&&!Number.isNaN(lastSync.getTime())?`Última sincronización: ${new Intl.DateTimeFormat("es-PA",{day:"2-digit",month:"2-digit",hour:"numeric",minute:"2-digit"}).format(lastSync)}`:"Aún no sincronizado";
- const profilePanel=`<div class="field"><label>Nombre visible</label><input id="profileName" value="${esc(p.name||"")}" placeholder="Tu nombre"></div><div class="row"><button class="btn primary" onclick="saveProfileName()">Guardar perfil</button><button class="btn ghost brand-action" onclick="loadGoogleProfile(true)"><img src="google.jpeg" alt="Google">Usar datos de Google</button><button class="btn ghost" onclick="document.getElementById('profilePhotoInput').click()">Cambiar foto</button>${p.customPhoto?`<button class="btn ghost" onclick="restoreGooglePhoto()">Usar foto de Google</button>`:""}</div><input id="profilePhotoInput" type="file" accept="image/*" style="display:none" onchange="handleProfilePhoto(this.files&&this.files[0])">`;
+ const pendingSync=state.activities.filter(a=>a.calendarSyncPending).length;const syncText=pendingSync?`${pendingSync} cambio${pendingSync===1?"":"s"} pendiente${pendingSync===1?"":"s"}`:lastSync&&!Number.isNaN(lastSync.getTime())?`Actualizado: ${new Intl.DateTimeFormat("es-PA",{day:"2-digit",month:"2-digit",hour:"numeric",minute:"2-digit"}).format(lastSync)}`:"Aún no sincronizado";
+ const connection=googleAccessToken?{text:"Conectado",cls:"ok",dot:"ok"}:state.settings.calendarConnected?{text:"Autorizado",cls:"warn",dot:"warn"}:{text:"Sin conectar",cls:"warn",dot:"bad"};
+ const profilePanel=`<div class="field"><label>Nombre visible</label><input id="profileName" value="${esc(p.name||"")}" placeholder="Tu nombre"></div><div class="field"><label>🏠 Dirección habitual / Casa</label><input id="homeAddr" value="${esc(state.settings.homeAddress||"")}" placeholder="Calle, barriada, distrito..."><small class="form-help">Se usa como destino cuando al terminar una actividad eliges volver a casa.</small></div><div class="row"><button class="btn primary" onclick="saveProfileAndHome()">Guardar perfil</button><button class="btn ghost brand-action" onclick="loadGoogleProfile(true)"><img src="google.jpeg" alt="Google">Usar datos de Google</button><button class="btn ghost" onclick="document.getElementById('profilePhotoInput').click()">Cambiar foto</button>${p.customPhoto?`<button class="btn ghost" onclick="restoreGooglePhoto()">Usar foto de Google</button>`:""}</div><input id="profilePhotoInput" type="file" accept="image/*" style="display:none" onchange="handleProfilePhoto(this.files&&this.files[0])">`;
  const placeContent=places.length?places.map(v=>{const arr=state.activities.filter(a=>a.venue===v),inc=arr.reduce((sum,a)=>sum+earned(a),0),ex=arr.reduce((sum,a)=>sum+expTotal(a),0),pc=placeConfig(v);return`<button class="place-card" onclick="openPlaceHistory(decodeURIComponent('${encodeURIComponent(v)}'))"><div><b>${esc(v)}</b><div class="place-metrics">${arr.length} actividades · ${money(inc-ex)} neto${pc?.gpsLat!=null&&pc?.gpsLng!=null?" · GPS ✓":""}</div></div><span class="chev">›</span></button>`}).join(""):'<div class="compact-empty">Aún no hay lugares registrados.</div>';
- const notif=`<p class="muted">Recordatorios de actividades, gastos, cobros y cambios de Google Calendar.</p><div class="row"><button class="btn primary" onclick="enableNotifications()">Activar notificaciones</button><button class="btn ghost" onclick="openNotifications()">Ver avisos (${notificationItems().length})</button></div><p class="muted" style="font-size:12px">Estado: <b>${notificationPermissionLabel()}</b></p>`;
+ const notif=`<p class="muted">Recordatorios de actividades, gastos y cobros.</p><div class="row"><button class="btn primary" onclick="enableNotifications()">Activar notificaciones</button><button class="btn ghost" onclick="openNotifications()">Ver avisos (${notificationItems().length})</button></div><p class="muted" style="font-size:12px">Estado: <b>${notificationPermissionLabel()}</b></p>`;
  const indicators=`<div class="info"><div class="box"><small>Promedio neto por toque</small><b>${money(avgNetGig())}</b></div><div class="box"><small>Gasto promedio por ensayo</small><b>${money(avgRehearsal())}</b></div><div class="box"><small>Gastos del período</small><b>${money(k.g)}</b></div><div class="box"><small>Ganancia neta</small><b>${money(k.net)}</b></div></div>`;
- const tariffs=`<p class="muted">Los cambios aquí afectan actividades futuras, nunca el historial cerrado.</p><button class="btn ghost" onclick="openPlaceDefaults()">Administrar lugares conocidos</button>`;
- const calendar=`<div class="row" style="align-items:center;margin-bottom:10px"><img class="service-logo" src="google-calendar.jpeg" alt="Google Calendar"><div><b>Google Calendar</b><div class="muted">${syncText}</div></div></div><p class="muted">Estado: <b>${googleAccessToken?"Conectado en esta sesión":state.settings.googleClientId?"Configurado, falta conectar":"Falta configurar"}</b></p><div class="field"><label>ID de cliente OAuth de Google</label><input id="googleClientId" value="${esc(state.settings.googleClientId||"")}" placeholder="xxxxxxxx.apps.googleusercontent.com"></div><div class="row"><button class="btn ghost" onclick="saveGoogleClientId()">Guardar ID</button><button class="btn primary brand-action" onclick="connectGoogle()"><img src="google.jpeg" alt="Google">Conectar con Google</button><button class="btn ghost brand-action" onclick="syncCalendar()"><img src="google-calendar.jpeg" alt="Google Calendar">Sincronizar ahora</button></div><p class="muted" style="font-size:12px">Sincroniza Mambito Sound desde el 01/06/2026. Los eventos cerrados quedan protegidos.</p>`;
+ const rr=state.settings.regionRates||{};const tariffs=`<p class="muted">Estas son las reglas base por región para actividades nuevas en Panamá. Los lugares con una regla habitual guardada pueden reemplazarlas.</p><div class="region-rates"><div class="region-rate"><label>Provincia de Panamá</label><input id="ratePanama" type="number" step=".01" value="${Number(rr.panama??50).toFixed(2)}"></div><div class="region-rate"><label>Panamá Oeste</label><input id="rateWest" type="number" step=".01" value="${Number(rr.panamaWest??40).toFixed(2)}"></div><div class="region-rate"><label>Otras provincias</label><input id="rateInterior" type="number" step=".01" value="${Number(rr.interior??60).toFixed(2)}"></div><div class="region-rate"><label>Playa / resort</label><input id="rateBeach" type="number" step=".01" value="${Number(rr.beach??100).toFixed(2)}"></div></div><div class="row" style="margin-top:9px"><button class="btn primary" onclick="saveRegionalRates()">Guardar tarifas</button><button class="btn ghost" onclick="openPlaceDefaults()">Lugares y reglas propias</button></div><p class="form-help">Los cambios no alteran actividades históricas.</p>`;
+ const calendar=`<div class="row" style="align-items:center;margin-bottom:10px"><img class="service-logo" src="google-calendar.jpeg" alt="Google Calendar"><div><b>Google Calendar</b><div class="connection-line"><span class="dot ${connection.dot}"></span><span>${connection.text}</span></div></div></div><div class="sync-state"><strong>${googleAccessToken?"✅ Sincronización disponible":"📅 Integración configurada"}</strong><small>${syncText}</small><small>Dirección: OLMS → Google Calendar · Google nunca modifica OLMS</small></div><div class="row"><button class="btn primary brand-action" onclick="connectGoogle(false)"><img src="google.jpeg" alt="Google">${googleAccessToken?"Renovar conexión":"Conectar Google"}</button><button class="btn ghost brand-action" onclick="syncCalendar()"><img src="google-calendar.jpeg" alt="Google Calendar">Sincronizar ahora</button></div><p class="form-help">Cada cambio guardado en una actividad se envía a Calendar 5 segundos después. Al abrir OLMS se verifica la sincronización; si la app está abierta a las 12:00 a. m., vuelve a sincronizar.</p><details class="advanced-box"><summary>Configuración avanzada</summary><div class="client-id-row"><div class="field"><label>ID de cliente OAuth</label><input id="googleClientId" value="${esc(state.settings.googleClientId||DEFAULT_GOOGLE_CLIENT_ID)}" readonly></div><button class="btn ghost small" onclick="toggleGoogleClientIdEdit()">Editar</button></div><button class="btn ghost small" onclick="saveGoogleClientId()">Guardar ID</button></details>`;
  const deleted=`<p class="muted">${state.deleted.length?`${state.deleted.length} elemento${state.deleted.length===1?"":"s"} disponible${state.deleted.length===1?"":"s"}.`:"La carpeta está vacía."}</p><button class="btn ghost" onclick="openDeletedHistory()">Abrir historial de eliminados</button>`;
- const general=`<div class="field"><label>Dirección de mi casa</label><input id="homeAddr" value="${esc(state.settings.homeAddress||"")}" placeholder="Calle, barriada, distrito..."></div><button class="btn primary" onclick="state.settings.homeAddress=$('homeAddr').value;save();toast('Dirección guardada')">Guardar dirección</button><div class="sectionline"><button class="btn ghost" onclick="if(confirm('¿Restaurar datos de ejemplo?')){state=structuredClone(seed);state.settings.googleClientId='';save()}">Restaurar datos de ejemplo</button></div>`;
  const install=`<div class="row" style="align-items:center"><img class="service-logo" src="icon-192.png" alt="Control OLMS"><div><b>Control OLMS</b><div class="muted">PWA / acceso directo</div></div></div><p class="muted">Instala la aplicación desde una dirección HTTPS compatible.</p><button class="btn primary" onclick="installApp()">Instalar aplicación</button>`;
  const row=(...args)=>moreSettingsRow(...args);
- $("more").innerHTML=`<div class="more-shell"><div class="more-heading"><h2>Más</h2><div class="muted">Ajustes, historial y herramientas</div></div><div class="more-profile-hero">${p.photo?`<img class="profile-avatar" src="${esc(p.photo)}" alt="Foto de perfil">`:`<div class="profile-avatar fallback">${esc((p.name||"OL").trim().slice(0,2).toUpperCase()||"OL")}</div>`}<div><h3>${esc(p.name||"K-milo")}</h3><div class="muted">La Mambito Sound</div></div><button class="btn small" onclick="toggleMore('profile')">Editar perfil</button></div>${moreOpen==="profile"?`<div class="more-profile-panel">${profilePanel}</div>`:""}
- <div class="settings-group"><div class="settings-group-title">Cuenta</div><div class="settings-card">${row("general","⚙️","Configuración general","Dirección de casa y datos","","",general)}</div></div>
+ $("more").innerHTML=`<div class="more-shell"><div class="more-heading"><h2>Configuración</h2><div class="muted">Ajustes, historial y herramientas</div></div><div class="more-profile-hero">${p.photo?`<img class="profile-avatar" src="${esc(p.photo)}" alt="Foto de perfil">`:`<div class="profile-avatar fallback">${esc((p.name||"OL").trim().slice(0,2).toUpperCase()||"OL")}</div>`}<div><h3>${esc(p.name||"K-milo")}</h3><div class="muted">La Mambito Sound</div></div><button class="btn small" onclick="toggleMore('profile')">Editar perfil</button></div>${moreOpen==="profile"?`<div class="more-profile-panel">${profilePanel}</div>`:""}
  <div class="settings-group"><div class="settings-group-title">Actividad y control</div><div class="settings-card">${row("places","📍","Lugares e historial",`${places.length} lugar${places.length===1?"":"es"}`,places.length?String(places.length):"","",placeContent)}${row("notifications","🔔","Notificaciones","Avisos y recordatorios",String(notificationItems().length),notificationItems().length?"warn":"ok",notif)}${row("indicators","📊","Indicadores","Promedios y métricas","","",indicators)}${row("deleted","🗑️","Historial de eliminados","Restaurar, reutilizar o borrar",String(state.deleted.length),state.deleted.length?"warn":"ok",deleted)}</div></div>
- <div class="settings-group"><div class="settings-group-title">Sistema e integraciones</div><div class="settings-card">${row("calendar","img:google-calendar.jpeg","Google Calendar",syncText,googleAccessToken?"Conectado":state.settings.googleClientId?"Configurar":"Sin conectar",googleAccessToken?"ok":"warn",calendar)}${row("tariffs","💵","Tarifas y reglas","Configuración para futuras actividades","","",tariffs)}${row("install","img:icon-192.png","Instalación","Control OLMS como aplicación","PWA","ok",install)}</div></div></div>`
+ <div class="settings-group"><div class="settings-group-title">Sistema e integraciones</div><div class="settings-card">${row("calendar","img:google-calendar.jpeg","Google Calendar",syncText,connection.text,connection.cls,calendar)}${row("tariffs","💵","Tarifas y condiciones","Tarifas regionales y lugares habituales","","",tariffs)}${row("install","img:icon-192.png","Instalación","Control OLMS como aplicación","PWA","ok",install)}</div></div></div>`;
 }
 function openDeletedHistory(){
  const arr=[...state.deleted].sort(chronological);
@@ -958,21 +1094,21 @@ function findKnownPlace(v){
 }
 
 function placeConfig(v){
- const q=(v||"").trim();if(!q)return null;const p=findKnownPlace(q);const key=p?.name||q;const direct=state.settings.placeDefaults?.[key]||state.settings.placeDefaults?.[q]||{};
- if(p)return {...p,...direct,name:p.name};if(Object.keys(direct).length)return {name:q,match:[q.toLowerCase()],...direct};return null
+ const q=(v||"").trim();if(!q)return null;const p=findKnownPlace(q);const key=p?.name||q;const direct=state.settings.placeDefaults?.[key]||state.settings.placeDefaults?.[q]||{};const hist=historicalPlaceConfig(q)||{};
+ if(p)return {...hist,...p,...direct,name:p.name};if(Object.keys(direct).length)return {...hist,name:q,match:[q.toLowerCase()],...direct};if(Object.keys(hist).length)return hist;return null
 }
 function openPlaceDefaults(){
  const names=[...new Set([...KNOWN_PLACES.map(p=>p.name),...Object.keys(state.settings.placeDefaults||{})])];
  const rows=names.map(name=>{const c=placeConfig(name)||{rate:0,rule:"Sin regla"};return `<button class="place-card" onclick="editPlaceDefault(decodeURIComponent('${encodeURIComponent(name)}'))"><div><b>${esc(name)}</b><div class="place-metrics">Tarifa ${money(c.rate||0)} · ${esc(c.rule||"Sin regla")}</div></div><span class="chev">›</span></button>`}).join("");
- $("listBody").innerHTML=`<button class="iconbtn close" onclick="D('listDlg').close()">✕</button><h2>Tarifas y reglas futuras</h2><p class="muted">Editar aquí actualiza la referencia y puede aplicarse a actividades futuras del mismo lugar. Nunca toca actividades ya realizadas.</p>${rows}`;D('listDlg').showModal()
+ $("listBody").innerHTML=`<button class="iconbtn close" onclick="D('listDlg').close()">✕</button><h2>Tarifas y condiciones futuras</h2><p class="muted">Editar aquí actualiza la referencia y puede aplicarse a actividades futuras del mismo lugar. Nunca toca actividades ya realizadas.</p>${rows}`;D('listDlg').showModal()
 }
 function editPlaceDefault(name){
  const base=KNOWN_PLACES.find(p=>p.name===name)||{name,rate:state.settings.placeDefaults?.[name]?.rate||0,rule:state.settings.placeDefaults?.[name]?.rule||"Hasta 7 días"};const cur=placeConfig(name)||base;
  const rate=prompt(`Tarifa habitual futura para ${name} (B/.)`,Number(cur.rate||0).toFixed(2));if(rate===null)return;
- const rule=prompt(`Regla de pago futura para ${name}`,cur.rule||"Hasta 7 días");if(rule===null)return;
+ const rule=prompt(`Condición de pago futura para ${name}`,cur.rule||"Hasta 7 días");if(rule===null)return;
  state.settings.placeDefaults[name]={...(state.settings.placeDefaults[name]||{}),rate:Number(rate||0),rule};
  if(confirm("¿Aplicar este cambio también a las actividades futuras ya creadas de este lugar?")){
-   state.activities.filter(a=>a.venue===name&&isUpcoming(a)).forEach(a=>{a.expected=Number(rate||0);a.final=Number(rate||0);a.paymentRule=rule});
+   state.activities.filter(a=>a.venue===name&&isUpcoming(a)).forEach(a=>{a.expected=Number(rate||0);a.final=a.expected;a.paymentRule=rule});
  }
  save();openPlaceDefaults();toast("Ajuste futuro guardado")
 }
@@ -982,14 +1118,15 @@ function openPlaceHistory(venue){
  const avgReceived=avg(doneArr.map(received)),avgExp=avg(doneArr.map(expTotal)),avgNet=avg(doneArr.map(a=>earned(a)-expTotal(a)));
  const transports={};arr.forEach(a=>[...(a.expenses?.outbound||[]),...(a.expenses?.return||[])].forEach(t=>transports[t.type]=(transports[t.type]||0)+1));
  const top=Object.entries(transports).sort((a,b)=>b[1]-a[1])[0];const tname=top?(TRANSPORTS.find(x=>x[0]===top[0])?.[1]||top[0]):"Sin datos";
- $("placeBody").innerHTML=`<button class="iconbtn close" onclick="D('placeDlg').close()">✕</button><h2>📍 ${esc(venue)}</h2><div class="info"><div class="box"><small>Actividades</small><b>${arr.length}</b></div><div class="box"><small>Promedio cobrado</small><b>${money(avgReceived)}</b></div><div class="box"><small>Promedio gastos</small><b>${money(avgExp)}</b></div><div class="box"><small>Ganancia neta promedio</small><b>${money(avgNet)}</b></div><div class="box"><small>Transporte más usado</small><b>${esc(tname)}</b></div><div class="box"><small>Regla habitual</small><b>${esc(placeConfig(venue)?.rule||arr[0]?.paymentRule||"Sin datos")}</b></div></div><div class="sectionline"><h3>Historial</h3>${arr.map(card).join("")||'<div class="empty">Sin registros.</div>'}</div>`;D('placeDlg').showModal()
+ $("placeBody").innerHTML=`<button class="iconbtn close" onclick="D('placeDlg').close()">✕</button><h2>📍 ${esc(venue)}</h2><div class="info"><div class="box"><small>Actividades</small><b>${arr.length}</b></div><div class="box"><small>Promedio cobrado</small><b>${money(avgReceived)}</b></div><div class="box"><small>Promedio gastos</small><b>${money(avgExp)}</b></div><div class="box"><small>Ganancia neta promedio</small><b>${money(avgNet)}</b></div><div class="box"><small>Transporte más usado</small><b>${esc(tname)}</b></div><div class="box"><small>Condición habitual</small><b>${esc(placeConfig(venue)?.rule||arr[0]?.paymentRule||"Sin datos")}</b></div></div><div class="sectionline"><h3>Historial</h3>${arr.map(card).join("")||'<div class="empty">Sin registros.</div>'}</div>`;D('placeDlg').showModal()
 }
 function suggestedRate(){
- const venue=($("avenue").value||"").toLowerCase(),loc=($("alocation").value||"").toLowerCase(),prov=($("aprovince").value||"").toLowerCase();
- if((venue+" "+loc).includes("playa")||(venue+" "+loc).includes("resort")||(venue+" "+loc).includes("beach"))return 100;
- if(prov.includes("panamá oeste")||prov.includes("panama oeste"))return 40;
- if(prov==="panamá"||prov==="panama"||loc.includes("ciudad de panamá"))return 50;
- if(prov)return 60;
+ const venue=($("avenue")?.value||"").toLowerCase(),loc=($("alocation")?.value||"").toLowerCase(),country=$("acountry")?.value||"Panamá",prov=currentProvince().toLowerCase(),rr=state.settings.regionRates||{};
+ if(country!=="Panamá")return null;
+ if((venue+" "+loc).includes("playa")||(venue+" "+loc).includes("resort")||(venue+" "+loc).includes("beach"))return Number(rr.beach??100);
+ if(prov.includes("panamá oeste")||prov.includes("panama oeste"))return Number(rr.panamaWest??40);
+ if(prov==="panamá"||prov==="panama")return Number(rr.panama??50);
+ if(prov)return Number(rr.interior??60);
  return null;
 }
 function plusTwoHours(){
@@ -997,51 +1134,49 @@ function plusTwoHours(){
  let [h,m]=$("astart").value.split(":").map(Number);$("aend").value=String((h+2)%24).padStart(2,"0")+":"+String(m).padStart(2,"0");
 }
 function updateDuePreview(){
- const a={date:$("adate").value,venue:$("avenue").value,free:$("afree").checked,paymentRule:$("apaymentrule").value};
- $("aduepreview").value=a.free?"No aplica":(due(a)?panamaDate(due(a)):"");
+ const rule=buildPaymentRuleFromUI();if($("apaymentrule"))$("apaymentrule").value=rule;const a={date:$("adate")?.value||"",venue:$("avenue")?.value||"",free:$("afree")?.checked??false,paymentRule:rule};if(!$("aduepreview"))return;if(!a.date){$("aduepreview").value="";return}const d=due(a);$("aduepreview").value=a.free?"No aplica":(d?panamaDate(d):"Según condición")
 }
-function setBillingMode(free){
- const chk=$("afree");if(!chk)return;
- chk.checked=!!free;
- syncFreeFields();
-}
+function setBillingMode(free){const chk=$("afree");if(!chk)return;chk.checked=!!free;syncFreeFields()}
 function syncFreeFields(){
- const fr=$("afree")?.checked??false;
- const paidBtn=$("billPaid"),freeBtn=$("billFree"),box=$("financialFields");
- if(paidBtn)paidBtn.classList.toggle("active",!fr);
- if(freeBtn)freeBtn.classList.toggle("active",fr);
- if(box)box.classList.toggle("hidden",fr);
- if($("aexpected"))$("aexpected").disabled=fr;
- if($("afinal"))$("afinal").disabled=fr;
- if(fr){
-   if($("aexpected"))$("aexpected").value="0";
-   if($("afinal"))$("afinal").value="0";
-   if($("apaymentrule"))$("apaymentrule").value="Sin remuneración";
- }else{
-   if($("apaymentrule")?.value==="Sin remuneración")$("apaymentrule").value="";
-   applyRateSuggestion(false);
- }
- updateDuePreview();
+ const fr=$("afree")?.checked??false,paidBtn=$("billPaid"),freeBtn=$("billFree"),box=$("financialFields");if(paidBtn)paidBtn.classList.toggle("active",!fr);if(freeBtn)freeBtn.classList.toggle("active",fr);if(box)box.classList.toggle("hidden",fr);if($("aexpected"))$("aexpected").disabled=fr;
+ if(fr){if($("aexpected"))$("aexpected").value="0";if($("apaymentrule"))$("apaymentrule").value="Sin remuneración"}else{if($("apaymentrule")?.value==="Sin remuneración")paymentRuleToUI("7 días después");applyRateSuggestion(false)}updateDuePreview();
 }
 function applyRateSuggestion(force=false){
- if($("afree").checked)return;
- const k=placeConfig($("avenue").value);
- let rate=k?.rate;
- if(rate==null)rate=suggestedRate();
- if(rate!=null && (force||$("aexpected").value==="")){$("aexpected").value=Number(rate).toFixed(2);if(autoFinal)$("afinal").value=Number(rate).toFixed(2)}
- if(!$("apaymentrule").value)$("apaymentrule").value=k?.rule||"Hasta 7 días";
- updateDuePreview();
+ if($("afree")?.checked)return;const k=placeConfig($("avenue")?.value);let rate=k?.habitual?k?.rate:null;if(rate==null)rate=suggestedRate();if(rate!=null&&(force||$("aexpected").value===""))$("aexpected").value=Number(rate).toFixed(2);if(rate==null&&force&&($("acountry")?.value||"Panamá")!=="Panamá"&&!k?.habitual)$("aexpected").value="";if(k?.rule&&($("apaymentrule")?.value===""||force))paymentRuleToUI(k.rule);updateDuePreview();
 }
 function applyKnownPlace(){
- const p=placeConfig($("avenue").value);if(!p){applyRateSuggestion(false);updateFormGuidance();return}
- $("avenue").value=p.name;
- if(p.location)$("alocation").value=p.location;if(p.province)$("aprovince").value=p.province;
- if(p.gpsLat!=null)$("alat").value=String(p.gpsLat);if(p.gpsLng!=null)$("alng").value=String(p.gpsLng);if(p.gpsAccuracy!=null)$("aaccuracy").value=String(p.gpsAccuracy);
- if(p.notes && !$("anotes").value)$("anotes").value=p.notes;
- if(!$("afree").checked){$("apaymentrule").value=p.rule||$("apaymentrule").value||"Hasta 7 días";if(p.rate!=null&&$("aexpected").value===""){$("aexpected").value=Number(p.rate).toFixed(2);if(autoFinal)$("afinal").value=Number(p.rate).toFixed(2)}}
- updateGPSStatus();syncFreeFields();updateDuePreview();updateFormGuidance();
+ const p=placeConfig($("avenue").value);if(!p){applyRateSuggestion(false);updateFormGuidance();return}if(!venueCompatible(p.name,$("akind")?.value||"presentacion",$("atype")?.value||"Boda")){$("avenue").value="";toast("Ese lugar no corresponde al tipo de actividad seleccionado");applyRateSuggestion(false);updateFormGuidance();return}
+ $("avenue").value=p.name;populateLocationSelectors(p.country||"Panamá",p.province||"",p.city||"");if((p.country||"Panamá")!=="Panamá"){$("aregion").value=p.province||"";if($("aforeigncity"))$("aforeigncity").value=p.city||""}if(p.location)$("alocation").value=p.location;if(p.gpsLat!=null)$("alat").value=String(p.gpsLat);if(p.gpsLng!=null)$("alng").value=String(p.gpsLng);if(p.gpsAccuracy!=null)$("aaccuracy").value=String(p.gpsAccuracy);if(p.notes&&!$("anotes").value)$("anotes").value=p.notes;
+ if(p.habitual){if(p.kind)$("akind").value=p.kind;if(p.type)$("atype").value=p.type;if(p.start)$("astart").value=p.start;if(p.end)$("aend").value=p.end;setBillingMode(!!p.free);if(!p.free&&p.rate!=null)$("aexpected").value=Number(p.rate).toFixed(2);if(p.rule)paymentRuleToUI(p.rule)}else if(!$("afree").checked){applyRateSuggestion(true)}
+ updateGPSStatus();syncFreeFields();updateDuePreview();updateFormGuidance();if(p.gpsLat!=null&&p.gpsLng!=null)resolveGPSAdministrative(Number(p.gpsLat),Number(p.gpsLng),{quiet:true});
 }
 
+
+let olmsMap=null,olmsMapMarker=null,pendingMapPoint=null;
+function loadLeaflet(){return new Promise((resolve,reject)=>{if(window.L)return resolve();if(!document.querySelector('link[data-olms-leaflet]')){const l=document.createElement('link');l.rel='stylesheet';l.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';l.dataset.olmsLeaflet='1';document.head.appendChild(l)}const existing=document.querySelector('script[data-olms-leaflet]');if(existing){existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',reject,{once:true});return}const sc=document.createElement('script');sc.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';sc.dataset.olmsLeaflet='1';sc.onload=resolve;sc.onerror=reject;document.head.appendChild(sc)})}
+async function openMapPicker(){
+ if(!D('mapDlg').open)D('mapDlg').showModal();const lat=Number($('alat').value),lng=Number($('alng').value),has=$('alat').value!==''&&$('alng').value!==''&&Number.isFinite(lat)&&Number.isFinite(lng);pendingMapPoint=has?{lat,lng}:null;
+ try{await loadLeaflet();setTimeout(()=>{const host=$('mapPicker');host.innerHTML='';if(olmsMap){olmsMap.remove();olmsMap=null}const center=has?[lat,lng]:[8.9824,-79.5199];olmsMap=L.map(host).setView(center,has?16:8);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(olmsMap);if(has)olmsMapMarker=L.marker(center).addTo(olmsMap);olmsMap.on('click',e=>{pendingMapPoint={lat:e.latlng.lat,lng:e.latlng.lng};if(olmsMapMarker)olmsMapMarker.setLatLng(e.latlng);else olmsMapMarker=L.marker(e.latlng).addTo(olmsMap);$('mapCoords').textContent=`Punto seleccionado: ${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`});if(has)$('mapCoords').textContent=`Punto actual: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;setTimeout(()=>olmsMap.invalidateSize(),80)},50)}catch(e){console.error(e);$('mapPicker').innerHTML='<div class="map-fallback">No se pudo cargar el mapa. Puedes usar «Pegar ubicación» o «Mi ubicación».</div>'}
+}
+function closeMapPicker(){if(D('mapDlg').open)D('mapDlg').close()}
+async function saveMapPoint(){if(!pendingMapPoint)return toast('Toca primero un punto del mapa');$('alat').value=String(pendingMapPoint.lat);$('alng').value=String(pendingMapPoint.lng);$('aaccuracy').value='';updateGPSStatus();closeMapPicker();await resolveGPSAdministrative(pendingMapPoint.lat,pendingMapPoint.lng);updateFormGuidance();toast('Punto GPS guardado')}
+function viewActivityGPSInGoogleMaps(){const lat=$('alat').value,lng=$('alng').value;if(!lat||!lng)return toast('No hay GPS guardado');window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lat+','+lng)}`,'_blank')}
+function openGpsPaste(){$('gpsPasteText').value='';$('gpsPastePreview').classList.add('hidden');if(!D('gpsPasteDlg').open)D('gpsPasteDlg').showModal()}
+function parseGPSInput(text){const t=String(text||'').trim();let m=t.match(/(?:@|q=|query=|ll=)(-?\d{1,2}(?:\.\d+)?)[,%2C\s]+(-?\d{1,3}(?:\.\d+)?)/i)||t.match(/!3d(-?\d{1,2}(?:\.\d+)?)!4d(-?\d{1,3}(?:\.\d+)?)/i)||t.match(/(-?\d{1,2}(?:\.\d+)?)\s*[,;]\s*(-?\d{1,3}(?:\.\d+)?)/);if(!m)return null;const lat=Number(m[1]),lng=Number(m[2]);if(!Number.isFinite(lat)||!Number.isFinite(lng)||Math.abs(lat)>90||Math.abs(lng)>180)return null;return{lat,lng}}
+async function applyPastedGPS(){const p=parseGPSInput($('gpsPasteText').value);if(!p){$('gpsPastePreview').textContent='No pude encontrar coordenadas en ese texto. Si es un enlace corto de Maps, abre el enlace y copia las coordenadas o el enlace completo.';$('gpsPastePreview').classList.remove('hidden');return}$('alat').value=String(p.lat);$('alng').value=String(p.lng);$('aaccuracy').value='';updateGPSStatus();D('gpsPasteDlg').close();await resolveGPSAdministrative(p.lat,p.lng);toast('Ubicación pegada y guardada')}
+function parseSpanishDate(text){const t=normText(text),now=new Date();let m=t.match(/\b(\d{1,2})[\/-](\d{1,2})(?:[\/-](\d{2,4}))?\b/);if(m){let y=m[3]?Number(m[3]):now.getFullYear();if(y<100)y+=2000;return`${y}-${String(Number(m[2])).padStart(2,'0')}-${String(Number(m[1])).padStart(2,'0')}`}const months={enero:1,febrero:2,marzo:3,abril:4,mayo:5,junio:6,julio:7,agosto:8,septiembre:9,setiembre:9,octubre:10,noviembre:11,diciembre:12};m=t.match(/\b(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|setiembre|octubre|noviembre|diciembre)(?:\s+de\s+(\d{4}))?/);if(m){const y=Number(m[3]||now.getFullYear());return`${y}-${String(months[m[2]]).padStart(2,'0')}-${String(Number(m[1])).padStart(2,'0')}`}return''}
+function parseTimeToken(h,m,ap){let hh=Number(h),mm=Number(m||0);ap=normText(ap||'');if(ap.startsWith('p')&&hh<12)hh+=12;if(ap.startsWith('a')&&hh===12)hh=0;return`${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`}
+function analyzeImportedText(){
+ const text=$('importText').value.trim();if(!text)return toast('Pega primero el mensaje de WhatsApp');const n=normText(text),data={};
+ const typeMap=[['boda','Boda'],['cumple','Cumpleaños'],['quince','Quince años'],['15 anos','Quince años'],['corporativo','Evento corporativo'],['festival','Festival'],['carnaval','Carnaval'],['concierto','Concierto'],['grabacion','Grabación'],['promocion','Promoción'],['ensayo regular','Ensayo regular'],['ensayo','Ensayo especial'],['viaje','Viaje']];for(const [k,v] of typeMap)if(n.includes(k)){data.type=v;break}data.kind=data.type?.startsWith('Ensayo')?'ensayo':data.type==='Viaje'?'viaje':data.type==='Grabación'?'grabacion':data.type==='Promoción'?'promocion':'presentacion';
+ const known=[...KNOWN_PLACES,...Object.keys(state.settings.placeDefaults||{}).map(name=>({name,match:[normText(name)]}))].find(p=>(p.match||[normText(p.name)]).some(k=>n.includes(normText(k))));if(known)data.venue=known.name;
+ const lines=text.split(/\n+/).map(x=>x.trim()).filter(Boolean),labeled=(label)=>{const r=new RegExp(`^${label}\\s*[:\\-]\\s*(.+)$`,'i');for(const line of lines){const m=line.match(r);if(m)return m[1].trim()}return''};data.venue=data.venue||labeled('lugar|local|sal[oó]n|sitio');data.title=labeled('t[ií]tulo|evento|actividad');if(!data.title&&lines[0]){let first=lines[0].replace(/^(boda|cumplea[nñ]os|quince a[nñ]os|ensayo regular|ensayo|presentaci[oó]n|toque)\s*[:\-]?\s*/i,'').trim();if(first&&first!==lines[0]||(/boda/i.test(lines[0])&&first))data.title=first}
+ data.date=parseSpanishDate(text);const times=[...text.matchAll(/\b(\d{1,2})(?::(\d{2}))?\s*(a\.?\s*m\.?|p\.?\s*m\.?)\b/gi)];if(times[0])data.start=parseTimeToken(times[0][1],times[0][2],times[0][3]);if(times[1])data.end=parseTimeToken(times[1][1],times[1][2],times[1][3]);
+ const amt=text.match(/(?:B\s*\/\s*\.|B\.|USD|US\$|\$)\s*(\d+(?:[.,]\d{1,2})?)/i);if(amt)data.expected=Number(amt[1].replace(',','.'));const gps=parseGPSInput(text);if(gps){data.gpsLat=gps.lat;data.gpsLng=gps.lng}
+ const prov=PANAMA_PROVINCES.find(x=>n.includes(normText(x)));if(prov){data.country='Panamá';data.province=prov}const country=COUNTRIES.find(x=>x!=='Panamá'&&n.includes(normText(x)));if(country)data.country=country;
+ const obs=lines.filter(x=>/vestuario|uniforme|camisa|ropa|observ|nota|contacto|entrada|llegar|montaje|sonido/i.test(x));data.notes=obs.join('\n');
+ D('importDlg').close();openActivityForm('',true);if(data.kind)$('akind').value=data.kind;if(data.type&&TYPES.includes(data.type))$('atype').value=data.type;if(data.kind==='ensayo')setBillingMode(true);else setBillingMode(false);applyActivityDefaults();if(data.title)$('atitle').value=data.title;if(data.venue){$('avenue').value=data.venue;applyKnownPlace()}if(data.kind)$('akind').value=data.kind;if(data.type&&TYPES.includes(data.type))$('atype').value=data.type;if(data.kind==='ensayo')setBillingMode(true);else if(data.kind)setBillingMode(false);if(data.country){populateLocationSelectors(data.country,data.province||'');if(data.country!=='Panamá'&&data.province)$('aregion').value=data.province}if(data.date)$('adate').value=data.date;if(data.start)$('astart').value=data.start;if(data.end)$('aend').value=data.end;if(data.expected!=null){setBillingMode(false);$('aexpected').value=Number(data.expected).toFixed(2)}if(data.gpsLat!=null){$('alat').value=String(data.gpsLat);$('alng').value=String(data.gpsLng);resolveGPSAdministrative(data.gpsLat,data.gpsLng,{quiet:true})}if(data.notes)$('anotes').value=data.notes;updateGPSStatus();updateDuePreview();updateFormGuidance();toast('Mensaje analizado · revisa el borrador')
+}
 
 function activityInterval(a){
  const st=new Date(`${a.date}T${a.start||"00:00"}:00-05:00`);let en=new Date(`${a.date}T${a.end||a.start||"00:00"}:00-05:00`);if((a.end||"")<(a.start||""))en=new Date(en.getTime()+86400000);return[st,en]
@@ -1049,36 +1184,32 @@ function activityInterval(a){
 function findScheduleConflict(candidate,ignoreId=""){
  const [cs,ce]=activityInterval(candidate);return state.activities.find(a=>a.id!==ignoreId&&!closed(a)&&(()=>{const [as,ae]=activityInterval(a);return cs<ae&&ce>as})())||null
 }
-function openActivityForm(id=""){
- const a=state.activities.find(x=>x.id===id);
- if(a?.outcome){toast("Esta actividad ya está cerrada y forma parte del historial");openDetail(a.id);return}
- if(a&&needsConfirmation(a)){promptActivityStatus(a.id);return}
- autoFinal=!a || Number(a.final??a.expected??0)===Number(a.expected??0);refreshVenueList();
- $("aid").value=a?.id||"";$("akind").value=a?.kind||"presentacion";
- $("atype").innerHTML=TYPES.map(x=>`<option ${x===(a?.type||"Boda")?"selected":""}>${x}</option>`).join("");
- $("atitle").value=a?.title&&a.title!==a.type?a.title:"";$("avenue").value=a?.venue||"";$("alocation").value=a?.location||"";$("aprovince").value=a?.province||"";
- $("alat").value=a?.gpsLat??"";$("alng").value=a?.gpsLng??"";$("aaccuracy").value=a?.gpsAccuracy??"";
- $("adate").value=a?.date||todayISO();$("astart").value=a?.start||"20:00";$("aend").value=a?.end||"22:00";$("aexpected").value=a?.expected??"";$("afinal").value=a?.final??"";$("afree").checked=a?!!a.free:false;$("aoutcome").value="";$("anotes").value=a?.notes||"";$("apaymentrule").value=a?.paymentRule||placeConfig(a?.venue)?.rule||"";
- $("activityTitle").textContent=a?"Editar actividad":"Nueva actividad";
- $("editExpenseShortcut").innerHTML=a?`<button class="btn ghost" onclick="D('activityDlg').close();openDetail('${a.id}','expenses')">💸 Abrir gastos de esta actividad</button>`:`<span class="muted">Después de guardar podrás registrar gastos desde la actividad. También estarán disponibles antes de tocar «Ya voy».</span>`;
- if(!a&&$("akind").value==="ensayo")$("afree").checked=true;syncFreeFields();applyActivityDefaults();updateGPSStatus();updateDuePreview();updateFormGuidance();D('activityDlg').showModal()
+function openNewActivityMenu(){if(!D("newActivityDlg").open)D("newActivityDlg").showModal()}
+function openImportMessage(){$("importText").value="";if(!D("importDlg").open)D("importDlg").showModal()}
+function openActivityForm(id="",fromImport=false){
+ const a=state.activities.find(x=>x.id===id);if(a?.outcome&&!unlockedHistoryIds.has(a.id)){toast("El evento está cerrado. Desbloquéalo desde su ficha para editarlo.");openDetail(a.id);return}if(a&&needsConfirmation(a)&&!unlockedHistoryIds.has(a.id)){promptActivityStatus(a.id);return}
+ refreshVenueList();$("aid").value=a?.id||"";$("akind").value=a?.kind||"presentacion";$("atype").innerHTML=TYPES.map(x=>`<option ${x===(a?.type||"Boda")?"selected":""}>${x}</option>`).join("");
+ $("atitle").value=a?.title&&a.title!==a.type?a.title:"";$("avenue").value=a?.venue||"";populateLocationSelectors(a?.country||"Panamá",a?.province||"",a?.city||"");if((a?.country||"Panamá")!=="Panamá"){$("aregion").value=a?.province||"";if($("aforeigncity"))$("aforeigncity").value=a?.city||""}$("alocation").value=a?.location||"";
+ $("alat").value=a?.gpsLat??"";$("alng").value=a?.gpsLng??"";$("aaccuracy").value=a?.gpsAccuracy??"";$("adate").value=a?.date||todayISO();$("astart").value=a?.start||"20:00";$("aend").value=a?.end||"22:00";$("aexpected").value=a?.expected??"";$("afree").checked=a?!!a.free:false;$("aoutcome").value=a?.outcome||"";$("anotes").value=a?.notes||"";paymentRuleToUI(a?.paymentRule||placeConfig(a?.venue)?.rule||"7 días después");
+ $("activityTitle").textContent=a?(a.outcome?"Editar actividad cerrada":"Editar actividad"):"Nueva actividad";$("importReviewBanner").classList.toggle("hidden",!fromImport);
+ $("editExpenseShortcut").innerHTML=a?`<button class="btn ghost small" onclick="D('activityDlg').close();openDetail('${a.id}','expenses')">Abrir gastos (${money(expTotal(a))})</button>`:`<span class="muted">No necesitas registrar gastos ahora.</span>`;
+ if(!a&&$("akind").value==="ensayo")$("afree").checked=true;syncFreeFields();if(!a)applyActivityDefaults();updateGPSStatus();updateDuePreview();updateFormGuidance();if(!D("activityDlg").open)D("activityDlg").showModal();
 }
-async function saveActivity(){
- let id=$("aid").value||uid(),old=state.activities.find(x=>x.id===id),rawTitle=String($("atitle").value||"").trim(),type=$("atype").value;
- let obj={id,kind:$("akind").value,type,title:rawTitle||type,venue:$("avenue").value.trim(),location:$("alocation").value.trim(),province:$("aprovince").value.trim(),gpsLat:$("alat").value===""?null:Number($("alat").value),gpsLng:$("alng").value===""?null:Number($("alng").value),gpsAccuracy:$("aaccuracy").value===""?null:Number($("aaccuracy").value),date:$("adate").value,start:$("astart").value,end:$("aend").value,expected:$("afree").checked?0:Number($("aexpected").value||0),final:$("afree").checked?0:Number($("afinal").value||$("aexpected").value||0),free:$("afree").checked,outcome:$("aoutcome").value,notes:$("anotes").value,paymentRule:$("apaymentrule").value||"Hasta 7 días",payments:old?.payments||[],expenses:old?.expenses||{outbound:[],return:[],extras:[]},calendarEventId:old?.calendarEventId||null,source:old?.source||"manual",expenseReviewDone:old?.expenseReviewDone??false,expensePromptAnswered:old?.expensePromptAnswered??false,postPromptSnoozedUntil:old?.postPromptSnoozedUntil||null,liveStage:old?.liveStage||"",paidFullAdjusted:old?.paidFullAdjusted||false,paymentAdjustmentNote:old?.paymentAdjustmentNote||"",pendingCalendarLocation:old?.pendingCalendarLocation||"",pendingCalendarVenue:old?.pendingCalendarVenue||""};
- if(!obj.venue)return toast("Escribe el nombre del lugar");
+async function saveActivity(habitual=false){
+ let id=$("aid").value||uid(),old=state.activities.find(x=>x.id===id),oldSnapshot=old?structuredClone(old):null,rawTitle=String($("atitle").value||"").trim(),type=$("atype").value,country=$("acountry").value||"Panamá",province=currentProvince(),paymentRule=$("afree").checked?"Sin remuneración":buildPaymentRuleFromUI();
+ let obj={id,kind:$("akind").value,type,title:rawTitle||type,venue:$("avenue").value.trim(),country,province,city:currentCity().trim(),location:$("alocation").value.trim(),gpsLat:$("alat").value===""?null:Number($("alat").value),gpsLng:$("alng").value===""?null:Number($("alng").value),gpsAccuracy:$("aaccuracy").value===""?null:Number($("aaccuracy").value),date:$("adate").value,start:$("astart").value,end:$("aend").value,expected:$("afree").checked?0:Number($("aexpected").value||0),final:$("afree").checked?0:Number($("aexpected").value||0),free:$("afree").checked,outcome:$("aoutcome").value,notes:$("anotes").value,paymentRule,payments:old?.payments||[],expenses:old?.expenses||{outbound:[],return:[],extras:[]},calendarEventId:old?.calendarEventId||null,source:"manual",expenseReviewDone:old?.expenseReviewDone??false,expensePromptAnswered:old?.expensePromptAnswered??false,postPromptSnoozedUntil:old?.postPromptSnoozedUntil||null,liveStage:old?.liveStage||"",paidFullAdjusted:old?.paidFullAdjusted||false,paymentAdjustmentNote:old?.paymentAdjustmentNote||""};
+ if(!obj.venue)return toast("Escribe el nombre del lugar");if(!obj.date)return toast("Selecciona la fecha");if(country==="Panamá"&&!province)return toast("Selecciona la provincia");if(country==="Panamá"&&!obj.city)return toast("Selecciona el distrito");
  const conflict=findScheduleConflict(obj,id);if(conflict){alert(`No se puede guardar porque se cruza con:\n${conflict.title} · ${panamaDate(conflict.date)} · ${panamaRange(conflict)}`);return}
- const existingPlace=placeConfig(obj.venue);
- if(!existingPlace&&obj.venue&&!obj.free&&!old){const r=prompt(`Es la primera vez que registras ${obj.venue}. ¿Cuándo suelen pagarte aquí?`,obj.paymentRule||"Hasta 7 días");if(r!==null&&r.trim())obj.paymentRule=r.trim()}
- rememberPlace(obj);
- if(old)Object.assign(old,obj);else state.activities.push(normalizeActivity(obj));
- localStorage.setItem(KEY,JSON.stringify(state));render();D('activityDlg').close();toast("Actividad guardada · lugar recordado");
- if(googleAccessToken){try{if(obj.calendarEventId)await updateCalendarEvent(obj);else await createCalendarEvent(obj);toast("Guardado también en Google Calendar")}catch(e){toast("Guardado en OLMS; Calendar no pudo actualizarse")}}
+ if(habitual)rememberPlace(obj,true);if(old)Object.assign(old,obj);else state.activities.push(normalizeActivity(obj));
+ const wasUnlocked=!!oldSnapshot?.outcome&&unlockedHistoryIds.has(id);unlockedHistoryIds.delete(id);
+ if(wasUnlocked&&!habitual){const fields=["venue","country","province","city","location","gpsLat","gpsLng","expected","paymentRule","type","kind"];const changed=fields.some(k=>String(oldSnapshot?.[k]??"")!==String(obj?.[k]??""));if(changed&&confirm("¿Actualizar también la información de este lugar para futuros eventos?")){rememberPlace(obj,!!placeConfig(obj.venue)?.habitual)}}
+ localStorage.setItem(KEY,JSON.stringify(state));render();D("activityDlg").close();toast(habitual?"Actividad guardada como habitual":"Actividad guardada en OLMS");queueCalendarSync(id);
 }
+function unlockActivity(id){const a=state.activities.find(x=>x.id===id);if(!a?.outcome)return;if(!confirm("¿Desbloquear temporalmente este evento cerrado para corregirlo?\n\nAl guardar volverá a quedar bloqueado."))return;unlockedHistoryIds.add(id);D('detailDlg').close();openActivityForm(id)}
 function openDetail(id,tab="summary"){
- const a=state.activities.find(x=>x.id===id);if(!a)return;let st=status(a),closedOp=!!a.outcome,locked=historyLocked(a);
- const lockNote=closedOp?`<div class="locked-note">${locked?"🔒 Esta actividad está cerrada y forma parte del historial. Sus datos principales ya no se pueden modificar.":"🔒 La actividad está cerrada. Solo quedan pendientes financieros o de gastos por completar."}</div>`:"";
- const editBtn=!closedOp?`<button class="btn ghost" onclick="D('detailDlg').close();openActivityForm('${id}')">Editar actividad</button>`:"";
+ const a=state.activities.find(x=>x.id===id);if(!a)return;let st=status(a),closedOp=!!a.outcome,locked=historyLocked(a),unlocked=unlockedHistoryIds.has(id);
+ const lockNote=closedOp?(unlocked?`<div class="unlock-box">🔓 <b>Edición temporal activa.</b><div class="muted">Puedes corregir datos, pagos y gastos. Al guardar la actividad vuelve a quedar bloqueada.</div></div>`:`<div class="locked-note">${locked?"🔒 Esta actividad está cerrada y forma parte del historial.":"🔒 La actividad está cerrada. Aún puede tener pendientes financieros o de gastos."}<div><button class="btn ghost small" onclick="unlockActivity('${id}')">🔓 Desbloquear edición</button></div></div>`):"";
+ const editBtn=!closedOp||unlocked?`<button class="btn ghost" onclick="D('detailDlg').close();openActivityForm('${id}')">Editar actividad</button>`:"";
  $("detailBody").innerHTML=`<button class="iconbtn close" onclick="D('detailDlg').close()">✕</button><h2>${esc(a.title)}</h2><span class="badge ${st[0]}">${st[1]}</span><p class="muted">${panamaDate(a.date)} · ${panamaRange(a)} · ${esc(a.venue||"Lugar pendiente")}</p>${lockNote}<div class="tabs"><button class="${tab==="summary"?"active":""}" onclick="openDetail('${id}','summary')">Resumen</button><button class="${tab==="payments"?"active":""}" onclick="openDetail('${id}','payments')">Pagos</button><button class="${tab==="expenses"?"active":""}" onclick="openDetail('${id}','expenses')">Gastos</button><button class="${tab==="route"?"active":""}" onclick="openDetail('${id}','route')">Cómo llegar</button></div>${detailTab(a,tab)}<div class="row" style="margin-top:14px">${editBtn}<button class="btn ghost brand-action" onclick="shareWhatsApp('${id}')"><img src="whatsapp.jpeg" alt="WhatsApp">Compartir</button><button class="btn danger" onclick="deleteActivity('${id}')">Mover a eliminados</button></div>`;
  if(!D('detailDlg').open)D('detailDlg').showModal()
 }
@@ -1089,13 +1220,13 @@ function detailTab(a,tab){
  if(tab==="payments")return paymentsTab(a);
  if(tab==="expenses")return expensesTab(a);
  if(tab==="route"){let d=encodeURIComponent(activityDestination(a)),h=encodeURIComponent(state.settings.homeAddress||"");return`<h3>Cómo llegar</h3><p class="muted">${a.gpsLat!=null&&a.gpsLng!=null?"GPS guardado ✓":"Usando dirección escrita"}</p><div class="nav-options"><a class="maps" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=${d}"><img src="google-maps.jpeg" alt="Google Maps">Google Maps · ubicación actual</a>${h?`<a class="maps" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=${h}&destination=${d}"><img src="google-maps.jpeg" alt="Google Maps">Google Maps · desde casa</a>`:""}<button class="uber" onclick="launchNavigation('${a.id}','uber')"><img src="uber-logo.jpeg" alt="Uber">Viajar con Uber</button></div>`}
- return`${a.pendingCalendarLocation?`<div class="location-review"><b>📍 Google Calendar propone otra ubicación</b><p>${esc(a.pendingCalendarLocation)}</p><button class="btn primary small" onclick="reviewCalendarLocation('${a.id}')">Revisar cambio</button> <button class="btn ghost small" onclick="dismissCalendarLocation('${a.id}')">Ignorar</button></div>`:""}<div class="info"><div class="box"><small>Esperado</small><b>${money(a.expected)}</b></div><div class="box"><small>Final acordado</small><b>${money(finalAmt(a))}</b></div><div class="box"><small>Recibido</small><b>${money(received(a))}</b></div><div class="box"><small>Gastos reales conocidos</small><b>${money(expTotal(a))}</b></div><div class="box"><small>Gastos con monto pendiente</small><b>${pendingExp(a)}</b></div><div class="box"><small>Neto actual</small><b>${money(earned(a)-expTotal(a))}</b></div><div class="box"><small>Regla de pago</small><b>${a.paymentRule||placeConfig(a.venue)?.rule||"Hasta 7 días"}</b></div><div class="box"><small>Fecha estimada</small><b>${due(a)?panamaDate(due(a)):"No aplica"}</b></div>${extraordinary(a)>0?`<div class="box"><small>Ingreso extraordinario</small><b>${money(extraordinary(a))}</b></div>`:""}${negativeAdjustment(a)>0?`<div class="box"><small>Ajuste negativo</small><b>-${money(negativeAdjustment(a))}</b></div>`:""}</div>${done(a)?`<div class="sectionline"><h3>📊 Cierre del toque</h3><div class="info"><div class="box"><small>Ingreso actual</small><b>${money(earned(a))}</b></div><div class="box"><small>Gastos totales</small><b>${money(expTotal(a))}</b></div><div class="box"><small>Ganancia neta</small><b>${money(earned(a)-expTotal(a))}</b></div><div class="box"><small>Estado del pago</small><b>${status(a)[1]}</b></div></div></div>`:""}${a.paymentAdjustmentNote?`<div class="sectionline"><b>Observación de ajuste de pago</b><p>${esc(a.paymentAdjustmentNote)}</p></div>`:""}${a.notes?`<div class="sectionline"><b>Observación</b><p>${esc(a.notes)}</p></div>`:""}<div class="sectionline"><button class="btn primary" onclick="openDetail('${a.id}','expenses')">💸 Registrar / revisar gastos</button></div>`
+ return`<div class="info"><div class="box"><small>Monto esperado</small><b>${money(finalAmt(a))}</b></div><div class="box"><small>Recibido</small><b>${money(received(a))}</b></div><div class="box"><small>Gastos reales conocidos</small><b>${money(expTotal(a))}</b></div><div class="box"><small>Gastos con monto pendiente</small><b>${pendingExp(a)}</b></div><div class="box"><small>Neto actual</small><b>${money(earned(a)-expTotal(a))}</b></div><div class="box"><small>Condición de pago</small><b>${a.paymentRule||placeConfig(a.venue)?.rule||"Hasta 7 días"}</b></div><div class="box"><small>Fecha estimada</small><b>${due(a)?panamaDate(due(a)):"No aplica"}</b></div>${extraordinary(a)>0?`<div class="box"><small>Ingreso extraordinario</small><b>${money(extraordinary(a))}</b></div>`:""}${negativeAdjustment(a)>0?`<div class="box"><small>Ajuste negativo</small><b>-${money(negativeAdjustment(a))}</b></div>`:""}</div>${done(a)?`<div class="sectionline"><h3>📊 Cierre del toque</h3><div class="info"><div class="box"><small>Ingreso actual</small><b>${money(earned(a))}</b></div><div class="box"><small>Gastos totales</small><b>${money(expTotal(a))}</b></div><div class="box"><small>Ganancia neta</small><b>${money(earned(a)-expTotal(a))}</b></div><div class="box"><small>Estado del pago</small><b>${status(a)[1]}</b></div></div></div>`:""}${a.paymentAdjustmentNote?`<div class="sectionline"><b>Observación de ajuste de pago</b><p>${esc(a.paymentAdjustmentNote)}</p></div>`:""}${a.notes?`<div class="sectionline"><b>Observación</b><p>${esc(a.notes)}</p></div>`:""}<div class="sectionline"><button class="btn primary" onclick="openDetail('${a.id}','expenses')">💸 Registrar / revisar gastos</button></div>`
 }
 
 function expenseReadOnlyList(a){return expenseTimeline(a,false,false)}
 function expensesTab(a){
  const spent=expTotal(a),pending=pendingExp(a),income=done(a)?earned(a):finalAmt(a),net=income-spent;
- const editable=!a.outcome||!a.expenseReviewDone||pending>0;
+ const editable=unlockedHistoryIds.has(a.id)||!a.outcome||!a.expenseReviewDone||pending>0;
  return `<div class="expense-summary">
    <div class="box"><small>Gastos registrados</small><b>${money(spent)}</b></div>
    <div class="box"><small>Montos pendientes</small><b>${pending}</b></div>
@@ -1114,9 +1245,9 @@ function expensesTab(a){
 
 function paymentsTab(a){
  if(a.free)return `<div class="locked-note">🎁 Esta actividad fue registrada sin cobro. Los gastos siguen disponibles en su pestaña.</div>`;
- const editable=done(a)&&balance(a)>0;
+ const editable=unlockedHistoryIds.has(a.id)||(done(a)&&balance(a)>0);
  const rows=(a.payments||[]).map((p,i)=>({...p,_i:i})).sort((x,y)=>String(x.date).localeCompare(String(y.date))).map(p=>`<div class="card"><div class="row" style="justify-content:space-between"><span>${panamaDate(p.date)} · <b>${money(p.amount)}</b></span>${editable?`<button class="mini" onclick="delPayment('${a.id}',${p._i})">✕</button>`:"<span class='history-lock'>🔒</span>"}</div></div>`).join("")||'<div class="muted">Sin pagos registrados.</div>';
- return`<div class="info"><div class="box"><small>Esperado</small><b>${money(a.expected)}</b></div><div class="box"><small>Final acordado</small><b>${money(finalAmt(a))}</b></div><div class="box"><small>Recibido</small><b>${money(received(a))}</b></div><div class="box"><small>Saldo</small><b>${money(balance(a))}</b></div>${extraordinary(a)>0?`<div class="box"><small>Excedente excepcional</small><b>${money(extraordinary(a))}</b></div>`:""}${negativeAdjustment(a)>0?`<div class="box"><small>Ajuste negativo</small><b>-${money(negativeAdjustment(a))}</b></div>`:""}<div class="box"><small>Regla de pago</small><b>${esc(a.paymentRule||placeConfig(a.venue)?.rule||"Hasta 7 días")}</b></div><div class="box"><small>Fecha estimada</small><b>${due(a)?panamaDate(due(a)):"No aplica"}</b></div></div>${a.paymentAdjustmentNote?`<div class="sectionline"><b>Observación</b><p>${esc(a.paymentAdjustmentNote)}</p></div>`:""}<div class="sectionline"><div class="triphead"><h3>Abonos</h3>${editable?`<button class="btn ghost small" onclick="addPayment('${a.id}')">＋ Agregar abono</button>`:`<span class="history-lock">🔒 Solo lectura</span>`}</div>${rows}</div>`
+ return`<div class="info"><div class="box"><small>Monto esperado</small><b>${money(finalAmt(a))}</b></div><div class="box"><small>Recibido</small><b>${money(received(a))}</b></div><div class="box"><small>Saldo</small><b>${money(balance(a))}</b></div>${extraordinary(a)>0?`<div class="box"><small>Excedente excepcional</small><b>${money(extraordinary(a))}</b></div>`:""}${negativeAdjustment(a)>0?`<div class="box"><small>Ajuste negativo</small><b>-${money(negativeAdjustment(a))}</b></div>`:""}<div class="box"><small>Condición de pago</small><b>${esc(a.paymentRule||placeConfig(a.venue)?.rule||"Hasta 7 días")}</b></div><div class="box"><small>Fecha estimada</small><b>${due(a)?panamaDate(due(a)):"No aplica"}</b></div></div>${a.paymentAdjustmentNote?`<div class="sectionline"><b>Observación</b><p>${esc(a.paymentAdjustmentNote)}</p></div>`:""}<div class="sectionline"><div class="triphead"><h3>Abonos</h3>${editable?`<button class="btn ghost small" onclick="addPayment('${a.id}')">＋ Agregar abono</button>`:`<span class="history-lock">🔒 Solo lectura</span>`}</div>${rows}</div>`
 }
 function delPayment(id,i){
  const a=state.activities.find(x=>x.id===id);if(!a||!a.payments?.[i])return;
@@ -1167,8 +1298,8 @@ function extraRow(a,e,i){
 function addExtra(id){let a=state.activities.find(x=>x.id===id);a.expenses.extras.push({id:uid(),category:"Comida",subtype:"Snack",amount:null});save();openDetail(id,"expenses")}
 function changeExtra(id,i,f,v){let a=state.activities.find(x=>x.id===id);a.expenses.extras[i][f]=f==="amount"?(v===""?null:Number(v)):v;if(f==="category"){if(v==="Comida")a.expenses.extras[i].subtype="Snack";else if(v==="Hospedaje")a.expenses.extras[i].subtype="Horas";else a.expenses.extras[i].subtype=""}save();openDetail(id,"expenses")}
 function delExtra(id,i){let a=state.activities.find(x=>x.id===id),old=a.expenses.extras.splice(i,1)[0];save();openDetail(id,"expenses");showUndo("Gasto eliminado",()=>{a.expenses.extras.splice(i,0,old);save();openDetail(id,"expenses")})}
-function deleteActivity(id){if(!confirm("¿Mover esta actividad al historial de eliminados?"))return;let i=state.activities.findIndex(x=>x.id===id),a=state.activities.splice(i,1)[0];state.deleted.push(a);save();D('detailDlg').close();showUndo("Actividad movida a eliminados",()=>{state.deleted=state.deleted.filter(x=>x.id!==id);state.activities.push(a);save()})}
-function restoreDeleted(id){let i=state.deleted.findIndex(x=>x.id===id),a=state.deleted.splice(i,1)[0];state.activities.push(a);save()}
+function deleteActivity(id){if(!confirm("¿Mover esta actividad al historial de eliminados?"))return;let i=state.activities.findIndex(x=>x.id===id),a=state.activities.splice(i,1)[0];state.deleted.push(a);save();queueCalendarDeletion(a);D('detailDlg').close();showUndo("Actividad movida a eliminados",()=>{if(a.calendarEventId&&calendarDeleteTimers[a.calendarEventId])clearTimeout(calendarDeleteTimers[a.calendarEventId]);state.deleted=state.deleted.filter(x=>x.id!==id);state.activities.push(a);save();queueCalendarSync(a.id)})}
+function restoreDeleted(id){let i=state.deleted.findIndex(x=>x.id===id),a=state.deleted.splice(i,1)[0];state.activities.push(a);save();queueCalendarSync(a.id)}
 function reuseDeleted(id){
  let a=state.deleted.find(x=>x.id===id);if(!a)return;
  let c=structuredClone(a);c.id=uid();c.date=todayISO();c.start="20:00";c.end="22:00";c.outcome="";c.liveStage="";c.payments=[];c.expenses={outbound:[],return:[],extras:[]};c.calendarEventId=null;c.source="manual";c.deletedFromCalendar=false;c.pendingCalendarLocation="";c.pendingCalendarVenue="";c.expenseReviewDone=false;c.expensePromptAnswered=false;c.paidFullAdjusted=false;c.paymentAdjustmentNote="";
@@ -1185,7 +1316,7 @@ function renderHeaderProfile(){
    av.innerHTML=`<img src="${esc(src)}" alt="Perfil">`;
  }
  if(sub){
-   sub.textContent=p.name?`${p.name} · La Mambito Sound · v6.7`:`La Mambito Sound · v6.7`;
+   sub.textContent=p.name?`${p.name} · La Mambito Sound · v6.8`:`La Mambito Sound · v6.8`;
  }
 }
 
@@ -1207,6 +1338,9 @@ async function loadGoogleProfile(force=false){
    localStorage.setItem(KEY,JSON.stringify(state));render();renderHeaderProfile();toast("Perfil de Google actualizado");
  }catch(e){toast("No se pudo cargar el perfil de Google")}
 }
+function saveProfileAndHome(){const p=state.settings.profile||{};p.name=($("profileName")?.value||p.name||"").trim();if(p.name)p.customName=true;state.settings.profile=p;state.settings.homeAddress=($("homeAddr")?.value||"").trim();save();toast("Perfil y dirección guardados")}
+function saveRegionalRates(){state.settings.regionRates={panama:Number($("ratePanama")?.value||50),panamaWest:Number($("rateWest")?.value||40),interior:Number($("rateInterior")?.value||60),beach:Number($("rateBeach")?.value||100)};save();toast("Tarifas regionales actualizadas")}
+function toggleGoogleClientIdEdit(){const el=$("googleClientId");if(!el)return;el.readOnly=!el.readOnly;if(!el.readOnly){el.focus();el.select();toast("Edición avanzada habilitada")}}
 function saveProfileName(){
  const v=($("profileName")?.value||"").trim();
  state.settings.profile.name=v;
@@ -1239,8 +1373,7 @@ function restoreGooglePhoto(){
 }
 
 function saveGoogleClientId(){
- state.settings.googleClientId=($("googleClientId")?.value||"").trim();save();
- toast(state.settings.googleClientId?"ID de Google guardado":"ID eliminado")
+ state.settings.googleClientId=($("googleClientId")?.value||DEFAULT_GOOGLE_CLIENT_ID).trim();save();const el=$("googleClientId");if(el)el.readOnly=true;toast("ID de Google guardado")
 }
 function loadGoogleGIS(){
  return new Promise((resolve,reject)=>{
@@ -1248,110 +1381,46 @@ function loadGoogleGIS(){
    const sc=document.createElement("script");sc.src="https://accounts.google.com/gsi/client";sc.async=true;sc.defer=true;sc.onload=resolve;sc.onerror=reject;document.head.appendChild(sc);
  })
 }
-async function connectGoogle(){
- const clientId=state.settings.googleClientId;
- if(!clientId)return toast("Primero guarda el ID de cliente OAuth de Google");
+async function connectGoogle(silent=false){
+ const clientId=state.settings.googleClientId||DEFAULT_GOOGLE_CLIENT_ID;if(!clientId){if(!silent)toast("Falta configurar el ID de Google");return false}
  try{
    await loadGoogleGIS();
-   googleTokenClient=google.accounts.oauth2.initTokenClient({
-     client_id:clientId,
-     scope:"openid email profile https://www.googleapis.com/auth/calendar.events",
-     callback:async r=>{
-       if(r.error)return toast("Google no autorizó el acceso");
-       googleAccessToken=r.access_token;state.settings.calendarConnected=true;save();toast("Google Calendar conectado");await loadGoogleProfile(false);await syncCalendar();
-     }
+   const ok=await new Promise(resolve=>{
+     let settled=false;const finish=v=>{if(settled)return;settled=true;resolve(v)};
+     googleTokenClient=google.accounts.oauth2.initTokenClient({client_id:clientId,scope:"openid email profile https://www.googleapis.com/auth/calendar.events",callback:async r=>{
+       if(r.error){if(!silent)toast("Google no autorizó el acceso");finish(false);return}
+       googleAccessToken=r.access_token;state.settings.calendarConnected=true;state.settings.googleTokenExpiresAt=Date.now()+Math.max(60,Number(r.expires_in||3600)-60)*1000;try{sessionStorage.setItem("olms_google_token",googleAccessToken);sessionStorage.setItem("olms_google_token_exp",String(state.settings.googleTokenExpiresAt))}catch(e){}localStorage.setItem(KEY,JSON.stringify(state));if(!silent)toast("Google Calendar conectado");try{await loadGoogleProfile(false)}catch(e){}renderMore();finish(true)
+     }});
+     googleTokenClient.requestAccessToken({prompt:""});setTimeout(()=>finish(false),15000);
    });
-   googleTokenClient.requestAccessToken({prompt:""});
- }catch(e){toast("No se pudo iniciar Google OAuth desde esta dirección")}
+   if(ok&&!silent)await syncCalendar(true);return ok;
+ }catch(e){console.error(e);if(!silent)toast("No se pudo iniciar Google OAuth desde esta dirección");return false}
 }
-async function gfetch(url,opt={}){
- const r=await fetch(url,{...opt,headers:{...(opt.headers||{}),Authorization:`Bearer ${googleAccessToken}`}});
- if(!r.ok)throw new Error(await r.text()); if(r.status===204)return null; return r.json()
-}
+async function gfetch(url,opt={}){const r=await fetch(url,{...opt,headers:{...(opt.headers||{}),Authorization:`Bearer ${googleAccessToken}`}});if(!r.ok){if(r.status===401){googleAccessToken=null;try{sessionStorage.removeItem("olms_google_token");sessionStorage.removeItem("olms_google_token_exp")}catch(e){}}const err=new Error(await r.text());err.status=r.status;throw err}if(r.status===204)return null;return r.json()}
 function calendarTitle(a){
  const venue=a.venue||"Lugar pendiente",type=a.type||"Otro",title=distinctTitle(a);
  if(a.kind==="ensayo")return`🎵 Ensayo Mambito Sound${a.type==="Ensayo especial"&&title?` – ${title}`:""} | ${venue}`;
  if(a.kind==="presentacion")return`🎤 Presentación Mambito Sound – ${type}${title?`: ${title}`:""} | ${venue}`;
  if(a.kind==="viaje")return`✈️ Viaje Mambito Sound${title?` – ${title}`:""}${venue?` | ${venue}`:""}`;
  if(a.kind==="grabacion")return`🎙️ Grabación Mambito Sound${title?` – ${title}`:""}${venue?` | ${venue}`:""}`;
- if(a.kind==="promocion")return`📣 Promoción Mambito Sound${title?` – ${title}`:""}${venue?` | ${venue}`:""}`;
- return`Mambito Sound${title?` – ${title}`:""}${venue?` | ${venue}`:""}`
+ if(a.kind==="promocion")return`📣 Promoción Mambito Sound${title?` – ${title}`:""}${venue?` | ${venue}`:""}`;return`Mambito Sound${title?` – ${title}`:""}${venue?` | ${venue}`:""}`
 }
-function calendarLocationText(a){
- const loc=String(a.location||"").trim(),prov=String(a.province||"").trim();
- if(!loc)return prov||a.venue||"";if(!prov||normText(loc).includes(normText(prov)))return loc;return `${loc}, ${prov}`;
+function calendarLocationText(a){const loc=String(a.location||"").trim(),city=String(a.city||"").trim(),prov=String(a.province||"").trim(),country=String(a.country||"Panamá").trim();return [loc,city,prov,country].filter((v,i,arr)=>v&&arr.findIndex(x=>normText(x)===normText(v))===i).join(", ")||a.venue||""}
+function eventEndDate(a){let d=new Date(a.date+"T12:00:00");if(a.end<a.start)d.setDate(d.getDate()+1);return d.toISOString().slice(0,10)}
+function nightBeforeReminderMinutes(a){const start=new Date(`${a.date}T${a.start||"00:00"}:00-05:00`),prevLocal=new Date(`${a.date}T23:00:00-05:00`);prevLocal.setDate(prevLocal.getDate()-1);return Math.max(0,Math.min(40320,Math.round((start-prevLocal)/60000)))}
+function calendarPayload(a){return{summary:calendarTitle(a),location:calendarLocationText(a),description:`${a.type||"Actividad"}${distinctTitle(a)?`: ${distinctTitle(a)}`:""}${a.venue?` · ${a.venue}`:""}${a.location?` · ${a.location}`:""}${a.gpsLat!=null&&a.gpsLng!=null?` · GPS ${Number(a.gpsLat).toFixed(6)}, ${Number(a.gpsLng).toFixed(6)}`:""}${a.notes?`. ${a.notes}`:""}`,colorId:"3",start:{dateTime:`${a.date}T${a.start}:00-05:00`,timeZone:"America/Panama"},end:{dateTime:`${eventEndDate(a)}T${a.end}:00-05:00`,timeZone:"America/Panama"},reminders:{useDefault:false,overrides:[{method:"popup",minutes:nightBeforeReminderMinutes(a)}]}}}
+async function createCalendarEvent(a){const ev=await gfetch("https://www.googleapis.com/calendar/v3/calendars/primary/events",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(calendarPayload(a))});a.calendarEventId=ev.id;a.source="manual";localStorage.setItem(KEY,JSON.stringify(state));return ev}
+async function updateCalendarEvent(a){return await gfetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${encodeURIComponent(a.calendarEventId)}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify(calendarPayload(a))})}
+async function deleteCalendarEventById(eventId){if(!googleAccessToken||!eventId)return;try{await gfetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${encodeURIComponent(eventId)}`,{method:"DELETE"})}catch(e){if(e.status!==404)throw e}}
+async function pushActivityToCalendar(a){if(!a||!googleAccessToken||a.date<CALENDAR_SYNC_START)return false;try{if(a.calendarEventId){try{await updateCalendarEvent(a)}catch(e){if(e.status===404){a.calendarEventId=null;await createCalendarEvent(a)}else throw e}}else await createCalendarEvent(a);a.calendarSyncPending=false;state.settings.lastCalendarSync=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(state));render();return true}catch(e){console.error(e);a.calendarSyncPending=true;localStorage.setItem(KEY,JSON.stringify(state));return false}}
+let calendarSaveTimers={},calendarDeleteTimers={};
+function queueCalendarSync(id){const a=state.activities.find(x=>x.id===id);if(!a)return;a.calendarSyncPending=true;localStorage.setItem(KEY,JSON.stringify(state));clearTimeout(calendarSaveTimers[id]);toast(state.settings.calendarConnected?"Guardado en OLMS · Calendar se actualizará en 5 s":"Guardado en OLMS · conecta Google para sincronizar");calendarSaveTimers[id]=setTimeout(async()=>{delete calendarSaveTimers[id];const x=state.activities.find(y=>y.id===id);if(!x)return;if(!googleAccessToken&&state.settings.calendarConnected)await connectGoogle(true);if(googleAccessToken){const ok=await pushActivityToCalendar(x);toast(ok?"Google Calendar actualizado ✓":"Cambio guardado · Calendar pendiente")}},5000)}
+function queueCalendarDeletion(a){if(!a?.calendarEventId)return;const id=a.calendarEventId;clearTimeout(calendarDeleteTimers[id]);calendarDeleteTimers[id]=setTimeout(async()=>{if(!googleAccessToken&&state.settings.calendarConnected)await connectGoogle(true);if(googleAccessToken){try{await deleteCalendarEventById(id);toast("Evento retirado de Google Calendar")}catch(e){console.error(e)}}},5000)}
+async function syncCalendar(silent=false){
+ if(!googleAccessToken){if(state.settings.calendarConnected){await connectGoogle(true);if(!googleAccessToken){if(!silent)toast("Google necesita reconexión");return}}else{if(!silent)toast("Conecta Google primero");return}}
+ let ok=0,fail=0;for(const a of state.activities.filter(x=>x.date>=CALENDAR_SYNC_START)){const done=await pushActivityToCalendar(a);done?ok++:fail++}state.settings.lastCalendarSync=new Date().toISOString();state.settings.lastCalendarEntrySync=todayISO();localStorage.setItem(KEY,JSON.stringify(state));render();if(!silent)toast(fail?`${ok} enviados · ${fail} pendientes`:`Google Calendar actualizado · ${ok} actividades`)
 }
-function eventEndDate(a){
- let d=new Date(a.date+"T12:00:00");if(a.end<a.start)d.setDate(d.getDate()+1);return d.toISOString().slice(0,10)
-}
-function nightBeforeReminderMinutes(a){
- const start=new Date(`${a.date}T${a.start||"00:00"}:00-05:00`);
- const prevLocal=new Date(`${a.date}T23:00:00-05:00`);
- prevLocal.setDate(prevLocal.getDate()-1);
- const mins=Math.round((start-prevLocal)/60000);
- return Math.max(0,Math.min(40320,mins));
-}
-function calendarPayload(a){
- return{summary:calendarTitle(a),location:calendarLocationText(a),description:`${a.type||"Actividad"}${distinctTitle(a)?`: ${distinctTitle(a)}`:""}${a.venue?` · ${a.venue}`:""}${a.notes?`. ${a.notes}`:""}`,colorId:"3",
- start:{dateTime:`${a.date}T${a.start}:00-05:00`,timeZone:"America/Panama"},
- end:{dateTime:`${eventEndDate(a)}T${a.end}:00-05:00`,timeZone:"America/Panama"},
- reminders:{useDefault:false,overrides:[{method:"popup",minutes:nightBeforeReminderMinutes(a)}]}}
-}
-async function createCalendarEvent(a){
- const ev=await gfetch("https://www.googleapis.com/calendar/v3/calendars/primary/events",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(calendarPayload(a))});
- a.calendarEventId=ev.id;a.source="calendar";save();return ev
-}
-async function updateCalendarEvent(a){
- return await gfetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${encodeURIComponent(a.calendarEventId)}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify(calendarPayload(a))})
-}
-function parseGoogleEvent(ev){
- const st=ev.start?.dateTime||"",en=ev.end?.dateTime||"",sum=ev.summary||"";let kind="presentacion",type="Otro",title="",venue=(ev.location||"").split(",")[0]||"";
- if(sum.startsWith("🎵"))kind="ensayo";else if(sum.startsWith("✈️"))kind="viaje";else if(sum.startsWith("🎙️"))kind="grabacion";else if(sum.startsWith("📣"))kind="promocion";
- if(sum.includes("Presentación Mambito Sound")){
-   let tail=sum.split("Presentación Mambito Sound").pop().replace(/^\s*[–-]\s*/,"");let parts=tail.split("|").map(x=>x.trim());let left=parts[0]||"Otro";venue=parts[1]||venue;
-   if(left.includes(":")){let z=left.split(":");type=z.shift().trim()||"Otro";title=z.join(":").trim()}else type=left||"Otro";
- }else if(sum.includes("Ensayo Mambito Sound")){
-   type=sum.includes(" – ")?"Ensayo especial":"Ensayo regular";let parts=sum.split("|");venue=(parts[1]||venue).trim();if(sum.includes(" – "))title=sum.split(" – ")[1].split("|")[0].trim();
- }else{
-   const parts=sum.split("|").map(x=>x.trim());venue=parts[1]||venue;let left=parts[0]||"";title=left.replace(/^.*?Mambito Sound\s*[–-]?\s*/,"").trim();type=kind==="viaje"?"Viaje":kind==="grabacion"?"Grabación":kind==="promocion"?"Promoción":"Otro";
- }
- const loc=ev.location||"";
- return{calendarEventId:ev.id,kind,type,title:title||type,venue,location:loc,province:loc.toLowerCase().includes("panamá oeste")?"Panamá Oeste":loc.toLowerCase().includes("panamá")?"Panamá":"",gpsLat:null,gpsLng:null,gpsAccuracy:null,date:st.slice(0,10),start:st.slice(11,16)||"00:00",end:en.slice(11,16)||"23:59",notes:"",free:kind==="ensayo",outcome:"",payments:[],expenses:{outbound:[],return:[],extras:[]},source:"calendar"}
-}
-async function syncCalendar(){
- if(!googleAccessToken)return toast("Conecta Google primero");
- try{
-   const url="https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&timeMin="+encodeURIComponent(CALENDAR_SYNC_START_ISO)+"&maxResults=250&q="+encodeURIComponent("Mambito Sound");
-   const d=await gfetch(url),found=new Set();
-   for(const ev of (d.items||[])){
-     const rawStart=(ev.start?.dateTime||ev.start?.date||"").slice(0,10);
-     if(rawStart && rawStart<CALENDAR_SYNC_START)continue;
-     if(state.settings.permanentlyDeletedCalendarIds.includes(ev.id))continue;
-     if(state.deleted.some(x=>x.calendarEventId===ev.id)){found.add(ev.id);continue}
-     found.add(ev.id);const p=parseGoogleEvent(ev);let a=state.activities.find(x=>x.calendarEventId===ev.id);
-     if(!a)a=state.activities.find(x=>!x.calendarEventId&&x.date===p.date&&x.start===p.start);
-     if(!a){const near=state.activities.find(x=>!x.calendarEventId&&x.date===p.date&&(x.venue===p.venue||x.type===p.type)&&Math.abs(eventStartTime(x)-eventStartTime(p))<=90*60000);if(near&&confirm(`Calendar encontró una actividad que podría ser la misma:\n${near.title} · ${near.start}\n${p.type} · ${p.start}\n\n¿Vincularlas?`))a=near}
-     if(a){
-       const future=!a.outcome&&activityEndTime(a)>new Date();const before={date:a.date,start:a.start,end:a.end};
-       a.calendarEventId=ev.id;a.deletedFromCalendar=false;
-       if(!a.outcome){
-         a.source="calendar";a.kind=p.kind;a.type=p.type;
-         if(future){a.date=p.date;a.start=p.start;a.end=p.end}
-         if(p.location&&p.location!==(a.location||"")){a.pendingCalendarLocation=p.location;a.pendingCalendarVenue=p.venue;addAlert("📍 Ubicación cambiada en Calendar",`${a.title}: revisa la nueva ubicación antes de aplicarla.`,`cal-location-${ev.id}-${p.location}`)}
-         if(future&&(before.date!==a.date||before.start!==a.start||before.end!==a.end))addAlert("📅 Fecha u horario actualizado",`${a.title}: Google Calendar actualizó fecha u horario.`,`cal-time-${ev.id}-${a.date}-${a.start}`);
-       }
-     }else{
-       let kp=placeConfig(p.venue);p.expected=p.free?0:(kp?.rate??(p.province==="Panamá Oeste"?40:50));p.final=p.expected;p.paymentRule=kp?.rule||"Hasta 7 días";p.expenseReviewDone=false;p.expensePromptAnswered=false;p.liveStage="";p.paidFullAdjusted=false;
-       state.activities.push({...p,id:uid()});addAlert("📅 Nuevo evento de Calendar",`${calendarTitle(p)} · ${panamaDateTime(p.date,p.start)}`,`cal-new-${ev.id}`)
-     }
-   }
-   state.activities.filter(a=>a.calendarEventId&&a.date>=CALENDAR_SYNC_START&&!a.outcome).forEach(a=>{if(!found.has(a.calendarEventId)&&!a.deletedFromCalendar){a.deletedFromCalendar=true;addAlert("🗑️ Eliminado de Google Calendar",`${a.title} ya no aparece en Google Calendar.`,`cal-del-${a.calendarEventId}`)}});
-   state.settings.lastCalendarSync=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(state));render();toast(`Calendar sincronizado: ${(d.items||[]).length} eventos`);maybePromptPostActivity();maybeFireNativeNotifications()
- }catch(e){console.error(e);toast("No se pudo sincronizar Google Calendar")}
-}
-
-
-function calendarQuickAction(){googleAccessToken?syncCalendar():connectGoogle()}
+async function calendarQuickAction(){if(googleAccessToken)await syncCalendar();else await connectGoogle(false)}
 
 function addAlert(title,body,tag){
  if(state.alerts.some(x=>x.tag===tag))return;
@@ -1393,7 +1462,6 @@ function notificationItems(){
  state.activities.forEach(a=>{
    if(needsConfirmation(a))out.push({id:`confirm-${a.id}`,type:"confirm",title:"⏳ Actividad pendiente de confirmar",body:`${a.title} ya terminó. Actualiza qué ocurrió.`,activityId:a.id});
    if(done(a)&&!a.expenseReviewDone)out.push({id:`expense-${a.id}`,type:"expense",title:"💸 Gastos pendientes",body:`Revisa los gastos de ${a.title}.`,activityId:a.id});
-   if(a.deletedFromCalendar)out.push({id:`deleted-${a.id}`,type:"deleted",title:"🗑️ Eliminado de Google Calendar",body:`${a.title} ya no aparece en Calendar.`,activityId:a.id});
    if(isUpcoming(a)){
      const miss=incompleteFields(a);
      if(miss.length)out.push({id:`incomplete-${a.id}`,type:"incomplete",title:"📝 Información pendiente",body:`${a.title}: falta ${miss.join(", ")}.`,activityId:a.id});
@@ -1468,8 +1536,7 @@ async function saveReprogram(id){
  const conflict=findScheduleConflict(candidate,id);
  if(conflict)return alert(`No se puede reprogramar porque se cruza con:\n${conflict.title} · ${panamaDate(conflict.date)} · ${panamaRange(conflict)}`);
  a.date=date;a.start=start;a.end=end;a.outcome="";a.liveStage="";a.postPromptSnoozedUntil=null;a.expenseReviewDone=false;a.expensePromptAnswered=false;
- localStorage.setItem(KEY,JSON.stringify(state));render();D('postActivityDlg').close();toast("Actividad reprogramada");
- if(googleAccessToken&&a.calendarEventId){try{await updateCalendarEvent(a)}catch(e){toast("Reprogramada en OLMS; Calendar no pudo actualizarse")}}
+ localStorage.setItem(KEY,JSON.stringify(state));render();D('postActivityDlg').close();toast("Actividad reprogramada");queueCalendarSync(a.id)
 }
 function confirmPostOutcome(id,outcome){
  const a=state.activities.find(x=>x.id===id);if(!a)return;
@@ -1498,12 +1565,12 @@ function showHotelDestinationFlow(id){
 let returnHotelState=null;
 function showReturnHotelForm(id,mode="hours",prefill=""){
  const a=state.activities.find(x=>x.id===id);if(!a)return;returnHotelState={id,mode};
- $("postActivityBody").innerHTML=`<h2>🏨 Hotel después del evento</h2><p class="muted">${mode==="hours"?"Por horas siempre corresponde a 3 horas.":"Registra la nueva estadía."}</p><div class="hotel-mode"><button id="returnHotelHours" class="${mode==="hours"?"active":""}" onclick="setReturnHotelMode('hours')">⏱️ 3 horas</button><button id="returnHotelNight" class="${mode==="night"?"active":""}" onclick="setReturnHotelMode('night')">🌙 Toda la noche</button></div><div class="field"><label>¿A qué hotel irás?</label><input id="returnHotelName" value="${esc(prefill)}" placeholder="Nombre del hotel"></div><div class="field"><label>¿Cuánto pagarás?</label><input id="returnHotelAmount" type="number" step=".01" min="0" placeholder="B/. 0.00"></div><div class="row"><button class="btn primary" onclick="saveReturnHotel()">Continuar</button><button class="btn ghost" onclick="showReturnDestinationQuestion('${id}')">Volver</button></div>`
+ const now=new Date(),hhmm=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;$("postActivityBody").innerHTML=`<h2>🏨 Hotel después del evento</h2><p class="muted">${mode==="hours"?"Por horas siempre corresponde a 3 horas.":"Registra la nueva estadía."}</p><div class="hotel-mode"><button id="returnHotelHours" class="${mode==="hours"?"active":""}" onclick="setReturnHotelMode('hours')">⏱️ 3 horas</button><button id="returnHotelNight" class="${mode==="night"?"active":""}" onclick="setReturnHotelMode('night')">🌙 Toda la noche</button></div><div class="field"><label>¿A qué hotel irás?</label><input id="returnHotelName" value="${esc(prefill)}" placeholder="Nombre del hotel"></div><div class="field"><label>Hora de entrada</label><input id="returnHotelCheckIn" type="time" value="${hhmm}"></div><div class="field"><label>¿Cuánto pagarás?</label><input id="returnHotelAmount" type="number" step=".01" min="0" placeholder="B/. 0.00"></div><div class="row"><button class="btn primary" onclick="saveReturnHotel()">Continuar</button><button class="btn ghost" onclick="showReturnDestinationQuestion('${id}')">Volver</button></div>`
 }
 function setReturnHotelMode(mode){if(!returnHotelState)return;returnHotelState.mode=mode;$("returnHotelHours")?.classList.toggle("active",mode==="hours");$("returnHotelNight")?.classList.toggle("active",mode==="night")}
 function saveReturnHotel(){
- const st=returnHotelState,a=state.activities.find(x=>x.id===st?.id);if(!a)return;const name=String($("returnHotelName")?.value||"").trim(),raw=String($("returnHotelAmount")?.value||"").trim(),amount=Number(raw);if(!name)return toast("Escribe el nombre del hotel");if(raw===""||!Number.isFinite(amount)||amount<0)return toast("Escribe cuánto pagarás");
- a.expenses.extras.push({id:uid(),category:"Hospedaje",subtype:st.mode==="hours"?"3 horas":"Noche completa",hotelName:name,stayMode:st.mode,amount,createdAt:new Date().toISOString()});localStorage.setItem(KEY,JSON.stringify(state));render();showReturnTransportSelection(a.id,name,"hotel")
+ const st=returnHotelState,a=state.activities.find(x=>x.id===st?.id);if(!a)return;const name=String($("returnHotelName")?.value||"").trim(),checkIn=String($("returnHotelCheckIn")?.value||"").trim(),raw=String($("returnHotelAmount")?.value||"").trim(),amount=Number(raw);if(!name)return toast("Escribe el nombre del hotel");if(!checkIn)return toast("Indica la hora de entrada al hotel");if(raw===""||!Number.isFinite(amount)||amount<0)return toast("Escribe cuánto pagarás");
+ a.expenses.extras.push({id:uid(),category:"Hospedaje",subtype:st.mode==="hours"?"3 horas":"Noche completa",hotelName:name,stayMode:st.mode,checkIn,amount,createdAt:new Date().toISOString()});localStorage.setItem(KEY,JSON.stringify(state));render();showReturnTransportSelection(a.id,name,"hotel")
 }
 function showReturnTransportSelection(id,destination,destinationType){
  const a=state.activities.find(x=>x.id===id);if(!a)return;const choices=TRANSPORTS;
@@ -1605,18 +1672,19 @@ function openQuickExpense(id,category,opts={}){
  const a=state.activities.find(x=>x.id===id);if(!a)return;
  if(a.outcome&&a.expenseReviewDone&&pendingExp(a)===0)return toast("Los gastos de esta actividad ya están cerrados");
  const side=opts.side||((a.liveStage==="ended"||done(a))?"return":"outbound");
- quickExpenseState={id,category,subtype:category==="Comida"?"Cena":"",stayMode:category==="Hospedaje"?"night":"",hotelName:"",transport:opts.transport||habitualTransport(a,side),side,destination:opts.destination||"",destinationType:opts.destinationType||"",showAllTransport:false,editId:null,bucket:null,amount:"",driver:"",allowPending:!!opts.allowPending,afterSave:opts.afterSave||""};renderQuickExpense()
+ quickExpenseState={id,category,subtype:category==="Comida"?"Cena":"",stayMode:category==="Hospedaje"?"night":"",hotelName:"",checkIn:"",transport:opts.transport||habitualTransport(a,side),side,destination:opts.destination||"",destinationType:opts.destinationType||"",showAllTransport:false,editId:null,bucket:null,amount:"",driver:"",allowPending:!!opts.allowPending,afterSave:opts.afterSave||""};renderQuickExpense()
 }
 function openEditExpense(id,bucket,expenseId){
  const a=state.activities.find(x=>x.id===id),ref=findExpenseRef(a,bucket,expenseId);if(!a||!ref)return;
  const e=ref.e,category=bucket==="extras"?(e.category||"Otro"):"Transporte";
- quickExpenseState={id,category,subtype:e.subtype||"",stayMode:e.stayMode||((/noche/i.test(e.subtype||""))?"night":/hora/i.test(e.subtype||"")?"hours":""),hotelName:e.hotelName||"",transport:e.type||"uber",side:bucket==="return"?"return":"outbound",destination:e.destination||"",destinationType:e.destinationType||"",showAllTransport:true,editId:e.id,bucket,amount:e.amount==null?"":String(e.amount),driver:e.driver||"",allowPending:e.amount==null,afterSave:""};renderQuickExpense()
+ quickExpenseState={id,category,subtype:e.subtype||"",stayMode:e.stayMode||((/noche/i.test(e.subtype||""))?"night":/hora/i.test(e.subtype||"")?"hours":""),hotelName:e.hotelName||"",checkIn:e.checkIn||"",transport:e.type||"uber",side:bucket==="return"?"return":"outbound",destination:e.destination||"",destinationType:e.destinationType||"",showAllTransport:true,editId:e.id,bucket,amount:e.amount==null?"":String(e.amount),driver:e.driver||"",allowPending:e.amount==null,afterSave:""};renderQuickExpense()
 }
-function snapshotQuick(){if(!quickExpenseState)return;const a=$("quickAmount"),d=$("quickDetail"),h=$("quickHotelName"),dr=$("quickDriver");if(a)quickExpenseState.amount=a.value;if(d)quickExpenseState.subtype=d.value;if(h)quickExpenseState.hotelName=h.value;if(dr)quickExpenseState.driver=dr.value}
+function snapshotQuick(){if(!quickExpenseState)return;const a=$("quickAmount"),d=$("quickDetail"),h=$("quickHotelName"),ci=$("quickHotelCheckIn"),dr=$("quickDriver");if(a)quickExpenseState.amount=a.value;if(d)quickExpenseState.subtype=d.value;if(h)quickExpenseState.hotelName=h.value;if(ci)quickExpenseState.checkIn=ci.value;if(dr)quickExpenseState.driver=dr.value}
 function setQuickAmount(v){const el=$("quickAmount");if(el){el.value=v;quickExpenseState.amount=v}}
 function quickChooseSide(side){snapshotQuick();quickExpenseState.side=side;const a=state.activities.find(x=>x.id===quickExpenseState.id);if(a&&!quickExpenseState.editId)quickExpenseState.transport=habitualTransport(a,side);renderQuickExpense()}
 function quickChooseTransport(type){snapshotQuick();quickExpenseState.transport=type;renderQuickExpense()}
 function quickChooseSubtype(v){snapshotQuick();quickExpenseState.subtype=v;renderQuickExpense()}
+function addHoursHHMM(v,hours){if(!/^\d{2}:\d{2}$/.test(String(v||"")))return"";let [h,m]=v.split(":").map(Number),mins=(h*60+m+hours*60)%(24*60);return`${String(Math.floor(mins/60)).padStart(2,"0")}:${String(mins%60).padStart(2,"0")}`}
 function quickChooseHotelMode(v){snapshotQuick();quickExpenseState.stayMode=v;quickExpenseState.subtype=v==="hours"?"3 horas":"Noche completa";renderQuickExpense()}
 function toggleQuickTransportAll(){snapshotQuick();quickExpenseState.showAllTransport=!quickExpenseState.showAllTransport;renderQuickExpense()}
 function renderQuickExpense(){
@@ -1628,7 +1696,7 @@ function renderQuickExpense(){
    <div class="quick-step"><h4>2 · Medio de transporte</h4>${!q.showAllTransport?`<div class="transport-section-title">Más usados${a.venue?` en ${esc(a.venue)}`:""}</div>`:""}<div class="transport-picker">${list.map(x=>`<button class="transport-choice ${q.transport===x[0]?"active":""}" onclick="quickChooseTransport('${x[0]}')"><img src="${transportIcon(x[0])}" alt="${x[1]}"><span>${x[1]}</span>${q.transport===x[0]?'<span class="selected-label">✓ Seleccionado</span>':""}</button>`).join("")}</div><button class="transport-more" onclick="toggleQuickTransportAll()">${q.showAllTransport?"Ver más usados":"Ver todos los transportes"}</button>${q.transport==="personal"?`<div class="field"><label>Quién conduce (opcional)</label><input id="quickDriver" value="${esc(q.driver||"")}" placeholder="Nombre"></div>`:""}</div>`;
  }
  if(q.category==="Comida")body=`<div class="quick-step"><h4>1 · Tipo de comida</h4><div class="choice-pills">${FOOD.map(x=>`<button class="choice-pill ${q.subtype===x?"active":""}" onclick="quickChooseSubtype('${x}')">${x}</button>`).join("")}</div></div>`;
- if(q.category==="Hospedaje")body=`<div class="quick-step"><h4>1 · Modalidad</h4><div class="hotel-mode"><button class="${q.stayMode==="hours"?"active":""}" onclick="quickChooseHotelMode('hours')">⏱️ Por horas</button><button class="${q.stayMode==="night"?"active":""}" onclick="quickChooseHotelMode('night')">🌙 Toda la noche</button></div>${q.stayMode==="hours"?'<div class="hour-note">En OLMS, hotel por horas = 3 horas.</div>':""}</div><div class="quick-step"><h4>2 · Hotel</h4><div class="field"><label>Nombre del hotel</label><input id="quickHotelName" value="${esc(q.hotelName||"")}" placeholder="Ej. Hotel Eclipse"></div></div>`;
+ if(q.category==="Hospedaje"){const cover=q.stayMode==="hours"&&q.checkIn?addHoursHHMM(q.checkIn,3):"";body=`<div class="quick-step"><h4>1 · Modalidad</h4><div class="hotel-mode"><button class="${q.stayMode==="hours"?"active":""}" onclick="quickChooseHotelMode('hours')">⏱️ Por horas</button><button class="${q.stayMode==="night"?"active":""}" onclick="quickChooseHotelMode('night')">🌙 Toda la noche</button></div>${q.stayMode==="hours"?'<div class="hour-note">En OLMS, hotel por horas = 3 horas.</div>':""}</div><div class="quick-step"><h4>2 · Hotel</h4><div class="field"><label>Nombre del hotel</label><input id="quickHotelName" value="${esc(q.hotelName||"")}" placeholder="Ej. Hotel Eclipse"></div><div class="field"><label>Hora de entrada</label><input id="quickHotelCheckIn" type="time" value="${esc(q.checkIn||"")}" onchange="snapshotQuick();renderQuickExpense()"></div>${cover?`<div class="hotel-coverage">Cubierto hasta las ${cover}</div>`:""}</div>`;}
  if(q.category==="Otro")body=`<div class="quick-step"><h4>1 · Detalle</h4><div class="field"><label>Concepto</label><input id="quickDetail" value="${esc(q.subtype||"")}" placeholder="Ej. vestuario, estacionamiento..."></div></div>`;
  const recent=recentAmounts(a,q.category,amountKey,q.transport),step=q.category==="Transporte"?"3":q.category==="Hospedaje"?"3":"2";
  body+=`<div class="quick-step"><h4>${step} · Monto pagado</h4><div class="field"><input id="quickAmount" class="amount-box" type="number" inputmode="decimal" step=".01" min="0" placeholder="B/. 0.00" value="${esc(q.amount||"")}"></div>${recent.length?`<div><small class="muted">Montos recientes para esta opción</small><div class="recent-amounts">${recent.map(v=>`<button onclick="setQuickAmount('${v.toFixed(2)}')">${money(v)}</button>`).join("")}</div></div>`:""}${q.allowPending?`<small class="form-help">Puedes dejar el monto vacío y completarlo después.</small>`:""}</div>`;
@@ -1640,10 +1708,10 @@ function deleteCurrentExpense(){
 }
 function saveQuickExpense(){
  snapshotQuick();const q=quickExpenseState,a=state.activities.find(x=>x.id===q.id);if(!a)return;const raw=String(q.amount??"").trim();let amount=raw===""?null:Number(raw);if(amount!=null&&(!Number.isFinite(amount)||amount<0))return toast("Monto no válido");if(amount==null&&!q.allowPending)return toast("Escribe el monto del gasto");
- if(q.category==="Hospedaje"&&!String(q.hotelName||"").trim())return toast("Escribe el nombre del hotel");
- if(amount!=null){const currentOld=q.editId?(findExpenseRef(a,q.bucket,q.editId)?.e.amount||0):0,projected=expTotal(a)-Number(currentOld||0)+amount;if(finalAmt(a)>0&&projected>=finalAmt(a)*.5&&!confirm(`⚠️ Con este gasto ya habrás consumido al menos la mitad de lo acordado para este evento.\n\n¿Registrar el gasto de todas formas?`))return}
+ if(q.category==="Hospedaje"&&!String(q.hotelName||"").trim())return toast("Escribe el nombre del hotel");if(q.category==="Hospedaje"&&!String(q.checkIn||"").trim())return toast("Indica la hora de entrada al hotel");
+ if(amount!=null){const currentOld=q.editId?(findExpenseRef(a,q.bucket,q.editId)?.e.amount||0):0,projected=expTotal(a)-Number(currentOld||0)+amount;if(finalAmt(a)>0&&projected>=finalAmt(a)*.5&&!confirm(`⚠️ Con este gasto ya habrás consumido al menos la mitad del monto esperado para este evento.\n\n¿Registrar el gasto de todas formas?`))return}
  const createdAt=q.editId?(findExpenseRef(a,q.bucket,q.editId)?.e.createdAt||new Date().toISOString()):new Date().toISOString();let targetBucket=q.category==="Transporte"?q.side:"extras";
- const obj=q.category==="Transporte"?{id:q.editId||uid(),type:q.transport,amount,driver:q.driver||"",destination:q.destination||"",destinationType:q.destinationType||"",createdAt,planned:amount==null}:{id:q.editId||uid(),category:q.category==="Otro"?"Otro":q.category,subtype:q.category==="Hospedaje"?(q.stayMode==="hours"?"3 horas":"Noche completa"):(q.subtype||q.category),hotelName:q.category==="Hospedaje"?String(q.hotelName||"").trim():"",stayMode:q.category==="Hospedaje"?q.stayMode:"",amount,createdAt};
+ const obj=q.category==="Transporte"?{id:q.editId||uid(),type:q.transport,amount,driver:q.driver||"",destination:q.destination||"",destinationType:q.destinationType||"",createdAt,planned:amount==null}:{id:q.editId||uid(),category:q.category==="Otro"?"Otro":q.category,subtype:q.category==="Hospedaje"?(q.stayMode==="hours"?"3 horas":"Noche completa"):(q.subtype||q.category),hotelName:q.category==="Hospedaje"?String(q.hotelName||"").trim():"",stayMode:q.category==="Hospedaje"?q.stayMode:"",checkIn:q.category==="Hospedaje"?q.checkIn:"",amount,createdAt};
  if(q.editId){const oldRef=findExpenseRef(a,q.bucket,q.editId);if(oldRef){oldRef.arr.splice(oldRef.i,1);a.expenses[targetBucket].push(obj)}}else a.expenses[targetBucket].push(obj);
  a.expensePromptAnswered=true;localStorage.setItem(KEY,JSON.stringify(state));D('quickExpenseDlg').close();render();if(D('detailDlg').open)openDetail(a.id,"expenses");toast(amount==null?"Gasto guardado con monto pendiente":"Gasto guardado");if(q.afterSave==="post-expenses")setTimeout(()=>showExpenseQuestion(a.id),120)
 }
@@ -1651,19 +1719,16 @@ function reviewCalendarLocation(id){
  const a=state.activities.find(x=>x.id===id);if(!a?.pendingCalendarLocation)return;const loc=a.pendingCalendarLocation,venue=a.pendingCalendarVenue||loc.split(",")[0];
  if(!confirm(`Google Calendar cambió la ubicación a:\n${loc}\n\n¿Aplicar esta nueva ubicación en Control OLMS?`))return;
  a.location=loc;if(venue)a.venue=venue;a.pendingCalendarLocation="";a.pendingCalendarVenue="";
- const p=placeConfig(a.venue);if(p&&isUpcoming(a)&&confirm("¿Aplicar también la tarifa y regla de pago habituales del nuevo lugar a esta actividad futura?")){a.expected=p.rate??a.expected;a.final=p.rate??a.final;a.paymentRule=p.rule||a.paymentRule}
+ const p=placeConfig(a.venue);if(p&&isUpcoming(a)&&confirm("¿Aplicar también la tarifa y regla de pago habituales del nuevo lugar a esta actividad futura?")){a.expected=p.rate??a.expected;a.final=a.expected;a.paymentRule=p.rule||a.paymentRule}
  save();if(D('detailDlg').open)openDetail(id,"summary");toast("Ubicación actualizada")
 }
 function dismissCalendarLocation(id){const a=state.activities.find(x=>x.id===id);if(!a)return;a.pendingCalendarLocation="";a.pendingCalendarVenue="";save();if(D('detailDlg').open)openDetail(id,"summary")}
 
+let lastSilentConnectAttempt=0,entryCalendarSyncDone=false;
 async function maybeAutoCalendarSync(){
- if(!googleAccessToken)return;
- const last=state.settings.lastCalendarSync?new Date(state.settings.lastCalendarSync):null;
- const now=new Date();
- const stale=!last||(now-last)>10*60*1000;
- const afterFive=now.getHours()>=5;
- const notToday=!last||last.toDateString()!==now.toDateString();
- if(stale||(afterFive&&notToday))await syncCalendar();
+ const now=new Date(),today=todayISO(),entryNeeded=!entryCalendarSyncDone,midnight=now.getHours()===0&&now.getMinutes()<5&&state.settings.lastMidnightSync!==today,pending=state.activities.some(a=>a.calendarSyncPending);
+ if(!googleAccessToken&&state.settings.calendarConnected&&Date.now()-lastSilentConnectAttempt>60000){lastSilentConnectAttempt=Date.now();await connectGoogle(true)}
+ if(googleAccessToken&&(entryNeeded||midnight||pending)){await syncCalendar(true);entryCalendarSyncDone=true;if(midnight)state.settings.lastMidnightSync=today;localStorage.setItem(KEY,JSON.stringify(state))}
 }
 
 let deferredInstallPrompt=null;
@@ -1697,25 +1762,19 @@ function switchView(view){
 }
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>switchView(b.dataset.view));
 $("akind").onchange=()=>{
- const k=$("akind").value;
- if(k==="ensayo"){$("atype").value="Ensayo regular";setBillingMode(true)}
- else if(k==="viaje"){$("atype").value="Viaje";setBillingMode(false)}
- else if(k==="grabacion"){$("atype").value="Grabación"}
- else if(k==="promocion"){$("atype").value="Promoción"}
- else {if(["Ensayo regular","Ensayo especial","Viaje","Grabación","Promoción"].includes($("atype").value))$("atype").value="Boda";setBillingMode(false)}
- applyActivityDefaults();updateFormGuidance()
+ const k=$("akind").value;if(k==="ensayo"){$("atype").value="Ensayo regular";setBillingMode(true)}else if(k==="viaje"){$("atype").value="Viaje";setBillingMode(false)}else if(k==="grabacion"){$("atype").value="Grabación"}else if(k==="promocion"){$("atype").value="Promoción"}else{if(["Ensayo regular","Ensayo especial","Viaje","Grabación","Promoción"].includes($("atype").value))$("atype").value="Boda";setBillingMode(false)}resetIncompatiblePlace();refreshVenueList();applyActivityDefaults();updateFormGuidance()
 };
 $("atype").addEventListener("change",()=>{
- const t=$("atype").value;if(t.startsWith("Ensayo")){$("akind").value="ensayo";setBillingMode(true)}else if(t==="Viaje")$("akind").value="viaje";else if(t==="Grabación")$("akind").value="grabacion";else if(t==="Promoción")$("akind").value="promocion";
- applyActivityDefaults();updateFormGuidance()
+ const t=$("atype").value;if(t.startsWith("Ensayo")){$("akind").value="ensayo";setBillingMode(true)}else if(t==="Viaje")$("akind").value="viaje";else if(t==="Grabación")$("akind").value="grabacion";else if(t==="Promoción")$("akind").value="promocion";else $("akind").value="presentacion";resetIncompatiblePlace();refreshVenueList();applyActivityDefaults();updateFormGuidance()
 });
 $("atitle").addEventListener("input",updateFormGuidance);
 $("avenue").addEventListener("input",updateFormGuidance);$("avenue").addEventListener("change",applyKnownPlace);$("avenue").addEventListener("blur",applyKnownPlace);
-$("aprovince").addEventListener("input",updateFormGuidance);$("aprovince").addEventListener("blur",()=>applyRateSuggestion(false));
+$("acountry").addEventListener("change",updateCountryFields);$("aprovince").addEventListener("change",()=>{populateDistricts($("aprovince").value,"");applyRateSuggestion(true);updateFormGuidance()});$("aregion").addEventListener("input",updateFormGuidance);$("acity").addEventListener("change",updateFormGuidance);$("aforeigncity").addEventListener("input",updateFormGuidance);
 $("alocation").addEventListener("input",updateFormGuidance);$("alocation").addEventListener("blur",()=>applyRateSuggestion(false));
-$("adate").addEventListener("change",updateDuePreview);$("apaymentrule").addEventListener("input",updateDuePreview);
+$("adate").addEventListener("change",updateDuePreview);$("apaymentcondition").addEventListener("change",()=>updatePaymentConditionFields(true));$("apaymentvalue").addEventListener("input",updateDuePreview);$("apaymentother").addEventListener("input",updateDuePreview);
 $("astart").addEventListener("change",()=>{plusTwoHours();updateFormGuidance()});
-$("aexpected").addEventListener("input",()=>{if(autoFinal)$("afinal").value=$("aexpected").value});$("afinal").addEventListener("input",()=>{autoFinal=false});$("afree").addEventListener("change",()=>{syncFreeFields();updateFormGuidance()});
+$("aexpected").addEventListener("input",updateDuePreview);$("afree").addEventListener("change",()=>{syncFreeFields();updateFormGuidance()});
+populateLocationSelectors("Panamá","","");paymentRuleToUI("7 días después");
 render();
 refreshVenueList();
 switchView("dashboard");

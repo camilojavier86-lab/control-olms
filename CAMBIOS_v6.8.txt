@@ -1,0 +1,95 @@
+CONTROL OLMS v6.8 FINAL — CAMBIOS PRINCIPALES
+Fecha: 23/09/2026
+
+Esta versión conserva todo lo preparado en la primera revisión de v6.8 y añade las correcciones finales solicitadas antes de instalarla.
+
+1. CREAR ACTIVIDAD
+- Se mantiene el diseño por tarjetas.
+- Orden lógico: Tipo de actividad → Identificación → Lugar → Fecha y horario → Cobro → Gastos → Observación.
+- Dos acciones finales diferenciadas:
+  • Guardar: crea una actividad única, sin convertirla en regla recurrente.
+  • Guardar como habitual: guarda la actividad y además memoriza lugar, ubicación, horario, cobro y condición de pago para futuras actividades compatibles.
+- Título y lugar siguen siendo conceptos separados.
+- Eventos únicos como bodas pueden guardarse normalmente sin convertir nombres como “Adrián y María” en patrones recurrentes.
+
+2. LUGARES INTELIGENTES
+- Las sugerencias de Lugar ahora dependen del tipo de actividad seleccionado.
+- Ejemplo: Casa de Russo aparece para ensayos compatibles, pero no como sugerencia al seleccionar Casino.
+- Un lugar usado anteriormente puede seguir recuperando sus datos físicos (país, provincia, distrito, dirección y GPS) sin que por ello se convierta en una actividad habitual.
+- Al cambiar el tipo de actividad, OLMS limpia un lugar conocido incompatible para evitar arrastrar datos erróneos.
+- Los lugares habituales pueden reutilizar tipo, horario, condición de pago y monto cuando corresponda.
+
+3. PAÍS, PROVINCIA, DISTRITO Y GPS
+- País: Panamá por defecto, editable con listado de países integrado en la app.
+- Panamá mantiene selector de las 10 provincias.
+- Distrito ahora es también un selector dependiente de la provincia; al cambiar provincia se eliminan distritos incompatibles.
+- Para otros países aparecen Provincia / región / estado y Ciudad / distrito como campos libres.
+- GPS tiene prioridad para validar la región: al capturar, marcar en el mapa o pegar coordenadas, OLMS intenta reconocer automáticamente país, provincia y distrito mediante geocodificación inversa gratuita.
+- Si el GPS contradice los campos anteriores, los datos administrativos se actualizan para evitar errores en los cálculos de cobro.
+- Si la geocodificación no está disponible, las coordenadas se conservan y la región queda indicada como pendiente de confirmar.
+- Se mantienen: Mi ubicación, Elegir en mapa, Pegar ubicación y Ver en Google Maps.
+
+4. TARIFAS Y COBRO
+- Tarifas base automáticas en Panamá:
+  • Provincia de Panamá: B/.50.00
+  • Panamá Oeste: B/.40.00
+  • Otras provincias: B/.60.00
+  • Playa / resort: B/.100.00
+- Fuera de Panamá el monto queda por definir, salvo regla habitual guardada.
+- “Monto esperado” sigue siendo el único monto base visible.
+- “Regla de pago” se simplifica y pasa a llamarse “Condición de pago”.
+- Condiciones seleccionables sin escribir frases largas:
+  • Mismo día
+  • Días después
+  • Día fijo del mes
+  • Antes del evento
+  • Otra condición
+- Solo aparece el dato adicional necesario (cantidad de días, día del mes o texto excepcional).
+- La fecha estimada se calcula automáticamente cuando la condición permite determinarla.
+
+5. GASTOS
+- No se solicita fecha ni hora para gastos normales: pertenecen automáticamente a la fecha del evento.
+- Hospedaje es la única excepción: solicita hora de entrada.
+- Hotel por horas mantiene la regla de 3 horas y muestra hasta qué hora queda cubierto.
+- Noche completa conserva la lógica de no volver a cobrar el mismo hospedaje al regresar después del evento.
+- El desglose continúa en orden de registro y cada gasto puede editarse cuando la actividad está abierta o temporalmente desbloqueada.
+- Se mantienen los iconos de transporte existentes y los logos oficiales ya integrados para Uber e InDrive.
+
+6. EVENTOS CERRADOS
+- Los eventos completados siguen protegidos contra cambios accidentales.
+- Se añade “Desbloquear edición”.
+- El desbloqueo es temporal y permite corregir datos principales, pagos y gastos.
+- Al guardar la actividad vuelve a quedar bloqueada.
+- Si una corrección histórica afecta lugar, GPS, provincia, distrito, cobro o condición de pago, OLMS puede preguntar si también debe actualizar la información utilizada en futuros eventos de ese lugar.
+
+7. IMPORTAR DESDE MENSAJE
+- El botón + mantiene Crear manualmente e Importar desde mensaje.
+- Se puede pegar información recibida por WhatsApp y OLMS prepara un borrador para revisión.
+- Detecta cuando es posible: tipo, título, lugar conocido, fecha, horario, monto, provincia/país, GPS y observaciones.
+- Nunca guarda automáticamente sin revisión del usuario.
+
+8. GOOGLE CALENDAR
+- Sincronización unidireccional: OLMS → Google Calendar.
+- Google Calendar no modifica ni crea registros dentro de OLMS.
+- Crear o editar una actividad genera una actualización 5 segundos después de guardar.
+- Se mantiene sincronización de seguridad al abrir la app y a medianoche cuando la PWA está activa.
+- Estado de conexión y última sincronización visibles en Configuración.
+- ID OAuth permanece en Configuración avanzada y protegido contra edición accidental.
+
+9. CONFIGURACIÓN
+- La pestaña inferior sigue llamándose “Más”.
+- La pantalla abierta desde ella se titula “Configuración”.
+- Dirección habitual / Casa permanece dentro de Mi perfil.
+- No existe “Restaurar datos de ejemplo”.
+- Se mantienen Tarifas, lugares, notificaciones, indicadores, eliminados, Google Calendar e instalación.
+
+10. COMPATIBILIDAD
+- Se mantiene la clave localStorage: control_olms_v2.
+- No es necesario borrar datos del navegador.
+- La actualización está preparada para instalarse sobre v6.7 conservando la información existente.
+
+VALIDACIONES REALIZADAS
+- Sintaxis JavaScript validada con Node.js.
+- Verificación estática de IDs y controles nuevos: distrito, condición de pago, doble guardado, GPS, desbloqueo e ingreso de hospedaje.
+- Revisión de compatibilidad de la clave localStorage y de los nombres de archivos PWA.
+- El entorno de prueba no permitió ejecutar un navegador local completo; por ello no se declara una prueba end-to-end de interfaz dentro del sandbox.
