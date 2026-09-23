@@ -1,5 +1,18 @@
-const C='control-olms-v6-6';
-const ASSETS=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./mambito-logo.png'];
+const C='control-olms-v6-7';
+const ASSETS=[
+  './',
+  './index.html',
+  './manifest.webmanifest',
+  './icon-192.png',
+  './icon-512.png',
+  './mambito-logo.png',
+  './google-calendar.jpeg',
+  './google-maps.jpeg',
+  './google.jpeg',
+  './whatsapp.jpeg',
+  './uber-logo.jpeg',
+  './indrive-logo.png'
+];
 
 self.addEventListener('install',e=>{
   e.waitUntil(caches.open(C).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()));

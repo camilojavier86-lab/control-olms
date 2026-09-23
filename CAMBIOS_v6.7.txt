@@ -1,0 +1,36 @@
+CONTROL OLMS v6.7 — ACTUALIZACIÓN
+Fecha: 23/09/2026
+
+Cambios principales
+- Inicio más limpio: se elimina el botón grande de gastos; se mantiene el acumulado general y la ganancia neta como dato principal.
+- Gastos y Navegar están disponibles antes de «Ya voy».
+- «Ya voy», «Llegué» y «Terminó» ahora activan un flujo operativo real.
+- «Ya voy» sugiere transporte de ida; «Llegué» ayuda a completar un transporte pendiente; «Terminó» pregunta primero participación/asistencia y luego destino y regreso.
+- Integración práctica con Uber: al abrir Uber desde Navegar, OLMS puede dejar preparado Transporte ida – Uber con monto pendiente para completarlo después.
+- Desglose cronológico de gastos por actividad, con iconos, total y edición individual mientras la actividad no esté totalmente cerrada.
+- Transporte rediseñado: Ida/Retorno, medio claramente seleccionado, montos recientes por medio (incluido B/. 0.00), medios habituales y todos los iconos existentes conservados.
+- Hospedaje: por horas = 3 horas; si se vuelve a un hotel por horas se registra un nuevo gasto. Si ya se pagó una noche completa y se regresa al mismo hotel, no se duplica el hospedaje.
+- Ubicación: Nombre del lugar, Provincia, Dirección y GPS quedan separados. Se puede guardar la ubicación actual y reutilizarla.
+- Lugares conocidos recuerdan dirección y GPS. Casa de Russo queda con la dirección indicada: San Nicolás, Calle 3 de Noviembre, entrando por La Seda. No se inventan coordenadas.
+- Formulario guiado por tipo de actividad, con ejemplos de llenado y autocompletado para datos recurrentes.
+- Título y Lugar no se repiten. Ejemplo de Calendar: «Presentación Mambito Sound – Boda: Adrián y María | Green Village».
+- Sección «Más» rediseñada como centro de control profesional, sin botón flotante +.
+- Logos de Google, Google Calendar, Google Maps, WhatsApp, Uber e InDrive incorporados donde representan servicios reales.
+- Compartir actividad por WhatsApp.
+- Historial cerrado protegido; eventos cerrados no son modificados por Calendar.
+- Corte de Google Calendar se mantiene desde 01/06/2026.
+
+Datos
+- Se mantiene la misma clave localStorage: control_olms_v2.
+- La actualización NO borra los datos existentes del navegador/dispositivo.
+- No borrar datos del sitio ni almacenamiento del navegador.
+
+Archivos nuevos o actualizados para GitHub Pages
+- index.html
+- sw.js
+- google-calendar.jpeg
+- google-maps.jpeg
+- google.jpeg
+- whatsapp.jpeg
+- uber-logo.jpeg
+- indrive-logo.png
