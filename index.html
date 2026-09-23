@@ -331,7 +331,7 @@ nav button{margin:4px;border-radius:12px}nav button.active{background:#111;color
 <dialog id="importDlg"><div class="dlg">
 <button class="iconbtn close" onclick="D('importDlg').close()">✕</button><h2>📋 Importar desde mensaje</h2><p class="muted">Copia el mensaje completo de WhatsApp y pégalo aquí. OLMS detectará lo que pueda y te mostrará el formulario para revisarlo.</p>
 <div class="field"><label>Mensaje recibido</label><textarea id="importText" rows="10" placeholder="Ej. Boda Adrián y María\nSábado 26 de septiembre\nGreen Village\n8:00 pm a 10:00 pm\nPago B/. 40.00"></textarea></div>
-<div class="row"><button class="btn primary" onclick="analyzeImportedText()">Analizar mensaje</button><button class="btn ghost" onclick="D('importDlg').close()">Cancelar</button></div>
+<div id="importStatus" class="gps-paste-preview hidden" style="margin-bottom:10px"></div><div class="row"><button id="importAnalyzeBtn" class="btn primary" onclick="analyzeImportedText()">Analizar mensaje</button><button class="btn ghost" onclick="D('importDlg').close()">Cancelar</button></div>
 </div></dialog>
 
 <dialog id="gpsPasteDlg"><div class="dlg">
@@ -1253,18 +1253,151 @@ async function applyPastedGPS(){
  pv.innerHTML=`<b>⚠️ No pude ubicar esa dirección automáticamente.</b><br>${district||prov?'Abriré el mapa en la zona seleccionada para que marques tú el punto exacto.':'Selecciona primero provincia/distrito o usa «Elegir en mapa» para marcar el punto exacto.'}`;
  if(district||prov){const fallback=await geocodeAddressForMap([district,prov,'Panamá'].filter(Boolean).join(', '));if(fallback)setTimeout(()=>{D('gpsPasteDlg').close();openMapPicker({lat:fallback.lat,lng:fallback.lng},'Zona aproximada',{requireTap:true})},350)}
 }
-function parseSpanishDate(text){const t=normText(text),now=new Date();let m=t.match(/\b(\d{1,2})[\/-](\d{1,2})(?:[\/-](\d{2,4}))?\b/);if(m){let y=m[3]?Number(m[3]):now.getFullYear();if(y<100)y+=2000;return`${y}-${String(Number(m[2])).padStart(2,'0')}-${String(Number(m[1])).padStart(2,'0')}`}const months={enero:1,febrero:2,marzo:3,abril:4,mayo:5,junio:6,julio:7,agosto:8,septiembre:9,setiembre:9,octubre:10,noviembre:11,diciembre:12};m=t.match(/\b(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|setiembre|octubre|noviembre|diciembre)(?:\s+de\s+(\d{4}))?/);if(m){const y=Number(m[3]||now.getFullYear());return`${y}-${String(months[m[2]]).padStart(2,'0')}-${String(Number(m[1])).padStart(2,'0')}`}return''}
+function parseSpanishDate(text){
+ const t=normText(text),now=new Date();let m=t.match(/\b(\d{1,2})[\/-](\d{1,2})(?:[\/-](\d{2,4}))?\b/);
+ if(m){let y=m[3]?Number(m[3]):now.getFullYear();if(y<100)y+=2000;return`${y}-${String(Number(m[2])).padStart(2,'0')}-${String(Number(m[1])).padStart(2,'0')}`}
+ const months={enero:1,febrero:2,marzo:3,abril:4,mayo:5,junio:6,julio:7,agosto:8,septiembre:9,setiembre:9,octubre:10,noviembre:11,diciembre:12};
+ m=t.match(/\b(\d{1,2})\s+(?:de\s+)?(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|setiembre|octubre|noviembre|diciembre)(?:\s+(?:de\s+)?(\d{4}))?/);
+ if(m){const y=Number(m[3]||now.getFullYear());return`${y}-${String(months[m[2]]).padStart(2,'0')}-${String(Number(m[1])).padStart(2,'0')}`}
+ return''
+}
 function parseTimeToken(h,m,ap){let hh=Number(h),mm=Number(m||0);ap=normText(ap||'');if(ap.startsWith('p')&&hh<12)hh+=12;if(ap.startsWith('a')&&hh===12)hh=0;return`${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`}
-function analyzeImportedText(){
- const text=$('importText').value.trim();if(!text)return toast('Pega primero el mensaje de WhatsApp');const n=normText(text),data={};
- const typeMap=[['boda','Boda'],['cumple','Cumpleaños'],['quince','Quince años'],['15 anos','Quince años'],['corporativo','Evento corporativo'],['festival','Festival'],['carnaval','Carnaval'],['concierto','Concierto'],['grabacion','Grabación'],['promocion','Promoción'],['ensayo regular','Ensayo regular'],['ensayo','Ensayo especial'],['viaje','Viaje']];for(const [k,v] of typeMap)if(n.includes(k)){data.type=v;break}data.kind=data.type?.startsWith('Ensayo')?'ensayo':data.type==='Viaje'?'viaje':data.type==='Grabación'?'grabacion':data.type==='Promoción'?'promocion':'presentacion';
- const known=[...KNOWN_PLACES,...Object.keys(state.settings.placeDefaults||{}).map(name=>({name,match:[normText(name)]}))].find(p=>(p.match||[normText(p.name)]).some(k=>n.includes(normText(k))));if(known)data.venue=known.name;
- const lines=text.split(/\n+/).map(x=>x.trim()).filter(Boolean),labeled=(label)=>{const r=new RegExp(`^${label}\\s*[:\\-]\\s*(.+)$`,'i');for(const line of lines){const m=line.match(r);if(m)return m[1].trim()}return''};data.venue=data.venue||labeled('lugar|local|sal[oó]n|sitio');data.title=labeled('t[ií]tulo|evento|actividad');if(!data.title&&lines[0]){let first=lines[0].replace(/^(boda|cumplea[nñ]os|quince a[nñ]os|ensayo regular|ensayo|presentaci[oó]n|toque)\s*[:\-]?\s*/i,'').trim();if(first&&first!==lines[0]||(/boda/i.test(lines[0])&&first))data.title=first}
- data.date=parseSpanishDate(text);const times=[...text.matchAll(/\b(\d{1,2})(?::(\d{2}))?\s*(a\.?\s*m\.?|p\.?\s*m\.?)\b/gi)];if(times[0])data.start=parseTimeToken(times[0][1],times[0][2],times[0][3]);if(times[1])data.end=parseTimeToken(times[1][1],times[1][2],times[1][3]);
- const amt=text.match(/(?:B\s*\/\s*\.|B\.|USD|US\$|\$)\s*(\d+(?:[.,]\d{1,2})?)/i);if(amt)data.expected=Number(amt[1].replace(',','.'));const gps=parseGPSInput(text);if(gps){data.gpsLat=gps.lat;data.gpsLng=gps.lng}
+function cleanImportedText(v){return String(v||'').replace(/[\*_~`]/g,'').replace(/\r/g,'').replace(/[ \t]+/g,' ').replace(/\n{3,}/g,'\n\n').trim()}
+function isoAddDays(iso,days){const d=new Date(`${iso}T12:00:00-05:00`);d.setDate(d.getDate()+days);return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function importedWeekdayIndex(iso){return new Date(`${iso}T12:00:00-05:00`).getDay()}
+function parseImportedRelativeDate(text){
+ const n=normText(text),days={domingo:0,lunes:1,martes:2,miercoles:3,jueves:4,viernes:5,sabado:6};const wd=Object.keys(days).find(x=>new RegExp(`\\b${x}\\b`).test(n));let offset=null,label='';
+ if(/\bpasado\s+manana\b/.test(n)){offset=2;label='pasado mañana'}else if(/\bmanana\b/.test(n)){offset=1;label='mañana'}else if(/\bhoy\b/.test(n)){offset=0;label='hoy'}
+ if(offset!==null){const date=isoAddDays(todayISO(),offset);if(wd&&importedWeekdayIndex(date)!==days[wd])return{date:'',uncertain:true,label:`${label} ${wd}`,reason:`«${label} ${wd}» no coincide con la fecha actual del teléfono. Confirma la fecha.`};return{date,uncertain:false,label:wd?`${label} ${wd}`:label}}
+ if(wd){const today=todayISO(),cur=importedWeekdayIndex(today),delta=(days[wd]-cur+7)%7;return{date:isoAddDays(today,delta),uncertain:false,label:wd}}
+ return null
+}
+function importedSegments(text){
+ const protectedText=String(text||'').replace(/a\.\s*m\./gi,'am').replace(/p\.\s*m\./gi,'pm');
+ const out=[];for(const line of protectedText.split(/\n+/)){const clean=line.trim();if(!clean)continue;for(const part of clean.split(/(?<=[!?])\s+|\.{2,}|\.\s+(?=[A-ZÁÉÍÓÚÑ])/)){if(part.trim())out.push(part.trim())}}
+ return out.length?out:[protectedText.trim()]
+}
+function importedTypeData(n){
+ if(/\bensay(?:o|ar|aremos|amos|ando)\b/.test(n)){const special=/\b(especial|extraordinario|adicional|general|prueba de sonido)\b/.test(n);return{kind:'ensayo',type:special?'Ensayo especial':'Ensayo regular'}}
+ if(/\bboda\b|\bmatrimonio\b/.test(n))return{kind:'presentacion',type:'Boda'};
+ if(/\bcumple(?:anos|años)?\b|\bcumpleanos\b/.test(n))return{kind:'presentacion',type:'Cumpleaños'};
+ if(/\b(quince\s+anos|15\s+anos|quinceanera|quinceañera)\b/.test(n))return{kind:'presentacion',type:'Quince años'};
+ if(/\bcorporativ[oa]\b|\bempresa\b/.test(n))return{kind:'presentacion',type:'Evento corporativo'};
+ if(/\bfestival\b/.test(n))return{kind:'presentacion',type:'Festival'};
+ if(/\bcarnaval\b/.test(n))return{kind:'presentacion',type:'Carnaval'};
+ if(/\bconcierto\b/.test(n))return{kind:'presentacion',type:'Concierto'};
+ if(/\bgrabaci[oó]n\b|\bgrabar\b/.test(n))return{kind:'grabacion',type:'Grabación'};
+ if(/\bpromoci[oó]n\b|\bpromocional\b/.test(n))return{kind:'promocion',type:'Promoción'};
+ if(/\bviaje\b|\bviajamos\b/.test(n))return{kind:'viaje',type:'Viaje'};
+ if(/\bcasino\b/.test(n))return{kind:'presentacion',type:'Casino'};
+ if(/\bhotel\b/.test(n))return{kind:'presentacion',type:'Hotel'};
+ if(/\bbar\b|\bdiscoteca\b|\bclub nocturno\b/.test(n))return{kind:'presentacion',type:'Bar/Discoteca'};
+ if(/\bevento\s+privado\b/.test(n))return{kind:'presentacion',type:'Evento privado'};
+ if(/\b(evento|toque|presentaci[oó]n|tocamos|tocar|show)\b/.test(n))return{kind:'presentacion',type:'Otro'};
+ return{kind:'presentacion',type:'Otro'}
+}
+function importedActivityScore(seg,data){
+ const n=normText(seg);let s=0;
+ if(data.kind==='ensayo'&&/\bensay/.test(n))s+=10;
+ if(data.kind==='presentacion'&&/\b(evento|toque|presentacion|tocar|tocamos|show|boda|cumple|casino|hotel|festival|concierto)\b/.test(n))s+=6;
+ if(data.kind==='grabacion'&&/\bgraba/.test(n))s+=8;if(data.kind==='promocion'&&/\bpromoc/.test(n))s+=8;if(data.kind==='viaje'&&/\bviaj/.test(n))s+=8;
+ if(/\b(hoy|manana|pasado manana|lunes|martes|miercoles|jueves|viernes|sabado|domingo)\b/.test(n)||/\b\d{1,2}[\/-]\d{1,2}\b/.test(n)||/\b\d{1,2}\s+de\s+[a-z]+/.test(n))s+=3;
+ if(/\b\d{1,2}(?::\d{2})?\s*(?:am|pm|a\.?\s*m\.?|p\.?\s*m\.?)\b/i.test(seg)||/\ba\s+las?\s+\d{1,2}/i.test(seg))s+=3;
+ if(/\bpara\s+(?:el|la)\s+(?:evento|boda|presentacion|toque)\b/.test(n)&&data.kind==='ensayo')s-=3;
+ return s
+}
+function importedPrimaryLine(segments,data){return [...segments].sort((a,b)=>importedActivityScore(b,data)-importedActivityScore(a,data))[0]||segments[0]||''}
+function importedKnownPlace(text){
+ const n=normText(text),saved=Object.keys(state.settings.placeDefaults||{}).map(name=>({name,match:[normText(name)]})),historical=[...new Set(state.activities.map(a=>a.venue).filter(Boolean))].map(name=>({name,match:[normText(name)]}));
+ const all=[...KNOWN_PLACES,...saved,...historical].sort((a,b)=>String(b.name).length-String(a.name).length);
+ return all.find(p=>(p.match||[normText(p.name)]).some(k=>k&&n.includes(normText(k))))||null
+}
+function cleanVenueCandidate(v){
+ let s=String(v||'').replace(/^[\s:,-]+|[\s:,-]+$/g,'').trim();
+ s=s.split(/\s+(?:y\s+(?:tenemos|hay|necesitamos|tocamos|vamos)|donde|para\s+el\s+d[ií]a|el\s+d[ií]a|el\s+(?:lunes|martes|mi[eé]rcoles|jueves|viernes|s[aá]bado|domingo)|este\s+(?:lunes|martes|mi[eé]rcoles|jueves|viernes|s[aá]bado|domingo)|pr[oó]ximo\s+(?:lunes|martes|mi[eé]rcoles|jueves|viernes|s[aá]bado|domingo)|a\s+las?|desde\s+las?|necesito|confirmen|confirmar|que\s+queda)\b/i)[0].trim();
+ return s.replace(/[.,;:]+$/,'').trim().slice(0,100)
+}
+function importedVenue(text,data){
+ const known=importedKnownPlace(text);if(known)return known.name;
+ const pats=[
+  /\b(?:lugar|ubicaci[oó]n|sitio)\s*[:\-]\s*([^\n.;]{2,100})/i,
+  /\b(?:evento|toque|presentaci[oó]n|show)\s+(?:es|ser[aá]|seria|sería)?\s*(?:para|en)\s+(?:el|la)?\s*([^\n.;]{2,100})/i,
+  /\b(?:tocamos|tocar|presentarnos|presentaci[oó]n|ensayo|ensayar)\s+(?:en|para)\s+(?:el|la)?\s*([^\n.;]{2,100})/i,
+  /\b(?:en|para)\s+(?:el|la)?\s*((?:hotel|casino|bar|discoteca|sal[oó]n|resort|casa|club|restaurante|centro|finca|quinta)\b[^\n.;]{0,80})/i
+ ];
+ for(const re of pats){const m=text.match(re);if(m){const v=cleanVenueCandidate(m[1]);if(v&&v.length>1)return v}}
+ if(data.type==='Ensayo regular')return state.settings.regularRehearsalPlace||'Casa de Russo';return''
+}
+function importedRefineType(data,venue,text){
+ const n=normText(`${venue} ${text}`);if(data.kind==='ensayo'){if(venue&&normText(venue)!==normText(state.settings.regularRehearsalPlace||'Casa de Russo')&&!importedKnownPlace(venue)?.habitual)data.type='Ensayo especial';return data}
+ if(data.type==='Otro'){if(/\bcasino\b/.test(n))data.type='Casino';else if(/\bhotel\b|\bresort\b/.test(n))data.type='Hotel';else if(/\bbar\b|\bdiscoteca\b|\bclub\b/.test(n))data.type='Bar/Discoteca'}return data
+}
+function importedTitle(type,segments,primary){
+ if(type.startsWith('Ensayo'))return'';const joined=segments.join(' ');let m;
+ if(type==='Boda'){m=joined.match(/\b(?:boda|matrimonio)(?:\s+de)?\s*[:\-]?\s*([A-ZÁÉÍÓÚÑ][^.,\n]{1,70}?)(?=\s+(?:en|el|a\s+las|para)\b|[.,]|$)/i);if(m){const s=m[1].trim();if(s&&!/^(manana|mañana|domingo|sabado|sábado)$/i.test(s))return s}}
+ if(type==='Cumpleaños'){m=joined.match(/\bcumple(?:a[nñ]os)?(?:\s+de)?\s*[:\-]?\s*([^.,\n]{2,60})/i);if(m)return m[1].trim()}
+ if(type==='Evento corporativo'){m=joined.match(/\bevento\s+corporativo(?:\s+de|\s+para)?\s*[:\-]?\s*([^.,\n]{2,60}?)(?=\s+en\b|\s+el\s+(?:lunes|martes|mi[eé]rcoles|jueves|viernes|s[aá]bado|domingo)\b|[.,]|$)/i);if(m)return m[1].trim()}
+ const labeled=segments.map(l=>l.match(/^(?:t[ií]tulo|actividad|evento)\s*[:\-]\s*(.+)$/i)).find(Boolean);if(labeled)return cleanVenueCandidate(labeled[1]);return''
+}
+function importedDateCandidates(segment){
+ const out=[],raw=String(segment||''),n=normText(raw),months='enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|setiembre|octubre|noviembre|diciembre';let m;
+ const rel=parseImportedRelativeDate(raw);if(rel)out.push({...rel,source:'relative'});
+ for(const x of raw.matchAll(new RegExp(`\\b(\\d{1,2})\\s+(?:de\\s+)?(${months})(?:\\s+(?:de\\s+)?(\\d{4}))?`,'gi'))){const iso=parseSpanishDate(x[0]);if(iso)out.push({date:iso,uncertain:false,label:x[0],source:'explicit'})}
+ for(const x of raw.matchAll(/\b(\d{1,2})[\/-](\d{1,2})(?:[\/-](\d{2,4}))?\b/g)){const iso=parseSpanishDate(x[0]);if(iso)out.push({date:iso,uncertain:false,label:x[0],source:'numeric'})}
+ m=n.match(/\b(?:lunes|martes|miercoles|jueves|viernes|sabado|domingo)\s+(\d{1,2})\b/);if(m&&!out.some(x=>x.date)){const now=new Date(),day=Number(m[1]);for(let k=0;k<3;k++){const mo=now.getMonth()+k,y=now.getFullYear()+Math.floor(mo/12),month=mo%12;const d=new Date(y,month,day);if(d.getDate()===day&&d>=new Date(now.getFullYear(),now.getMonth(),now.getDate())){out.push({date:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`,uncertain:false,label:m[0],source:'weekday-day'});break}}}
+ m=n.match(/\b(?:el\s+)?d[ií]a\s+(\d{1,2})\b|\bel\s+(\d{1,2})\b/);if(m&&!out.some(x=>x.date)){const day=Number(m[1]||m[2]),now=new Date();if(day>=1&&day<=31){for(let k=0;k<3;k++){const mo=now.getMonth()+k,y=now.getFullYear()+Math.floor(mo/12),month=mo%12,d=new Date(y,month,day);if(d.getDate()===day&&d>=new Date(now.getFullYear(),now.getMonth(),now.getDate())){out.push({date:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`,uncertain:false,label:m[0],source:'day-only'});break}}}}
+ return out
+}
+function importedMainDate(segments,primary,data){
+ const scored=[];for(const seg of segments){for(const c of importedDateCandidates(seg)){let score=importedActivityScore(seg,data)+(seg===primary?6:0)+(c.source==='relative'?2:0);const ns=normText(seg);if(data.kind==='ensayo'&&/\bpara\s+(?:el|la)\s+(?:evento|boda|presentacion|toque)\b/.test(ns))score-=12;scored.push({...c,score,segment:seg})}}
+ scored.sort((a,b)=>b.score-a.score);return scored[0]||null
+}
+function importedRelatedDate(segments,data,mainDate){
+ if(data.kind!=='ensayo')return'';for(const seg of segments){const n=normText(seg);if(/\bpara\s+(?:el|la)\s+(?:evento|boda|presentacion|toque)\b/.test(n)){const c=importedDateCandidates(seg).find(x=>x.date&&x.date!==mainDate);if(c)return c.date}}return''
+}
+function importedTimeCandidates(segment,data){
+ const raw=String(segment||''),out=[],seen=new Set();const add=(h,m,label,uncertain=false)=>{let hh=Number(h),mm=Number(m||0);if(hh<0||hh>23||mm>59)return;const val=`${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;if(!seen.has(val)){seen.add(val);out.push({time:val,label,uncertain})}};
+ for(const x of raw.matchAll(/\b(\d{1,2})(?::(\d{2}))?\s*(a\.?\s*m\.?|p\.?\s*m\.?)\b/gi))add(...(()=>{const v=parseTimeToken(x[1],x[2],x[3]).split(':');return[Number(v[0]),Number(v[1]),x[0],false]})());
+ for(const x of raw.matchAll(/\b(?:a\s+las?\s+)?(\d{1,2})(?::(\d{2}))?\s+(?:de|por)\s+la\s+(manana|mañana|tarde|noche|madrugada)\b/gi)){let h=Number(x[1]),part=normText(x[3]);if((part==='tarde'||part==='noche')&&h<12)h+=12;if(part==='madrugada'&&h===12)h=0;add(h,x[2]||0,x[0],false)}
+ for(const x of raw.matchAll(/\b(?:a\s+las?\s+)(\d{1,2})(?::(\d{2}))?\b/gi)){let h=Number(x[1]),uncertain=true;if(data.kind==='ensayo'&&h>=6&&h<=11){uncertain=false}else if(data.kind==='presentacion'&&h>=7&&h<=11){h+=12;uncertain=true}add(h,x[2]||0,x[0],uncertain)}
+ return out
+}
+function importedMainTimes(segments,primary,data){
+ const scored=[];for(const seg of segments){const base=importedActivityScore(seg,data)+(seg===primary?6:0);for(const t of importedTimeCandidates(seg,data))scored.push({...t,score:base+(t.uncertain?0:2),segment:seg})}scored.sort((a,b)=>b.score-a.score);if(!scored.length)return{};const first=scored[0],same=importedTimeCandidates(first.segment,data).filter(x=>x.time!==first.time);return{start:first.time,end:same[0]?.time||'',warning:first.uncertain?'La hora fue interpretada sin a. m./p. m.; revísala.':''}
+}
+function importedMeaningfulNotes(segments,primary,relatedDate){
+ const keep=[];for(const l of segments){if(l===primary)continue;const n=normText(l);if(/^bendiciones\b|^hola\b|^buen(?:os|as)\b|^saludos\b/.test(n))continue;if(/puntualidad|integrantes|reemplaz|vestuario|uniforme|camisa|ropa|entrada|llegar|montaje|sonido|contacto|indicacion|recomend|instrumento|equipo|tarima|prueba/.test(n))keep.push(l)}if(relatedDate)keep.unshift(`Evento relacionado: ${panamaDate(relatedDate)}`);return keep.join('\n').slice(0,900)
+}
+function interpretImportedMessage(raw){
+ const text=cleanImportedText(raw),n=normText(text),segments=importedSegments(text),data={warnings:[]};Object.assign(data,importedTypeData(n));
+ let venue=importedVenue(text,data);data.venue=venue;importedRefineType(data,venue,text);const primary=importedPrimaryLine(segments,data);data.primary=primary;data.title=importedTitle(data.type,segments,primary);
+ const dc=importedMainDate(segments,primary,data);if(dc?.date)data.date=dc.date;else if(dc?.uncertain){data.dateUncertain=true;data.warnings.push(dc.reason||'Confirma la fecha.')}else data.warnings.push('No pude identificar una fecha con seguridad.');
+ data.relatedDate=importedRelatedDate(segments,data,data.date||'');const tm=importedMainTimes(segments,primary,data);if(tm.start)data.start=tm.start;else data.warnings.push('No pude identificar la hora de inicio.');if(tm.end)data.end=tm.end;if(tm.warning)data.warnings.push(tm.warning);
+ if(data.type==='Ensayo regular'&&!data.end)data.end='';
+ const amt=text.match(/(?:B\s*\/\s*\.|B\.|USD|US\$|\$)\s*(\d+(?:[.,]\d{1,2})?)/i);if(amt)data.expected=Number(amt[1].replace(',','.'));
+ const gps=parseGPSInput(text);if(gps){data.gpsLat=gps.lat;data.gpsLng=gps.lng}
  const prov=PANAMA_PROVINCES.find(x=>n.includes(normText(x)));if(prov){data.country='Panamá';data.province=prov}const country=COUNTRIES.find(x=>x!=='Panamá'&&n.includes(normText(x)));if(country)data.country=country;
- const obs=lines.filter(x=>/vestuario|uniforme|camisa|ropa|observ|nota|contacto|entrada|llegar|montaje|sonido/i.test(x));data.notes=obs.join('\n');
- D('importDlg').close();openActivityForm('',true);if(data.kind)$('akind').value=data.kind;if(data.type&&TYPES.includes(data.type))$('atype').value=data.type;if(data.kind==='ensayo')setBillingMode(true);else setBillingMode(false);applyActivityDefaults();if(data.title)$('atitle').value=data.title;if(data.venue){$('avenue').value=data.venue;applyKnownPlace()}if(data.kind)$('akind').value=data.kind;if(data.type&&TYPES.includes(data.type))$('atype').value=data.type;if(data.kind==='ensayo')setBillingMode(true);else if(data.kind)setBillingMode(false);if(data.country){populateLocationSelectors(data.country,data.province||'');if(data.country!=='Panamá'&&data.province)$('aregion').value=data.province}if(data.date)$('adate').value=data.date;if(data.start)$('astart').value=data.start;if(data.end)$('aend').value=data.end;if(data.expected!=null){setBillingMode(false);$('aexpected').value=Number(data.expected).toFixed(2)}if(data.gpsLat!=null){$('alat').value=String(data.gpsLat);$('alng').value=String(data.gpsLng);resolveGPSAdministrative(data.gpsLat,data.gpsLng,{quiet:true})}if(data.notes)$('anotes').value=data.notes;updateGPSStatus();updateDuePreview();updateFormGuidance();toast('Mensaje analizado · revisa el borrador')
+ data.notes=importedMeaningfulNotes(segments,primary,data.relatedDate);
+ data.detectedCount=[data.type!=='Otro',!!data.venue,!!data.date,!!data.start,data.expected!=null,data.gpsLat!=null].filter(Boolean).length;return data
+}
+function applyImportedDraft(data){
+ D('importDlg').close();openActivityForm('',true);$('akind').value=data.kind;$('atype').value=TYPES.includes(data.type)?data.type:'Otro';
+ if(data.type==='Ensayo regular'){applyActivityDefaults()}else{resetIncompatiblePlace();refreshVenueList();setBillingMode(data.kind==='ensayo')}
+ if(data.title)$('atitle').value=data.title;
+ if(data.venue){$('avenue').value=data.venue;const pc=placeConfig(data.venue);if(pc)applyKnownPlace()}
+ if(data.country){populateLocationSelectors(data.country,data.province||'',data.city||'');if(data.country!=='Panamá'&&data.province)$('aregion').value=data.province}
+ if(data.date)$('adate').value=data.date;else if(data.dateUncertain)$('adate').value='';
+ if(data.start)$('astart').value=data.start;if(data.end)$('aend').value=data.end;else if(data.type==='Ensayo regular'&&data.venue){const p=placeConfig(data.venue)||findKnownPlace(data.venue);if(p?.end)$('aend').value=p.end}
+ if(data.expected!=null){setBillingMode(false);$('aexpected').value=Number(data.expected).toFixed(2)}
+ if(data.gpsLat!=null){$('alat').value=String(data.gpsLat);$('alng').value=String(data.gpsLng);resolveGPSAdministrative(data.gpsLat,data.gpsLng,{quiet:true})}
+ if(data.notes)$('anotes').value=data.notes;updateGPSStatus();updateDuePreview();updateFormGuidance();
+ const detected=[data.type!=='Otro'?data.type:'',data.venue||'',data.start?`Inicio ${data.start}`:'',data.date?panamaDate(data.date):''].filter(Boolean),banner=$('importReviewBanner');if(banner){banner.classList.remove('hidden');banner.innerHTML=`<b>📋 Borrador creado desde el mensaje</b><small><b>Detectado:</b> ${esc(detected.join(' · ')||'información parcial')}${data.warnings?.length?`<br><span style="color:#9a5b00"><b>Revisar:</b> ${esc(data.warnings.join(' '))}</span>`:''}<br>Confirma los campos antes de guardar.</small>`}
+ toast(detected.length?`Borrador listo · ${detected.slice(0,3).join(' · ')}`:'Mensaje leído · completa los datos faltantes')
+}
+function analyzeImportedText(){
+ const raw=$('importText').value.trim(),btn=$('importAnalyzeBtn'),status=$('importStatus');if(!raw)return toast('Pega primero el mensaje');
+ if(btn){btn.disabled=true;btn.textContent='Analizando…'}if(status){status.classList.remove('hidden');status.textContent='Leyendo el mensaje…'}
+ try{const data=interpretImportedMessage(raw);if(status)status.textContent=data.detectedCount?`✓ Encontré ${data.detectedCount} datos útiles. Preparando borrador…`:'No encontré suficientes datos; abriré el formulario para que completes lo que falta.';setTimeout(()=>applyImportedDraft(data),80)}catch(e){console.error('OLMS import analyzer',e);if(status){status.classList.remove('hidden');status.innerHTML='<b>⚠️ No pude interpretar el mensaje automáticamente.</b><br>El texto no se perdió. Intenta de nuevo o crea la actividad manualmente.'}toast('No pude analizar ese mensaje · revisa el texto')}finally{setTimeout(()=>{if(btn){btn.disabled=false;btn.textContent='Analizar mensaje'}},250)}
 }
 
 function activityInterval(a){

@@ -1,4 +1,4 @@
-const C='control-olms-v6-8-calendargpsfix-1';
+const C='control-olms-v6-8-analyzerfix-2';
 const ASSETS=[
   './',
   './index.html',
