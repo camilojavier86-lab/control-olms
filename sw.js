@@ -1,14 +1,14 @@
-const C='control-olms-v6-8-build-2026-09-23-7';
+const C='control-olms-v6-8-build-2026-09-23-9';
 const UPDATE_INFO={
   version:'6.8',
-  build:'2026.09.23-7',
+  build:'2026.09.23-9',
   kind:'maintenance',
-  title:'Sistema profesional de actualizaciones',
+  title:'Ubicaciones nuevas más seguras y precisas',
   notes:[
-    'Nuevo aviso de actualización disponible antes de instalar.',
-    'Puedes revisar las mejoras y elegir Actualizar ahora o Más tarde.',
-    'Confirmación visible cuando la actualización queda instalada.',
-    'Configuración muestra versión, compilación y estado de actualización.'
+    'OLMS ya no inventa GPS para casas, barriadas o direcciones ambiguas.',
+    'Los lugares públicos reconocibles pueden sugerir una ubicación para confirmar.',
+    'Los lugares guardados conservan siempre sus datos y coordenadas existentes.',
+    'Google Maps y Uber usan únicamente GPS confirmado.'
   ]
 };
 const ASSETS=[

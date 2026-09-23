@@ -272,6 +272,7 @@ nav button{margin:4px;border-radius:12px}nav button.active{background:#111;color
 <div class="form-section">
   <h3>📍 Lugar</h3>
   <div class="field"><label>Lugar</label><input id="avenue" list="venueList" placeholder="Ej. Casa de Russo"><small class="form-help">Si OLMS ya conoce el lugar, seleccionarlo recupera automáticamente su ubicación y reglas habituales.</small><datalist id="venueList"></datalist></div>
+  <div id="venueLookupState" class="location-review hidden"></div>
   <div class="location-grid">
     <div class="field"><label>País</label><select id="acountry"></select></div>
     <div class="field" id="panamaProvinceField"><label>Provincia</label><select id="aprovince"></select></div>
@@ -409,16 +410,17 @@ window.addEventListener("error",e=>{
 });
 const KEY="control_olms_v2";
 const OLMS_VERSION="6.8";
-const OLMS_BUILD="2026.09.23-7";
+const OLMS_BUILD="2026.09.23-9";
 const OLMS_BUILD_TYPE="maintenance";
 const OLMS_BUILD_NOTES=[
- "Nuevo aviso de actualización disponible antes de instalar.",
- "Puedes revisar las mejoras y elegir Actualizar ahora o Más tarde.",
- "Confirmación visible cuando la actualización queda instalada.",
- "Configuración muestra versión, compilación y estado de actualización."
+ "Nueva protección al crear lugares: OLMS ya no inventa GPS para casas, barriadas o direcciones ambiguas.",
+ "Los lugares públicos reconocibles pueden sugerir una ubicación, pero debes confirmarla antes de usarla.",
+ "Los lugares ya guardados conservan siempre su GPS, país, provincia, distrito y dirección registrados.",
+ "Google Maps y Uber continúan usando únicamente coordenadas GPS confirmadas para navegar."
 ];
 const OLMS_UPDATE_KEYS={last:"olms_update_last_build",pending:"olms_update_pending_install"};
 let olmsSWRegistration=null,olmsAvailableUpdate=null,olmsUpdateReloading=false;
+let pendingPublicPlaceSuggestion=null,activeResolvedVenueKey="";
 const DEFAULT_GOOGLE_CLIENT_ID="339104750665-nc0vfr39r5nbhekfnlvuatarkq3hnvdi.apps.googleusercontent.com";
 const PANAMA_PROVINCES=["Bocas del Toro","Chiriquí","Coclé","Colón","Darién","Herrera","Los Santos","Panamá","Panamá Oeste","Veraguas"];
 const PANAMA_DISTRICTS={
@@ -788,6 +790,74 @@ function resetIncompatiblePlace(){
  const v=$("avenue")?.value||"";if(!v)return;const known=placeConfig(v)||historicalPlaceConfig(v);if(!known)return;if(venueCompatible(v,$("akind")?.value||"presentacion",$("atype")?.value||"Boda"))return;
  $("avenue").value="";$("alocation").value="";$("alat").value="";$("alng").value="";$("aaccuracy").value="";if($("amapsaddress"))$("amapsaddress").value="";populateLocationSelectors("Panamá","");if($("aforeigncity"))$("aforeigncity").value="";updateGPSStatus();toast("El lugar anterior no corresponde al nuevo tipo de actividad");
 }
+
+function clearVenueLookupState(){
+ pendingPublicPlaceSuggestion=null;const el=$("venueLookupState");if(el){el.classList.add("hidden");el.innerHTML=""}
+}
+function looksLikePrivateOrAddress(v){
+ const n=normText(v);if(!n)return true;
+ return /\b(casa|residencia|residencial|barriada|urbanizacion|urbanización|apartamento|apto|lote|calle|avenida|ave\.?|manzana|sector|entrada|detras|detrás|frente|esquina)\b/.test(n)||/^\s*#?\d/.test(n)||/\b\d{1,4}[\-\s]\d{1,4}\b/.test(n);
+}
+function venueSearchContext(){
+ const country=$("acountry")?.value||"Panamá",province=currentProvince(),district=currentCity();return [district,province,country].filter(Boolean).join(", ");
+}
+function tokenSimilarity(a,b){
+ const stop=new Set(["de","del","la","el","los","las","y","en","hotel","casino","resort","salon","salón","centro"]);
+ const aa=normText(a).split(/[^a-z0-9]+/).filter(x=>x.length>1&&!stop.has(x)),bb=new Set(normText(b).split(/[^a-z0-9]+/).filter(x=>x.length>1&&!stop.has(x)));if(!aa.length)return 0;return aa.filter(x=>bb.has(x)).length/aa.length;
+}
+function publicResultConfidence(query,r){
+ const cat=normText(r.category||r.class||""),type=normText(r.type||""),addr=normText(r.addresstype||""),label=String(r.display_name||""),name=String(r.name||"");
+ const rejected=["house","residential","road","street","neighbourhood","neighborhood","suburb","quarter","hamlet","postcode","boundary"];
+ if(rejected.some(x=>type===x||addr===x||cat===x))return 0;
+ const publicCats=["amenity","tourism","leisure","shop","office","building","historic","sport","craft","club","aeroway","railway"];
+ const publicTypes=["hotel","casino","restaurant","bar","pub","nightclub","mall","theatre","theater","stadium","convention_centre","events_venue","community_centre","university","school","church","place_of_worship","resort"];
+ let score=tokenSimilarity(query,`${name} ${label}`);
+ if(normText(label).includes(normText(query)))score=Math.max(score,.92);
+ if(publicCats.includes(cat))score+=.12;
+ if(publicTypes.some(x=>type.includes(x)))score+=.16;
+ const imp=Number(r.importance||0);if(Number.isFinite(imp))score+=Math.min(.12,imp*.2);
+ return Math.min(1,score);
+}
+async function searchPublicPlaceCandidate(name){
+ const raw=String(name||"").trim();if(raw.length<3||looksLikePrivateOrAddress(raw))return null;
+ const context=venueSearchContext(),queries=[context?`${raw}, ${context}`:raw,raw];
+ for(const q of [...new Set(queries)]){
+  try{
+   const url=`https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&namedetails=1&limit=5&accept-language=es&q=${encodeURIComponent(q)}`;
+   const r=await fetch(url,{headers:{"Accept":"application/json"}});if(!r.ok)continue;const arr=await r.json();if(!Array.isArray(arr))continue;
+   const ranked=arr.map(x=>({x,score:publicResultConfidence(raw,x)})).filter(z=>z.score>=.68).sort((a,b)=>b.score-a.score);
+   if(!ranked.length)continue;const best=ranked[0],second=ranked[1];
+   if(second&&best.score-second.score<.08)continue;
+   const lat=Number(best.x.lat),lng=Number(best.x.lon);if(!Number.isFinite(lat)||!Number.isFinite(lng))continue;
+   return{lat,lng,label:best.x.display_name||raw,name:best.x.name||raw,score:best.score};
+  }catch(e){console.warn("Búsqueda de lugar público:",e)}
+ }
+ return null;
+}
+function showPublicPlaceSuggestion(p){
+ pendingPublicPlaceSuggestion=p;const el=$("venueLookupState");if(!el)return;el.classList.remove("hidden");el.innerHTML=`<b>📍 Posible ubicación pública encontrada</b><p class="muted" style="margin:6px 0">${esc(p.label)}</p><small>OLMS no la usará para navegación hasta que tú la confirmes.</small><div class="row" style="margin-top:9px"><button type="button" class="btn primary small" onclick="confirmPublicPlaceSuggestion()">Confirmar ubicación</button><button type="button" class="btn ghost small" onclick="reviewPublicPlaceSuggestion()">Revisar en mapa</button></div>`;
+}
+async function confirmPublicPlaceSuggestion(){
+ const p=pendingPublicPlaceSuggestion;if(!p)return;$('alat').value=String(p.lat);$('alng').value=String(p.lng);$('aaccuracy').value='';if($('amapsaddress'))$('amapsaddress').value=p.label||'';activeResolvedVenueKey=normText($('avenue')?.value||'');clearVenueLookupState();updateGPSStatus();await resolveGPSAdministrative(p.lat,p.lng);toast('Ubicación pública confirmada para navegación');
+}
+function reviewPublicPlaceSuggestion(){
+ const p=pendingPublicPlaceSuggestion;if(!p)return;clearVenueLookupState();openMapPicker({lat:p.lat,lng:p.lng},'Ubicación encontrada · confirma el punto',{requireTap:true});
+}
+function clearStalePlaceDataForNewVenue(){
+ $('alocation').value='';if($('amapsaddress'))$('amapsaddress').value='';$('alat').value='';$('alng').value='';$('aaccuracy').value='';populateLocationSelectors('Panamá','','');if($('aforeigncity'))$('aforeigncity').value='';setGeoResolveState('');updateGPSStatus();
+}
+async function handleVenueBlur(){
+ const raw=String($('avenue')?.value||'').trim();clearVenueLookupState();if(!raw)return;
+ const known=placeConfig(raw);if(known){applyKnownPlace();activeResolvedVenueKey=normText(known.name||raw);return}
+ const key=normText(raw);if(activeResolvedVenueKey&&key!==activeResolvedVenueKey){clearStalePlaceDataForNewVenue();activeResolvedVenueKey=''}
+ if(looksLikePrivateOrAddress(raw)){
+  const el=$('venueLookupState');if(el){el.classList.remove('hidden');el.innerHTML='<b>📍 GPS pendiente de confirmar</b><p class="muted" style="margin:6px 0">Parece una casa, barriada o referencia privada. OLMS no asignará un punto aproximado.</p><small>Usa Mi ubicación, Elegir en mapa o Pegar ubicación cuando tengas el punto correcto.</small>'}return;
+ }
+ const el=$('venueLookupState');if(el){el.classList.remove('hidden');el.innerHTML='<b>🔎 Buscando un lugar público reconocible…</b><p class="muted" style="margin:6px 0">Si existe una coincidencia clara, OLMS te pedirá confirmarla.</p>'}
+ const p=await searchPublicPlaceCandidate(raw);if(normText($('avenue')?.value||'')!==key)return;
+ if(p){showPublicPlaceSuggestion(p);return}
+ if(el){el.classList.remove('hidden');el.innerHTML='<b>📍 GPS pendiente de confirmar</b><p class="muted" style="margin:6px 0">No encontré una coincidencia pública suficientemente segura.</p><small>OLMS no inventará coordenadas. Marca el punto manualmente cuando lo tengas.</small>'}
+}
 function updateGPSStatus(){
  const lat=Number($("alat")?.value),lng=Number($("alng")?.value),acc=Number($("aaccuracy")?.value),ok=Number.isFinite(lat)&&Number.isFinite(lng)&&$("alat")?.value!==""&&$("alng")?.value!=="";
  const st=$("gpsStatus"),co=$("gpsCoords"),cl=$("gpsClearBtn"),vw=$("gpsViewBtn");if(!st)return;
@@ -798,24 +868,36 @@ function updateGPSStatus(){
 function setGeoResolveState(text,cls="wait"){const el=$("geoResolveState");if(!el)return;if(!text){el.classList.add("hidden");el.textContent="";return}el.textContent=text;el.className=`geo-state ${cls}`}
 function canonicalPanamaProvince(v){const n=normText(v).replace(/^provincia de /,"");return PANAMA_PROVINCES.find(x=>normText(x)===n||n.includes(normText(x)))||""}
 function canonicalDistrict(province,...values){const arr=PANAMA_DISTRICTS[province]||[];for(const raw of values){const n=normText(raw).replace(/^distrito de /,"");const hit=arr.find(x=>normText(x)===n||n.includes(normText(x))||normText(x).includes(n));if(hit)return hit}return""}
-async function resolveGPSAdministrative(lat,lng,{quiet=false}={}){
+async function resolveGPSAdministrative(lat,lng,{quiet=false,preserveAdmin=false}={}){
  if(!Number.isFinite(Number(lat))||!Number.isFinite(Number(lng)))return false;setGeoResolveState("📍 Confirmando país, provincia y distrito…","wait");
  try{
    const url=`https://nominatim.openstreetmap.org/reverse?format=jsonv2&addressdetails=1&zoom=10&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}&accept-language=es`;
    const r=await fetch(url,{headers:{"Accept":"application/json"}});if(!r.ok)throw new Error("HTTP "+r.status);const data=await r.json(),ad=data.address||{},cc=String(ad.country_code||"").toLowerCase();if($("amapsaddress")&&!$("amapsaddress").value.trim()&&data.display_name)$("amapsaddress").value=String(data.display_name).trim();
    if(cc==="pa"||normText(ad.country)==="panama"){
-     const province=canonicalPanamaProvince(ad.state||ad.region||ad.state_district||ad.county||"");populateLocationSelectors("Panamá",province);
-     const district=canonicalDistrict(province,ad.county,ad.city_district,ad.municipality,ad.city,ad.town,ad.village);populateDistricts(province,district);if(district)$("acity").value=district;
+     const province=canonicalPanamaProvince(ad.state||ad.region||ad.state_district||ad.county||"");
+     const district=canonicalDistrict(province,ad.county,ad.city_district,ad.municipality,ad.city,ad.town,ad.village);
+     if(preserveAdmin){
+       const savedProvince=$("aprovince")?.value||"",savedDistrict=$("acity")?.value||"";
+       if(!savedProvince&&province)populateLocationSelectors("Panamá",province,district||"");
+       else if(savedProvince&&province===savedProvince&&!savedDistrict&&district){populateDistricts(savedProvince,district);$("acity").value=district}
+       const provConflict=!!(savedProvince&&province&&savedProvince!==province),distConflict=!!(savedDistrict&&district&&savedDistrict!==district&&(!province||province===savedProvince));
+       if(provConflict||distConflict)setGeoResolveState("⚠️ El GPS no coincide con los datos guardados del lugar. OLMS conservó el lugar guardado; revisa el punto si es necesario.","wait");
+       else setGeoResolveState(`✓ GPS verificado · se conserva la ubicación guardada${savedProvince?` · ${savedProvince}`:""}${savedDistrict?` · ${savedDistrict}`:""}`,"ok");
+       applyRateSuggestion(true);updateFormGuidance();return true;
+     }
+     populateLocationSelectors("Panamá",province);populateDistricts(province,district);if(district)$("acity").value=district;
      setGeoResolveState(`✓ GPS confirmado · Panamá${province?` · ${province}`:""}${district?` · ${district}`:""}`,"ok");applyRateSuggestion(true);updateFormGuidance();return true;
    }
-   const country=COUNTRIES.find(x=>normText(x)===normText(ad.country))||ad.country||"";if(country&&COUNTRIES.includes(country))$("acountry").value=country;updateCountryFields();if($("aregion"))$("aregion").value=ad.state||ad.region||"";if($("aforeigncity"))$("aforeigncity").value=ad.city||ad.town||ad.municipality||"";setGeoResolveState(`✓ GPS confirmado · ${country||"ubicación internacional"}`,"ok");applyRateSuggestion(true);updateFormGuidance();return true;
+   const country=COUNTRIES.find(x=>normText(x)===normText(ad.country))||ad.country||"";
+   if(preserveAdmin){setGeoResolveState(`✓ GPS verificado · se conserva la ubicación guardada${country?` · ${country}`:""}`,"ok");applyRateSuggestion(true);updateFormGuidance();return true}
+   if(country&&COUNTRIES.includes(country))$("acountry").value=country;updateCountryFields();if($("aregion"))$("aregion").value=ad.state||ad.region||"";if($("aforeigncity"))$("aforeigncity").value=ad.city||ad.town||ad.municipality||"";setGeoResolveState(`✓ GPS confirmado · ${country||"ubicación internacional"}`,"ok");applyRateSuggestion(true);updateFormGuidance();return true;
  }catch(e){console.warn("Geocodificación inversa:",e);setGeoResolveState("GPS guardado · región pendiente de confirmar","wait");if(!quiet)toast("GPS guardado; no pude confirmar la región ahora");return false}
 }
 async function captureActivityLocation(){
- if(!navigator.geolocation)return toast("Este dispositivo no permite obtener ubicación GPS");toast("Obteniendo ubicación actual…");
+ clearVenueLookupState();if(!navigator.geolocation)return toast("Este dispositivo no permite obtener ubicación GPS");toast("Obteniendo ubicación actual…");
  navigator.geolocation.getCurrentPosition(async pos=>{$("alat").value=String(pos.coords.latitude);$("alng").value=String(pos.coords.longitude);$("aaccuracy").value=String(pos.coords.accuracy||"");updateGPSStatus();await resolveGPSAdministrative(pos.coords.latitude,pos.coords.longitude);toast("Ubicación GPS guardada en el formulario")},err=>{console.warn(err);toast(err.code===1?"Debes permitir la ubicación en el navegador":"No se pudo obtener la ubicación actual")},{enableHighAccuracy:true,timeout:12000,maximumAge:30000});
 }
-function clearActivityGPS(){if($("alat"))$("alat").value="";if($("alng"))$("alng").value="";if($("aaccuracy"))$("aaccuracy").value="";if($("amapsaddress"))$("amapsaddress").value="";setGeoResolveState("");updateGPSStatus();updateFormGuidance()}
+function clearActivityGPS(){clearVenueLookupState();if($("alat"))$("alat").value="";if($("alng"))$("alng").value="";if($("aaccuracy"))$("aaccuracy").value="";if($("amapsaddress"))$("amapsaddress").value="";setGeoResolveState("");updateGPSStatus();updateFormGuidance()}
 function currentProvince(){return ($("acountry")?.value||"Panamá")==="Panamá"?($("aprovince")?.value||""):($("aregion")?.value||"")}
 function currentCity(){return ($("acountry")?.value||"Panamá")==="Panamá"?($("acity")?.value||""):($("aforeigncity")?.value||"")}
 function populateDistricts(province,city=""){
@@ -861,6 +943,7 @@ function applyActivityDefaults(){
    if(!$("aid").value||!$("avenue").value||normText($("avenue").value)==="casa de russo")$("avenue").value=place?.name||"Casa de Russo";
    if(place?.country)$("acountry").value=place.country;if(place?.location)$("alocation").value=place.location;if($("amapsaddress"))$("amapsaddress").value=place?.mapsAddress||"";if(place?.province){if((place.country||"Panamá")==="Panamá"){populateLocationSelectors(place.country||"Panamá",place.province,place.city||"")}else{$("aregion").value=place.province;if($("aforeigncity"))$("aforeigncity").value=place.city||""}}
    if(place?.gpsLat!=null)$("alat").value=String(place.gpsLat);if(place?.gpsLng!=null)$("alng").value=String(place.gpsLng);if(place?.gpsAccuracy!=null)$("aaccuracy").value=String(place.gpsAccuracy);
+   activeResolvedVenueKey=normText(place?.name||"Casa de Russo");clearVenueLookupState();
    if(!$("aid").value){$("atitle").value="";if(!$("astart").value||$("astart").value==="20:00")$("astart").value=place?.start||"09:00";$("aend").value=place?.end||$("aend").value;plusTwoHours()}
    setBillingMode(true);updateCountryFields();
  }
@@ -1197,10 +1280,10 @@ function applyRateSuggestion(force=false){
  if($("afree")?.checked)return;const k=placeConfig($("avenue")?.value);let rate=k?.habitual?k?.rate:null;if(rate==null)rate=suggestedRate();if(rate!=null&&(force||$("aexpected").value===""))$("aexpected").value=Number(rate).toFixed(2);if(rate==null&&force&&($("acountry")?.value||"Panamá")!=="Panamá"&&!k?.habitual)$("aexpected").value="";if(k?.rule&&($("apaymentrule")?.value===""||force))paymentRuleToUI(k.rule);updateDuePreview();
 }
 function applyKnownPlace(){
- const p=placeConfig($("avenue").value);if(!p){applyRateSuggestion(false);updateFormGuidance();return}if(!venueCompatible(p.name,$("akind")?.value||"presentacion",$("atype")?.value||"Boda")){$("avenue").value="";toast("Ese lugar no corresponde al tipo de actividad seleccionado");applyRateSuggestion(false);updateFormGuidance();return}
- $("avenue").value=p.name;populateLocationSelectors(p.country||"Panamá",p.province||"",p.city||"");if((p.country||"Panamá")!=="Panamá"){$("aregion").value=p.province||"";if($("aforeigncity"))$("aforeigncity").value=p.city||""}if(p.location)$("alocation").value=p.location;if($("amapsaddress"))$("amapsaddress").value=p.mapsAddress||"";if(p.gpsLat!=null)$("alat").value=String(p.gpsLat);if(p.gpsLng!=null)$("alng").value=String(p.gpsLng);if(p.gpsAccuracy!=null)$("aaccuracy").value=String(p.gpsAccuracy);if(p.notes&&!$("anotes").value)$("anotes").value=p.notes;
+ clearVenueLookupState();const p=placeConfig($("avenue").value);if(!p){applyRateSuggestion(false);updateFormGuidance();return}if(!venueCompatible(p.name,$("akind")?.value||"presentacion",$("atype")?.value||"Boda")){$("avenue").value="";toast("Ese lugar no corresponde al tipo de actividad seleccionado");applyRateSuggestion(false);updateFormGuidance();return}
+ $("avenue").value=p.name;activeResolvedVenueKey=normText(p.name);populateLocationSelectors(p.country||"Panamá",p.province||"",p.city||"");if((p.country||"Panamá")!=="Panamá"){$("aregion").value=p.province||"";if($("aforeigncity"))$("aforeigncity").value=p.city||""}if(p.location)$("alocation").value=p.location;if($("amapsaddress"))$("amapsaddress").value=p.mapsAddress||"";if(p.gpsLat!=null)$("alat").value=String(p.gpsLat);if(p.gpsLng!=null)$("alng").value=String(p.gpsLng);if(p.gpsAccuracy!=null)$("aaccuracy").value=String(p.gpsAccuracy);if(p.notes&&!$("anotes").value)$("anotes").value=p.notes;
  if(p.habitual){if(p.kind)$("akind").value=p.kind;if(p.type)$("atype").value=p.type;if(p.start)$("astart").value=p.start;if(p.end)$("aend").value=p.end;setBillingMode(!!p.free);if(!p.free&&p.rate!=null)$("aexpected").value=Number(p.rate).toFixed(2);if(p.rule)paymentRuleToUI(p.rule)}else if(!$("afree").checked){applyRateSuggestion(true)}
- updateGPSStatus();syncFreeFields();updateDuePreview();updateFormGuidance();if(p.gpsLat!=null&&p.gpsLng!=null)resolveGPSAdministrative(Number(p.gpsLat),Number(p.gpsLng),{quiet:true});
+ updateGPSStatus();syncFreeFields();updateDuePreview();updateFormGuidance();if(p.gpsLat!=null&&p.gpsLng!=null)resolveGPSAdministrative(Number(p.gpsLat),Number(p.gpsLng),{quiet:true,preserveAdmin:true});
 }
 
 
@@ -1212,7 +1295,7 @@ async function openMapPicker(seed=null,seedLabel='',options={}){
  try{await loadLeaflet();setTimeout(()=>{const host=$('mapPicker');host.innerHTML='';if(olmsMap){olmsMap.remove();olmsMap=null}const center=startPoint?[startPoint.lat,startPoint.lng]:[8.9824,-79.5199];olmsMap=L.map(host).setView(center,startPoint?16:8);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(olmsMap);if(startPoint)olmsMapMarker=L.marker(center).addTo(olmsMap);olmsMap.on('click',e=>{pendingMapPoint={lat:e.latlng.lat,lng:e.latlng.lng};if(olmsMapMarker)olmsMapMarker.setLatLng(e.latlng);else olmsMapMarker=L.marker(e.latlng).addTo(olmsMap);$('mapCoords').textContent=`✓ Punto exacto seleccionado: ${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`});if(startPoint){$('mapCoords').textContent=requireTap?`${seedLabel||'Referencia aproximada'} · toca tú el punto exacto antes de guardar`:(seedLabel||`${seeded?'Punto recibido':'Punto actual'}: ${startPoint.lat.toFixed(6)}, ${startPoint.lng.toFixed(6)}`)}else $('mapCoords').textContent='Toca el punto exacto para seleccionarlo.';setTimeout(()=>olmsMap.invalidateSize(),80)},50)}catch(e){console.error(e);$('mapPicker').innerHTML='<div class="map-fallback">No se pudo cargar el mapa. Puedes usar «Pegar ubicación» o «Mi ubicación».</div>'}
 }
 function closeMapPicker(){if(D('mapDlg').open)D('mapDlg').close()}
-async function saveMapPoint(){if(!pendingMapPoint)return toast('Toca tú el punto exacto del mapa antes de guardarlo');$('alat').value=String(pendingMapPoint.lat);$('alng').value=String(pendingMapPoint.lng);$('aaccuracy').value='';updateGPSStatus();closeMapPicker();await resolveGPSAdministrative(pendingMapPoint.lat,pendingMapPoint.lng);updateFormGuidance();toast('Punto GPS exacto guardado')}
+async function saveMapPoint(){clearVenueLookupState();if(!pendingMapPoint)return toast('Toca tú el punto exacto del mapa antes de guardarlo');$('alat').value=String(pendingMapPoint.lat);$('alng').value=String(pendingMapPoint.lng);$('aaccuracy').value='';updateGPSStatus();closeMapPicker();await resolveGPSAdministrative(pendingMapPoint.lat,pendingMapPoint.lng);updateFormGuidance();toast('Punto GPS exacto guardado')}
 function viewActivityGPSInGoogleMaps(){const lat=$('alat').value,lng=$('alng').value;if(!lat||!lng)return toast('No hay GPS guardado');window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lat+','+lng)}`,'_blank')}
 function decodeLocationText(text){let t=String(text||'').trim().replace(/&amp;/g,'&');for(let i=0;i<3;i++){try{const d=decodeURIComponent(t);if(d===t)break;t=d}catch(e){break}}return t}
 function parseGPSInput(text){
@@ -1271,7 +1354,7 @@ async function openMapForUnresolvedLink(){
  openMapPicker(null,'',{requireTap:true});
 }
 function openGpsPaste(){$('gpsPasteText').value='';pendingGoogleMapsUrl='';const pv=$('gpsPastePreview');pv.textContent='';pv.classList.add('hidden');const b=$('gpsPasteUseBtn');if(b){b.disabled=false;b.textContent='Usar esta ubicación'}if(!D('gpsPasteDlg').open)D('gpsPasteDlg').showModal()}
-async function applyExactGPSPoint(p,msg='Coordenadas exactas guardadas'){$('alat').value=String(p.lat);$('alng').value=String(p.lng);$('aaccuracy').value='';updateGPSStatus();if(D('gpsPasteDlg').open)D('gpsPasteDlg').close();await resolveGPSAdministrative(p.lat,p.lng);toast(msg)}
+async function applyExactGPSPoint(p,msg='Coordenadas exactas guardadas'){clearVenueLookupState();$('alat').value=String(p.lat);$('alng').value=String(p.lng);$('aaccuracy').value='';updateGPSStatus();if(D('gpsPasteDlg').open)D('gpsPasteDlg').close();await resolveGPSAdministrative(p.lat,p.lng);toast(msg)}
 async function applyPastedGPS(){
  const raw=$('gpsPasteText').value.trim(),pv=$('gpsPastePreview'),btn=$('gpsPasteUseBtn');if(!raw)return toast('Pega primero una ubicación');
  const p=parseGPSInput(raw);if(p){await applyExactGPSPoint(p);return}
@@ -1425,12 +1508,13 @@ function applyImportedDraft(data){
  D('importDlg').close();openActivityForm('',true);$('akind').value=data.kind;$('atype').value=TYPES.includes(data.type)?data.type:'Otro';
  if(data.type==='Ensayo regular'){applyActivityDefaults()}else{resetIncompatiblePlace();refreshVenueList();setBillingMode(data.kind==='ensayo')}
  if(data.title)$('atitle').value=data.title;
- if(data.venue){$('avenue').value=data.venue;const pc=placeConfig(data.venue);if(pc)applyKnownPlace()}
- if(data.country){populateLocationSelectors(data.country,data.province||'',data.city||'');if(data.country!=='Panamá'&&data.province)$('aregion').value=data.province}
+ let importedKnown=null;
+ if(data.venue){$('avenue').value=data.venue;importedKnown=placeConfig(data.venue);if(importedKnown)applyKnownPlace()}
+ if(data.country&&!importedKnown){populateLocationSelectors(data.country,data.province||'',data.city||'');if(data.country!=='Panamá'&&data.province)$('aregion').value=data.province}
  if(data.date)$('adate').value=data.date;else if(data.dateUncertain)$('adate').value='';
  if(data.start)$('astart').value=data.start;if(data.end)$('aend').value=data.end;else if(data.type==='Ensayo regular'&&data.venue){const p=placeConfig(data.venue)||findKnownPlace(data.venue);if(p?.end)$('aend').value=p.end}
  if(data.expected!=null){setBillingMode(false);$('aexpected').value=Number(data.expected).toFixed(2)}
- if(data.gpsLat!=null){$('alat').value=String(data.gpsLat);$('alng').value=String(data.gpsLng);resolveGPSAdministrative(data.gpsLat,data.gpsLng,{quiet:true})}
+ if(data.gpsLat!=null){$('alat').value=String(data.gpsLat);$('alng').value=String(data.gpsLng);resolveGPSAdministrative(data.gpsLat,data.gpsLng,{quiet:true,preserveAdmin:!!importedKnown})}
  if(data.notes)$('anotes').value=data.notes;updateGPSStatus();updateDuePreview();updateFormGuidance();
  const detected=[data.type!=='Otro'?data.type:'',data.venue||'',data.start?`Inicio ${data.start}`:'',data.date?panamaDate(data.date):''].filter(Boolean),banner=$('importReviewBanner');if(banner){banner.classList.remove('hidden');banner.innerHTML=`<b>📋 Borrador creado desde el mensaje</b><small><b>Detectado:</b> ${esc(detected.join(' · ')||'información parcial')}${data.warnings?.length?`<br><span style="color:#9a5b00"><b>Revisar:</b> ${esc(data.warnings.join(' '))}</span>`:''}<br>Confirma los campos antes de guardar.</small>`}
  toast(detected.length?`Borrador listo · ${detected.slice(0,3).join(' · ')}`:'Mensaje leído · completa los datos faltantes')
@@ -1451,7 +1535,7 @@ function openNewActivityMenu(){if(!D("newActivityDlg").open)D("newActivityDlg").
 function openImportMessage(){$("importText").value="";if(!D("importDlg").open)D("importDlg").showModal()}
 function openActivityForm(id="",fromImport=false){
  const a=state.activities.find(x=>x.id===id);if(a?.outcome&&!unlockedHistoryIds.has(a.id)){toast("El evento está cerrado. Desbloquéalo desde su ficha para editarlo.");openDetail(a.id);return}if(a&&needsConfirmation(a)&&!unlockedHistoryIds.has(a.id)){promptActivityStatus(a.id);return}
- refreshVenueList();$("aid").value=a?.id||"";$("akind").value=a?.kind||"presentacion";$("atype").innerHTML=TYPES.map(x=>`<option ${x===(a?.type||"Boda")?"selected":""}>${x}</option>`).join("");
+ refreshVenueList();$("aid").value=a?.id||"";activeResolvedVenueKey=a?.venue?normText(a.venue):"";clearVenueLookupState();$("akind").value=a?.kind||"presentacion";$("atype").innerHTML=TYPES.map(x=>`<option ${x===(a?.type||"Boda")?"selected":""}>${x}</option>`).join("");
  $("atitle").value=a?.title&&a.title!==a.type?a.title:"";$("avenue").value=a?.venue||"";populateLocationSelectors(a?.country||"Panamá",a?.province||"",a?.city||"");if((a?.country||"Panamá")!=="Panamá"){$("aregion").value=a?.province||"";if($("aforeigncity"))$("aforeigncity").value=a?.city||""}$("alocation").value=a?.location||"";if($("amapsaddress"))$("amapsaddress").value=a?.mapsAddress||placeConfig(a?.venue)?.mapsAddress||"";
  $("alat").value=a?.gpsLat??"";$("alng").value=a?.gpsLng??"";$("aaccuracy").value=a?.gpsAccuracy??"";$("adate").value=a?.date||todayISO();$("astart").value=a?.start||"20:00";$("aend").value=a?.end||"22:00";$("aexpected").value=a?.expected??"";$("afree").checked=a?!!a.free:false;$("aoutcome").value=a?.outcome||"";$("anotes").value=a?.notes||"";paymentRuleToUI(a?.paymentRule||placeConfig(a?.venue)?.rule||"7 días después");
  $("activityTitle").textContent=a?(a.outcome?"Editar actividad cerrada":"Editar actividad"):"Nueva actividad";$("importReviewBanner").classList.toggle("hidden",!fromImport);
@@ -2056,7 +2140,7 @@ $("atype").addEventListener("change",()=>{
  const t=$("atype").value;if(t.startsWith("Ensayo")){$("akind").value="ensayo";setBillingMode(true)}else if(t==="Viaje")$("akind").value="viaje";else if(t==="Grabación")$("akind").value="grabacion";else if(t==="Promoción")$("akind").value="promocion";else $("akind").value="presentacion";resetIncompatiblePlace();refreshVenueList();applyActivityDefaults();updateFormGuidance()
 });
 $("atitle").addEventListener("input",updateFormGuidance);
-$("avenue").addEventListener("input",updateFormGuidance);$("avenue").addEventListener("change",applyKnownPlace);$("avenue").addEventListener("blur",applyKnownPlace);
+$("avenue").addEventListener("input",()=>{clearVenueLookupState();updateFormGuidance()});$("avenue").addEventListener("change",applyKnownPlace);$("avenue").addEventListener("blur",handleVenueBlur);
 $("acountry").addEventListener("change",updateCountryFields);$("aprovince").addEventListener("change",()=>{populateDistricts($("aprovince").value,"");applyRateSuggestion(true);updateFormGuidance()});$("aregion").addEventListener("input",updateFormGuidance);$("acity").addEventListener("change",updateFormGuidance);$("aforeigncity").addEventListener("input",updateFormGuidance);
 $("alocation").addEventListener("input",updateFormGuidance);$("alocation").addEventListener("blur",()=>applyRateSuggestion(false));
 $("adate").addEventListener("change",updateDuePreview);$("apaymentcondition").addEventListener("change",()=>updatePaymentConditionFields(true));$("apaymentvalue").addEventListener("input",updateDuePreview);$("apaymentother").addEventListener("input",updateDuePreview);
