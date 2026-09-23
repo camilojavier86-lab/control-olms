@@ -187,6 +187,27 @@ nav button{margin:4px;border-radius:12px}nav button.active{background:#111;color
 .dual-save{display:grid;grid-template-columns:1fr 1fr;gap:9px;width:100%}.dual-save .btn{min-height:45px}.habitual-save{background:linear-gradient(135deg,#c9a227,#e3bd4f);color:#111}.geo-state{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:4px 7px;background:#eee8dc;font-size:10px;font-weight:850;margin-top:5px}.geo-state.ok{background:#2e9b5718;color:#22733e}.geo-state.wait{background:#e8893218;color:#9a5718}.payment-extra.hidden{display:none}.unlock-box{border:1px solid #c9a22766;background:#fff8df;border-radius:13px;padding:11px;margin:10px 0}.unlock-box .btn{margin-top:7px}.hotel-coverage{font-size:11px;color:#22733e;font-weight:800;margin-top:5px}
 @media(max-width:560px){.import-choice,.location-grid,.region-rates{grid-template-columns:1fr}.gps-actions .btn{min-width:calc(50% - 4px)}.dual-save{grid-template-columns:1fr}}
 
+
+/* ===== Sistema profesional de actualizaciones OLMS ===== */
+.update-dialog{max-width:520px}
+.update-hero{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+.update-icon{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;background:#111;color:#fff;font-size:24px;flex:0 0 auto}
+.update-dialog h2{margin:0 0 3px;font-size:25px;line-height:1.05}
+.update-version-line{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.update-chip{display:inline-flex;align-items:center;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:900;background:#efe8d8;color:#5e5548}
+.update-chip.maintenance{background:#fff1ce;color:#825a00}
+.update-chip.release{background:#e8f4ea;color:#196b35}
+.update-notes{margin:12px 0 16px;padding:12px 14px;background:#f7f3e8;border:1px solid var(--line);border-radius:14px}
+.update-notes b{display:block;margin-bottom:7px}
+.update-notes ul{margin:0;padding-left:20px;display:grid;gap:7px}
+.update-notes li{line-height:1.28}
+.update-progress{display:none;margin:10px 0 0;padding:10px 12px;border-radius:12px;background:#f2ecdf;font-weight:800}
+.update-dialog.installing .update-progress{display:block}
+.update-dialog.installing .update-actions{opacity:.55;pointer-events:none}
+.about-version{display:grid;gap:7px;margin:10px 0 14px}
+.about-version .line{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+.about-version .line:last-child{border-bottom:0}
+
 </style>
 </head>
 <body>
@@ -366,6 +387,13 @@ o 3 a Nte. 101-15, La Chorrera, Provincia de Panamá Oeste"></textarea></div>
 
 <dialog id="navDlg"><div class="dlg" id="navBody"></div></dialog>
 <dialog id="placeDlg"><div class="dlg" id="placeBody"></div></dialog>
+<dialog id="updateDlg"><div class="dlg update-dialog" id="updateDialogBody">
+<button class="iconbtn close" id="updateCloseBtn" onclick="closeUpdateDialog()">✕</button>
+<div class="update-hero"><div class="update-icon" id="updateIcon">⬆️</div><div><h2 id="updateTitle">Actualización disponible</h2><div class="muted" id="updateSubtitle"></div><div class="update-version-line" id="updateVersionLine"></div></div></div>
+<div class="update-notes"><b id="updateNotesTitle">Novedades</b><ul id="updateNotesList"></ul></div>
+<div class="update-progress" id="updateProgress">Preparando actualización…</div>
+<div class="row update-actions" id="updateActions"><button class="btn primary" id="updateNowBtn" onclick="installAvailableUpdate()">Actualizar ahora</button><button class="btn ghost" id="updateLaterBtn" onclick="deferAvailableUpdate()">Más tarde</button></div>
+</div></dialog>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -380,6 +408,17 @@ window.addEventListener("error",e=>{
   if(sp){sp.classList.add("hide");setTimeout(()=>sp.remove(),260)}
 });
 const KEY="control_olms_v2";
+const OLMS_VERSION="6.8";
+const OLMS_BUILD="2026.09.23-7";
+const OLMS_BUILD_TYPE="maintenance";
+const OLMS_BUILD_NOTES=[
+ "Nuevo aviso de actualización disponible antes de instalar.",
+ "Puedes revisar las mejoras y elegir Actualizar ahora o Más tarde.",
+ "Confirmación visible cuando la actualización queda instalada.",
+ "Configuración muestra versión, compilación y estado de actualización."
+];
+const OLMS_UPDATE_KEYS={last:"olms_update_last_build",pending:"olms_update_pending_install"};
+let olmsSWRegistration=null,olmsAvailableUpdate=null,olmsUpdateReloading=false;
 const DEFAULT_GOOGLE_CLIENT_ID="339104750665-nc0vfr39r5nbhekfnlvuatarkq3hnvdi.apps.googleusercontent.com";
 const PANAMA_PROVINCES=["Bocas del Toro","Chiriquí","Coclé","Colón","Darién","Herrera","Los Santos","Panamá","Panamá Oeste","Veraguas"];
 const PANAMA_DISTRICTS={
@@ -1046,10 +1085,12 @@ function renderMore(){
  const calendar=`<div class="row" style="align-items:center;margin-bottom:10px"><img class="service-logo" src="google-calendar.jpeg" alt="Google Calendar"><div><b>Google Calendar</b><div class="connection-line"><span class="dot ${connection.dot}"></span><span>${connection.text}</span></div></div></div><div class="sync-state"><strong>${googleAccessToken?"✅ Sincronización disponible":"📅 Integración configurada"}</strong><small>${syncText}</small><small>Dirección: OLMS → Google Calendar · Google nunca modifica OLMS</small></div><div class="row"><button class="btn primary brand-action" onclick="connectGoogle(false)"><img src="google.jpeg" alt="Google">${googleAccessToken?"Renovar conexión":"Conectar Google"}</button><button class="btn ghost brand-action" onclick="syncCalendar()"><img src="google-calendar.jpeg" alt="Google Calendar">Sincronizar ahora</button></div><p class="form-help">Cada cambio guardado en una actividad se envía a Calendar 5 segundos después. Al abrir OLMS se verifica la sincronización; si la app está abierta a las 12:00 a. m., vuelve a sincronizar.</p><details class="advanced-box"><summary>Configuración avanzada</summary><div class="client-id-row"><div class="field"><label>ID de cliente OAuth</label><input id="googleClientId" value="${esc(state.settings.googleClientId||DEFAULT_GOOGLE_CLIENT_ID)}" readonly></div><button class="btn ghost small" onclick="toggleGoogleClientIdEdit()">Editar</button></div><button class="btn ghost small" onclick="saveGoogleClientId()">Guardar ID</button></details>`;
  const deleted=`<p class="muted">${state.deleted.length?`${state.deleted.length} elemento${state.deleted.length===1?"":"s"} disponible${state.deleted.length===1?"":"s"}.`:"La carpeta está vacía."}</p><button class="btn ghost" onclick="openDeletedHistory()">Abrir historial de eliminados</button>`;
  const install=`<div class="row" style="align-items:center"><img class="service-logo" src="icon-192.png" alt="Control OLMS"><div><b>Control OLMS</b><div class="muted">PWA / acceso directo</div></div></div><p class="muted">Instala la aplicación desde una dirección HTTPS compatible.</p><button class="btn primary" onclick="installApp()">Instalar aplicación</button>`;
+ const aboutStatus=olmsAvailableUpdate?`Actualización disponible`:`Actualizado`;
+ const about=`<div class="about-version"><div class="line"><span>Versión instalada</span><b>v${OLMS_VERSION}</b></div><div class="line"><span>Compilación</span><b>${OLMS_BUILD}</b></div><div class="line"><span>Estado</span><b>${olmsAvailableUpdate?"⬆️ Actualización disponible":"✅ Actualizado"}</b></div></div><div class="row"><button class="btn primary" onclick="checkForAppUpdate(true)">${olmsAvailableUpdate?"Ver actualización":"Buscar actualizaciones"}</button></div><p class="form-help">Las correcciones de mantenimiento pueden conservar el mismo número de versión y cambiar solamente la compilación.</p>`;
  const row=(...args)=>moreSettingsRow(...args);
  $("more").innerHTML=`<div class="more-shell"><div class="more-heading"><h2>Configuración</h2><div class="muted">Ajustes, historial y herramientas</div></div><div class="more-profile-hero">${p.photo?`<img class="profile-avatar" src="${esc(p.photo)}" alt="Foto de perfil">`:`<div class="profile-avatar fallback">${esc((p.name||"OL").trim().slice(0,2).toUpperCase()||"OL")}</div>`}<div><h3>${esc(p.name||"K-milo")}</h3><div class="muted">La Mambito Sound</div></div><button class="btn small" onclick="toggleMore('profile')">Editar perfil</button></div>${moreOpen==="profile"?`<div class="more-profile-panel">${profilePanel}</div>`:""}
  <div class="settings-group"><div class="settings-group-title">Actividad y control</div><div class="settings-card">${row("places","📍","Lugares e historial",`${places.length} lugar${places.length===1?"":"es"}`,places.length?String(places.length):"","",placeContent)}${row("notifications","🔔","Notificaciones","Avisos y recordatorios",String(notificationItems().length),notificationItems().length?"warn":"ok",notif)}${row("indicators","📊","Indicadores","Promedios y métricas","","",indicators)}${row("deleted","🗑️","Historial de eliminados","Restaurar, reutilizar o borrar",String(state.deleted.length),state.deleted.length?"warn":"ok",deleted)}</div></div>
- <div class="settings-group"><div class="settings-group-title">Sistema e integraciones</div><div class="settings-card">${row("calendar","img:google-calendar.jpeg","Google Calendar",syncText,connection.text,connection.cls,calendar)}${row("tariffs","💵","Tarifas y condiciones","Tarifas regionales y lugares habituales","","",tariffs)}${row("install","img:icon-192.png","Instalación","Control OLMS como aplicación","PWA","ok",install)}</div></div></div>`;
+ <div class="settings-group"><div class="settings-group-title">Sistema e integraciones</div><div class="settings-card">${row("calendar","img:google-calendar.jpeg","Google Calendar",syncText,connection.text,connection.cls,calendar)}${row("tariffs","💵","Tarifas y condiciones","Tarifas regionales y lugares habituales","","",tariffs)}${row("install","img:icon-192.png","Instalación","Control OLMS como aplicación","PWA","ok",install)}${row("about","ℹ️","Acerca de OLMS",`v${OLMS_VERSION} · ${OLMS_BUILD}`,aboutStatus,olmsAvailableUpdate?"warn":"ok",about)}</div></div></div>`;
 }
 function openDeletedHistory(){
  const arr=[...state.deleted].sort(chronological);
@@ -1961,7 +2002,30 @@ async function installApp(){
  if(deferredInstallPrompt){deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null}
  else toast("La instalación aparecerá cuando Control OLMS esté publicado en HTTPS")
 }
-if("serviceWorker" in navigator && location.protocol.startsWith("http"))navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
+function normalizeUpdateInfo(v={}){return {version:String(v.version||OLMS_VERSION),build:String(v.build||""),kind:String(v.kind||"maintenance"),title:String(v.title||""),notes:Array.isArray(v.notes)?v.notes.filter(Boolean).map(String):[]}}
+function updateInfoIsNew(info){return !!info?.build&&info.build!==OLMS_BUILD}
+function setUpdateDialog(mode,info){
+ const d=D("updateDlg"),body=D("updateDialogBody");if(!d||!body)return;info=normalizeUpdateInfo(info);body.classList.remove("installing");
+ const isRelease=info.version!==OLMS_VERSION||info.kind==="release",available=mode==="available",installed=mode==="installed";
+ D("updateIcon").textContent=installed?"✅":isRelease?"✨":"🔧";
+ D("updateTitle").textContent=installed?"Actualización completada":isRelease?`Control OLMS v${info.version} disponible`:"Actualización de mantenimiento disponible";
+ D("updateSubtitle").textContent=installed?`Ya estás utilizando ${isRelease?`Control OLMS v${info.version}`:`la compilación ${info.build}`}.`:isRelease?"Hay una nueva versión lista para instalar.":"Hay correcciones y mejoras listas para instalar.";
+ D("updateVersionLine").innerHTML=`<span class="update-chip ${isRelease?"release":"maintenance"}">${isRelease?`Versión v${esc(info.version)}`:"Mantenimiento"}</span>${info.build?`<span class="update-chip">Compilación ${esc(info.build)}</span>`:""}`;
+ D("updateNotesTitle").textContent=installed?"Cambios instalados":"Novedades de esta actualización";
+ D("updateNotesList").innerHTML=(info.notes.length?info.notes:["Mejoras de estabilidad y correcciones internas."]).map(x=>`<li>${esc(x)}</li>`).join("");
+ D("updateProgress").textContent="Instalando actualización…";
+ D("updateNowBtn").textContent=installed?"Entendido":"Actualizar ahora";D("updateNowBtn").onclick=installed?closeUpdateDialog:installAvailableUpdate;
+ D("updateLaterBtn").style.display=available?"":"none";D("updateCloseBtn").style.display=available?"":"";
+ if(!d.open)d.showModal();
+}
+function closeUpdateDialog(){const d=D("updateDlg");if(d?.open)d.close()}
+function showAvailableUpdate(info,force=false){info=normalizeUpdateInfo(info);if(!updateInfoIsNew(info))return;olmsAvailableUpdate=info;renderMore();if(!force&&sessionStorage.getItem("olms_update_deferred")==info.build)return;setUpdateDialog("available",info)}
+function deferAvailableUpdate(){if(olmsAvailableUpdate?.build)sessionStorage.setItem("olms_update_deferred",olmsAvailableUpdate.build);closeUpdateDialog();toast("La actualización queda pendiente para la próxima vez") }
+function requestWaitingUpdateInfo(worker){try{worker?.postMessage({type:"GET_UPDATE_INFO"})}catch(e){console.warn("No pude consultar la actualización",e)}}
+function installAvailableUpdate(){const reg=olmsSWRegistration,worker=reg?.waiting;if(!worker){toast("La actualización todavía se está preparando");checkForAppUpdate(true);return}const info=olmsAvailableUpdate||{version:OLMS_VERSION,build:"",kind:"maintenance",notes:[]};localStorage.setItem(OLMS_UPDATE_KEYS.pending,JSON.stringify(info));D("updateDialogBody")?.classList.add("installing");D("updateProgress").textContent="Instalando actualización… OLMS se reiniciará al terminar.";olmsUpdateReloading=true;worker.postMessage({type:"SKIP_WAITING"})}
+async function checkForAppUpdate(force=false){if(!olmsSWRegistration){if(force)toast("El sistema de actualizaciones aún se está iniciando");return}if(force)toast("Buscando actualizaciones…");try{await olmsSWRegistration.update();if(olmsSWRegistration.waiting)requestWaitingUpdateInfo(olmsSWRegistration.waiting);else if(force)setTimeout(()=>{if(!olmsAvailableUpdate)toast("Control OLMS está actualizado ✓")},700)}catch(e){console.warn("Actualización OLMS",e);if(force)toast("No se pudo comprobar la actualización ahora")}}
+function showInstalledUpdateIfNeeded(){let pending=null;try{pending=JSON.parse(localStorage.getItem(OLMS_UPDATE_KEYS.pending)||"null")}catch(e){}if(pending){localStorage.removeItem(OLMS_UPDATE_KEYS.pending);localStorage.setItem(OLMS_UPDATE_KEYS.last,OLMS_BUILD);setTimeout(()=>setUpdateDialog("installed",pending),500);return}const last=localStorage.getItem(OLMS_UPDATE_KEYS.last);if(last!==OLMS_BUILD){localStorage.setItem(OLMS_UPDATE_KEYS.last,OLMS_BUILD);if(localStorage.getItem(KEY))setTimeout(()=>setUpdateDialog("installed",{version:OLMS_VERSION,build:OLMS_BUILD,kind:OLMS_BUILD_TYPE,notes:OLMS_BUILD_NOTES}),850)}}
+async function initAppUpdateSystem(){if(!("serviceWorker" in navigator)||!location.protocol.startsWith("http")){showInstalledUpdateIfNeeded();return}navigator.serviceWorker.addEventListener("message",e=>{if(e.data?.type!=="OLMS_UPDATE_INFO")return;const info=normalizeUpdateInfo(e.data);if(updateInfoIsNew(info))showAvailableUpdate(info)});navigator.serviceWorker.addEventListener("controllerchange",()=>{if(olmsUpdateReloading){olmsUpdateReloading=false;location.reload()}});try{const reg=await navigator.serviceWorker.register("sw.js",{updateViaCache:"none"});olmsSWRegistration=reg;reg.addEventListener("updatefound",()=>{const w=reg.installing;if(!w)return;w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller){setTimeout(()=>requestWaitingUpdateInfo(reg.waiting||w),80)}})});if(reg.waiting)requestWaitingUpdateInfo(reg.waiting);await reg.update();if(reg.waiting)requestWaitingUpdateInfo(reg.waiting);setTimeout(()=>{if(!olmsAvailableUpdate)showInstalledUpdateIfNeeded()},950)}catch(e){console.warn("Service worker OLMS",e);showInstalledUpdateIfNeeded()}}
 function showUndo(msg,fn){undoAction=fn;let t=$("toast");t.innerHTML=`${msg} &nbsp; <button style="border:0;background:transparent;color:#e5c15a;font-weight:900" onclick="undoNow()">DESHACER</button>`;t.style.display="block";clearTimeout(window.tt);window.tt=setTimeout(()=>{t.style.display="none";undoAction=null},5000)}
 function undoNow(){if(undoAction)undoAction();$("toast").style.display="none";undoAction=null}
 function toast(msg){let t=$("toast");t.textContent=msg;t.style.display="block";clearTimeout(window.tt);window.tt=setTimeout(()=>t.style.display="none",2600)}
@@ -2002,11 +2066,12 @@ populateLocationSelectors("Panamá","","");paymentRuleToUI("7 días después");
 render();
 refreshVenueList();
 switchView("dashboard");
+initAppUpdateSystem();
 clearTimeout(window.__olmsBootTimer);
 setTimeout(()=>{const sp=$("splash");if(sp){sp.classList.add("hide");setTimeout(()=>sp.remove(),220)}},650);
 setTimeout(()=>{maybeAutoCalendarSync();maybePromptPostActivity();maybeFireNativeNotifications();},1100);
-document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){render();setTimeout(()=>{maybeAutoCalendarSync();maybePromptPostActivity();maybeFireNativeNotifications();},250)}});
-window.addEventListener("focus",()=>{render();setTimeout(()=>{maybeAutoCalendarSync();maybePromptPostActivity();maybeFireNativeNotifications();},250)});
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){render();setTimeout(()=>{maybeAutoCalendarSync();maybePromptPostActivity();maybeFireNativeNotifications();checkForAppUpdate(false);},250)}});
+window.addEventListener("focus",()=>{render();setTimeout(()=>{maybeAutoCalendarSync();maybePromptPostActivity();maybeFireNativeNotifications();checkForAppUpdate(false);},250)});
 setInterval(()=>{render();maybeAutoCalendarSync();maybePromptPostActivity();maybeFireNativeNotifications();},60000);
 </script>
 </body>
