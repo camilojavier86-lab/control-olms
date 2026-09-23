@@ -335,13 +335,15 @@ nav button{margin:4px;border-radius:12px}nav button.active{background:#111;color
 </div></dialog>
 
 <dialog id="gpsPasteDlg"><div class="dlg">
-<button class="iconbtn close" onclick="D('gpsPasteDlg').close()">✕</button><h2>📋 Pegar ubicación GPS</h2><p class="muted">Pega coordenadas o un enlace completo de Google Maps recibido por WhatsApp.</p>
-<div class="field"><label>Coordenadas o enlace</label><textarea id="gpsPasteText" rows="5" placeholder="8.950123, -79.650456\no https://www.google.com/maps?q=8.950123,-79.650456"></textarea></div>
-<div id="gpsPastePreview" class="gps-paste-preview hidden"></div><div class="row"><button class="btn primary" onclick="applyPastedGPS()">Usar esta ubicación</button><button class="btn ghost" onclick="D('gpsPasteDlg').close()">Cancelar</button></div>
+<button class="iconbtn close" onclick="D('gpsPasteDlg').close()">✕</button><h2>📋 Pegar ubicación</h2><p class="muted">Pega coordenadas, un enlace de Google Maps o una dirección copiada desde Google Maps o WhatsApp.</p>
+<div class="field"><label>Coordenadas, enlace o dirección</label><textarea id="gpsPasteText" rows="5" placeholder="8.950123, -79.650456
+o https://www.google.com/maps/...
+o 3 a Nte. 101-15, La Chorrera, Provincia de Panamá Oeste"></textarea></div>
+<div id="gpsPastePreview" class="gps-paste-preview hidden"></div><div class="row"><button id="gpsPasteUseBtn" class="btn primary" onclick="applyPastedGPS()">Usar esta ubicación</button><button class="btn ghost" onclick="D('gpsPasteDlg').close()">Cancelar</button></div>
 </div></dialog>
 
 <dialog id="mapDlg"><div class="dlg">
-<button class="iconbtn close" onclick="closeMapPicker()">✕</button><h2>🗺️ Elegir punto en el mapa</h2><p class="muted">Mueve el mapa y toca el punto exacto del lugar. No requiere una API pagada.</p>
+<button class="iconbtn close" onclick="closeMapPicker()">✕</button><h2>🗺️ Elegir punto en el mapa</h2><p class="muted">Confirma el punto sugerido o toca el punto exacto del lugar. No requiere una API pagada.</p>
 <div id="mapPicker" class="map-picker"><div class="map-fallback">Cargando mapa…</div></div><div id="mapCoords" class="map-coords">Toca un punto para seleccionarlo.</div>
 <div class="row"><button class="btn primary" onclick="saveMapPoint()">Guardar punto</button><button class="btn ghost" onclick="closeMapPicker()">Cancelar</button></div>
 </div></dialog>
@@ -1154,16 +1156,54 @@ function applyKnownPlace(){
 
 let olmsMap=null,olmsMapMarker=null,pendingMapPoint=null;
 function loadLeaflet(){return new Promise((resolve,reject)=>{if(window.L)return resolve();if(!document.querySelector('link[data-olms-leaflet]')){const l=document.createElement('link');l.rel='stylesheet';l.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';l.dataset.olmsLeaflet='1';document.head.appendChild(l)}const existing=document.querySelector('script[data-olms-leaflet]');if(existing){existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',reject,{once:true});return}const sc=document.createElement('script');sc.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';sc.dataset.olmsLeaflet='1';sc.onload=resolve;sc.onerror=reject;document.head.appendChild(sc)})}
-async function openMapPicker(){
- if(!D('mapDlg').open)D('mapDlg').showModal();const lat=Number($('alat').value),lng=Number($('alng').value),has=$('alat').value!==''&&$('alng').value!==''&&Number.isFinite(lat)&&Number.isFinite(lng);pendingMapPoint=has?{lat,lng}:null;
- try{await loadLeaflet();setTimeout(()=>{const host=$('mapPicker');host.innerHTML='';if(olmsMap){olmsMap.remove();olmsMap=null}const center=has?[lat,lng]:[8.9824,-79.5199];olmsMap=L.map(host).setView(center,has?16:8);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(olmsMap);if(has)olmsMapMarker=L.marker(center).addTo(olmsMap);olmsMap.on('click',e=>{pendingMapPoint={lat:e.latlng.lat,lng:e.latlng.lng};if(olmsMapMarker)olmsMapMarker.setLatLng(e.latlng);else olmsMapMarker=L.marker(e.latlng).addTo(olmsMap);$('mapCoords').textContent=`Punto seleccionado: ${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`});if(has)$('mapCoords').textContent=`Punto actual: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;setTimeout(()=>olmsMap.invalidateSize(),80)},50)}catch(e){console.error(e);$('mapPicker').innerHTML='<div class="map-fallback">No se pudo cargar el mapa. Puedes usar «Pegar ubicación» o «Mi ubicación».</div>'}
+async function openMapPicker(seed=null,seedLabel=''){
+ if(!D('mapDlg').open)D('mapDlg').showModal();const lat=Number($('alat').value),lng=Number($('alng').value),has=$('alat').value!==''&&$('alng').value!==''&&Number.isFinite(lat)&&Number.isFinite(lng);
+ const seeded=seed&&Number.isFinite(Number(seed.lat))&&Number.isFinite(Number(seed.lng));const startPoint=seeded?{lat:Number(seed.lat),lng:Number(seed.lng)}:(has?{lat,lng}:null);pendingMapPoint=startPoint?{...startPoint}:null;
+ try{await loadLeaflet();setTimeout(()=>{const host=$('mapPicker');host.innerHTML='';if(olmsMap){olmsMap.remove();olmsMap=null}const center=startPoint?[startPoint.lat,startPoint.lng]:[8.9824,-79.5199];olmsMap=L.map(host).setView(center,startPoint?16:8);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(olmsMap);if(startPoint)olmsMapMarker=L.marker(center).addTo(olmsMap);olmsMap.on('click',e=>{pendingMapPoint={lat:e.latlng.lat,lng:e.latlng.lng};if(olmsMapMarker)olmsMapMarker.setLatLng(e.latlng);else olmsMapMarker=L.marker(e.latlng).addTo(olmsMap);$('mapCoords').textContent=`Punto seleccionado: ${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`});if(startPoint)$('mapCoords').textContent=seedLabel||`${seeded?'Resultado encontrado':'Punto actual'}: ${startPoint.lat.toFixed(6)}, ${startPoint.lng.toFixed(6)}`;setTimeout(()=>olmsMap.invalidateSize(),80)},50)}catch(e){console.error(e);$('mapPicker').innerHTML='<div class="map-fallback">No se pudo cargar el mapa. Puedes usar «Pegar ubicación» o «Mi ubicación».</div>'}
 }
 function closeMapPicker(){if(D('mapDlg').open)D('mapDlg').close()}
 async function saveMapPoint(){if(!pendingMapPoint)return toast('Toca primero un punto del mapa');$('alat').value=String(pendingMapPoint.lat);$('alng').value=String(pendingMapPoint.lng);$('aaccuracy').value='';updateGPSStatus();closeMapPicker();await resolveGPSAdministrative(pendingMapPoint.lat,pendingMapPoint.lng);updateFormGuidance();toast('Punto GPS guardado')}
 function viewActivityGPSInGoogleMaps(){const lat=$('alat').value,lng=$('alng').value;if(!lat||!lng)return toast('No hay GPS guardado');window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lat+','+lng)}`,'_blank')}
-function openGpsPaste(){$('gpsPasteText').value='';$('gpsPastePreview').classList.add('hidden');if(!D('gpsPasteDlg').open)D('gpsPasteDlg').showModal()}
+let pastedAddressCandidate='';
+function openGpsPaste(){$('gpsPasteText').value='';pastedAddressCandidate='';const pv=$('gpsPastePreview');pv.textContent='';pv.classList.add('hidden');const b=$('gpsPasteUseBtn');if(b){b.disabled=false;b.textContent='Usar esta ubicación'}if(!D('gpsPasteDlg').open)D('gpsPasteDlg').showModal()}
 function parseGPSInput(text){const t=String(text||'').trim();let m=t.match(/(?:@|q=|query=|ll=)(-?\d{1,2}(?:\.\d+)?)[,%2C\s]+(-?\d{1,3}(?:\.\d+)?)/i)||t.match(/!3d(-?\d{1,2}(?:\.\d+)?)!4d(-?\d{1,3}(?:\.\d+)?)/i)||t.match(/(-?\d{1,2}(?:\.\d+)?)\s*[,;]\s*(-?\d{1,3}(?:\.\d+)?)/);if(!m)return null;const lat=Number(m[1]),lng=Number(m[2]);if(!Number.isFinite(lat)||!Number.isFinite(lng)||Math.abs(lat)>90||Math.abs(lng)>180)return null;return{lat,lng}}
-async function applyPastedGPS(){const p=parseGPSInput($('gpsPasteText').value);if(!p){$('gpsPastePreview').textContent='No pude encontrar coordenadas en ese texto. Si es un enlace corto de Maps, abre el enlace y copia las coordenadas o el enlace completo.';$('gpsPastePreview').classList.remove('hidden');return}$('alat').value=String(p.lat);$('alng').value=String(p.lng);$('aaccuracy').value='';updateGPSStatus();D('gpsPasteDlg').close();await resolveGPSAdministrative(p.lat,p.lng);toast('Ubicación pegada y guardada')}
+function looksLikeUrl(text){return /^https?:\/\//i.test(String(text||'').trim())}
+function addressSearchCandidates(raw){
+ const t=String(raw||'').replace(/\s+/g,' ').trim();if(!t)return[];const out=[t];
+ const parts=t.split(',').map(x=>x.trim()).filter(Boolean);if(parts.length>1)out.push(parts.slice(1).join(', '));
+ const prov=$('aprovince')?.value||'',district=$('acity')?.value||'';if(district||prov)out.push([district,prov,'Panamá'].filter(Boolean).join(', '));
+ return [...new Set(out.filter(Boolean))];
+}
+async function geocodeAddressForMap(raw){
+ const candidates=addressSearchCandidates(raw);
+ for(const q of candidates){
+  try{
+   const url=`https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=5&accept-language=es&q=${encodeURIComponent(q)}`;
+   const r=await fetch(url,{headers:{'Accept':'application/json'}});if(!r.ok)continue;const arr=await r.json();if(Array.isArray(arr)&&arr.length){
+    const best=arr[0],lat=Number(best.lat),lng=Number(best.lon);if(Number.isFinite(lat)&&Number.isFinite(lng))return{lat,lng,label:best.display_name||q,query:q,exact:q===candidates[0]};
+   }
+  }catch(e){console.warn('Búsqueda de dirección:',e)}
+ }
+ return null;
+}
+async function applyPastedGPS(){
+ const raw=$('gpsPasteText').value.trim(),pv=$('gpsPastePreview'),btn=$('gpsPasteUseBtn');if(!raw)return toast('Pega primero una ubicación');
+ const p=parseGPSInput(raw);
+ if(p){$('alat').value=String(p.lat);$('alng').value=String(p.lng);$('aaccuracy').value='';updateGPSStatus();D('gpsPasteDlg').close();await resolveGPSAdministrative(p.lat,p.lng);toast('Coordenadas guardadas');return}
+ if(looksLikeUrl(raw)){
+  pv.innerHTML='<b>Enlace detectado.</b><br>Este enlace no muestra coordenadas directamente. Si Google Maps te permite copiar la dirección del lugar, pégala aquí; OLMS la buscará en el mapa para que confirmes el punto exacto.';pv.classList.remove('hidden');return;
+ }
+ btn.disabled=true;btn.textContent='Buscando…';pv.innerHTML='<b>Dirección detectada.</b><br>Buscando el lugar en el mapa…';pv.classList.remove('hidden');
+ const result=await geocodeAddressForMap(raw);btn.disabled=false;btn.textContent='Usar esta ubicación';
+ if(result){
+  pastedAddressCandidate=raw;if(!$('alocation').value.trim())$('alocation').value=raw;
+  pv.innerHTML=`<b>📍 Dirección encontrada.</b><br>${esc(result.label)}<br><small>Confirma el punto exacto en el mapa antes de guardarlo.</small>`;
+  setTimeout(()=>{D('gpsPasteDlg').close();openMapPicker({lat:result.lat,lng:result.lng},'Dirección encontrada · confirma o mueve el punto exacto')},250);return;
+ }
+ const prov=$('aprovince')?.value||'',district=$('acity')?.value||'';
+ pv.innerHTML=`<b>⚠️ No pude ubicar esa dirección automáticamente.</b><br>${district||prov?'Abriré el mapa en la zona seleccionada para que marques el punto exacto.':'Selecciona primero provincia/distrito o usa «Elegir en mapa» para marcar el punto exacto.'}`;
+ if(district||prov){const fallback=await geocodeAddressForMap([district,prov,'Panamá'].filter(Boolean).join(', '));if(fallback)setTimeout(()=>{D('gpsPasteDlg').close();openMapPicker({lat:fallback.lat,lng:fallback.lng},'Zona aproximada · toca el punto exacto')},350)}
+}
 function parseSpanishDate(text){const t=normText(text),now=new Date();let m=t.match(/\b(\d{1,2})[\/-](\d{1,2})(?:[\/-](\d{2,4}))?\b/);if(m){let y=m[3]?Number(m[3]):now.getFullYear();if(y<100)y+=2000;return`${y}-${String(Number(m[2])).padStart(2,'0')}-${String(Number(m[1])).padStart(2,'0')}`}const months={enero:1,febrero:2,marzo:3,abril:4,mayo:5,junio:6,julio:7,agosto:8,septiembre:9,setiembre:9,octubre:10,noviembre:11,diciembre:12};m=t.match(/\b(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|setiembre|octubre|noviembre|diciembre)(?:\s+de\s+(\d{4}))?/);if(m){const y=Number(m[3]||now.getFullYear());return`${y}-${String(months[m[2]]).padStart(2,'0')}-${String(Number(m[1])).padStart(2,'0')}`}return''}
 function parseTimeToken(h,m,ap){let hh=Number(h),mm=Number(m||0);ap=normText(ap||'');if(ap.startsWith('p')&&hh<12)hh+=12;if(ap.startsWith('a')&&hh===12)hh=0;return`${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`}
 function analyzeImportedText(){
