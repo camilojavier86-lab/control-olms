@@ -1,14 +1,14 @@
-const C='control-olms-v6-8-build-2026-09-23-12';
+const C='control-olms-v6-8-build-2026-09-23-16';
 const UPDATE_INFO={
   version:'6.8',
-  build:'2026.09.23-12',
+  build:'2026.09.23-16',
   kind:'maintenance',
-  title:'Resumen financiero y títulos más precisos',
+  title:'Resolución automática de enlaces de Maps',
   notes:[
-    'Cobrado ahora representa todo el dinero realmente recibido.',
-    'Ganancia neta usa Cobrado real menos Gastos; Ingresos devengados se elimina del Inicio.',
-    'OLMS y Google Calendar usan el mismo título preciso con clase, Mambito Sound, tipo, identificación, lugar y distrito/ciudad.',
-    'Se mantienen las correcciones de selector inteligente de lugares y GPS canónico.'
+    'Los enlaces cortos de Google Maps pueden resolverse automáticamente con el Resolver gratuito.',
+    'Provincia, distrito y tarifa se actualizan al obtener las coordenadas exactas.',
+    'Se corrige la confusión entre Panamá y Panamá Oeste.',
+    'Cambiar de lugar descarta los datos de ubicación del lugar anterior.'
   ]
 }
 const ASSETS=[
