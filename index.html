@@ -447,14 +447,14 @@ window.addEventListener("error",e=>{
 });
 const KEY="control_olms_v2";
 const OLMS_VERSION="6.8";
-const OLMS_BUILD="2026.09.23-16";
+const OLMS_BUILD="2026.09.24-17";
 const OLMS_BUILD_TYPE="maintenance";
 const OLMS_BUILD_NOTES=[
- "Los enlaces cortos de Google Maps pueden resolverse automáticamente mediante un pequeño servicio gratuito de Cloudflare Workers.",
- "Al resolver un enlace de Maps, OLMS completa coordenadas, país, provincia, distrito y vuelve a calcular la tarifa regional.",
- "Se corrige la identificación de Panamá Oeste para evitar que se confunda con Panamá, como ocurrió con Seven en La Chorrera.",
- "Al cambiar el nombre del lugar, OLMS descarta los datos de ubicación del lugar anterior antes de buscar el nuevo destino.",
- "La búsqueda directa de lugares, Maps, Uber y Google Calendar se mantienen sin cambiar la estructura de datos existente."
+ "Los enlaces cortos maps.app.goo.gl usan primero el Resolver configurado, evitando que el navegador intercepte la resolución.",
+ "OLMS ya no interpreta identificadores internos de Google como si fueran direcciones humanas.",
+ "Cuando el Resolver devuelve coordenadas, se completan provincia, distrito y tarifa antes de habilitar Uber.",
+ "Se conserva la integración gratuita de Cloudflare ya configurada; no necesitas volver a pegar la URL del Resolver.",
+ "No cambia la estructura de datos existente ni los pagos, gastos, historial o sincronización de Calendar."
 ];
 const OLMS_UPDATE_KEYS={last:"olms_update_last_build",pending:"olms_update_pending_install"};
 let olmsSWRegistration=null,olmsAvailableUpdate=null,olmsUpdateReloading=false;
@@ -1485,11 +1485,19 @@ function parseGPSInput(text){
  return null;
 }
 function looksLikeUrl(text){return /^https?:\/\//i.test(String(text||'').trim())}
+function plausibleMapsAddressText(v){
+ const t=String(v||'').trim();if(!t||parseGPSInput(t))return false;
+ if(/^[A-Za-z0-9_-]{18,}$/.test(t))return false;
+ if(/^(?:0x[0-9a-f]+:0x[0-9a-f]+|ChIJ[A-Za-z0-9_-]+)$/i.test(t))return false;
+ if(!/[\s,.-]/.test(t)&&t.length>14)return false;
+ return true;
+}
 function googleMapsAddressFromUrl(raw){
  try{
   const decoded=decodeLocationText(raw),u=new URL(decoded),keys=['query','q','destination','daddr','address'];
-  for(const k of keys){const v=u.searchParams.get(k);if(v&&!parseGPSInput(v)&&v.trim())return v.replace(/\+/g,' ').trim()}
-  const m=u.pathname.match(/\/maps\/(?:place|search)\/([^/@]+)/i)||u.pathname.match(/\/place\/([^/@]+)/i);if(m&&m[1]){const v=decodeLocationText(m[1]).replace(/\+/g,' ').trim();if(v&&!parseGPSInput(v))return v}
+  for(const k of keys){const v=u.searchParams.get(k);if(v){const txt=v.replace(/\+/g,' ').trim();if(plausibleMapsAddressText(txt))return txt}}
+  const m=u.pathname.match(/\/maps\/(?:place|search)\/([^/@]+)/i)||u.pathname.match(/\/place\/([^/@]+)/i);
+  if(m&&m[1]){const v=decodeLocationText(m[1]).replace(/\+/g,' ').trim();if(plausibleMapsAddressText(v))return v}
  }catch(e){}
  return '';
 }
@@ -1502,9 +1510,18 @@ async function resolveGoogleMapsViaService(raw){
 }
 async function tryResolveGoogleMapsUrl(raw){
  const direct=parseGPSInput(raw);if(direct)return{...direct,source:'url'};
+ let shortLink=false;try{const h=new URL(raw).hostname.toLowerCase();shortLink=h==='maps.app.goo.gl'||h==='goo.gl'}catch(e){}
+ if(shortLink&&mapsResolverConfigured()){
+  const viaService=await resolveGoogleMapsViaService(raw);
+  if(viaService?.lat!=null)return viaService;
+ }
  const addr=googleMapsAddressFromUrl(raw);if(addr)return{address:addr,source:'url-address'};
- try{const r=await fetch(raw,{method:'GET',redirect:'follow',credentials:'omit',cache:'no-store'});const finalUrl=r?.url||'';const p=parseGPSInput(finalUrl);if(p)return{...p,finalUrl,source:'redirect'};const a=googleMapsAddressFromUrl(finalUrl);if(a)return{address:a,finalUrl,source:'redirect-address'}}catch(e){console.warn('El navegador no pudo resolver el enlace corto de Maps:',e)}
- return await resolveGoogleMapsViaService(raw);
+ try{
+  const r=await fetch(raw,{method:'GET',redirect:'follow',credentials:'omit',cache:'no-store'}),finalUrl=r?.url||'';
+  const p=parseGPSInput(finalUrl);if(p)return{...p,finalUrl,source:'redirect'};
+  const a=googleMapsAddressFromUrl(finalUrl);if(a)return{address:a,finalUrl,source:'redirect-address'};
+ }catch(e){console.warn('El navegador no pudo resolver el enlace corto de Maps:',e)}
+ return shortLink?await resolveGoogleMapsViaService(raw):null;
 }
 function addressSearchCandidates(raw){
  const t=String(raw||'').replace(/\s+/g,' ').trim();if(!t)return[];const out=[t];

@@ -1,14 +1,14 @@
-const C='control-olms-v6-8-build-2026-09-23-16';
+const C='control-olms-v6-8-build-2026-09-24-17';
 const UPDATE_INFO={
   version:'6.8',
-  build:'2026.09.23-16',
+  build:'2026.09.24-17',
   kind:'maintenance',
-  title:'Resolución automática de enlaces de Maps',
+  title:'Corrección de enlaces cortos de Maps',
   notes:[
-    'Los enlaces cortos de Google Maps pueden resolverse automáticamente con el Resolver gratuito.',
-    'Provincia, distrito y tarifa se actualizan al obtener las coordenadas exactas.',
-    'Se corrige la confusión entre Panamá y Panamá Oeste.',
-    'Cambiar de lugar descarta los datos de ubicación del lugar anterior.'
+    'Los enlaces cortos usan primero el Resolver configurado para obtener coordenadas exactas.',
+    'OLMS ya no confunde identificadores internos de Google con direcciones.',
+    'Provincia, distrito y tarifa se actualizan cuando el Resolver devuelve el punto exacto.',
+    'La URL de Cloudflare ya guardada se conserva; no necesitas configurarla otra vez.'
   ]
 }
 const ASSETS=[
