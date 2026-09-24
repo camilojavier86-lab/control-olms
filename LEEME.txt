@@ -1,19 +1,23 @@
-CONTROL OLMS v6.8 · BUILD 2026.09.24-17
+CONTROL OLMS v6.8 · BUILD 2026.09.24-19
 
-CORRECCIÓN PRINCIPAL
-- Los enlaces cortos de Google Maps ahora consultan primero el Resolver Cloudflare ya configurado.
-- Se evita que OLMS tome códigos internos de Google (por ejemplo cadenas largas tipo EgSs...) como si fueran una dirección.
-- Si el Resolver devuelve coordenadas, OLMS completa provincia, distrito y recalcula la tarifa.
-- La URL del Resolver que ya guardaste permanece en localStorage; no debes configurarla otra vez.
+CAMBIO PRINCIPAL: TIPOS DE ACTIVIDAD AGRUPADOS POR CLASE
+- Presentación / toque: Bar/Discoteca, Hotel, Resort, Casino, Festival, Carnaval, Concierto, Evento privado, Boda, Quinceaño, Evento corporativo, Inauguración y Restaurante.
+- Ensayo: Orquesta completa y Seccional de voces.
+- Producción: Video y Audio.
+- Promoción: Radio y TV.
+- Viaje: Internacional.
+- Al cambiar la Clase, el selector Tipo muestra únicamente los tipos de esa clase.
+- Hotel y Resort activan directamente la tarifa especial de B/. 100.
+- Tacos La Neta conserva B/. 25; Panamá B/. 50; Panamá Oeste B/. 40; demás provincias B/. 60.
+
+COMPATIBILIDAD
+- Se mantiene localStorage: control_olms_v2.
+- Los nombres anteriores equivalentes se convierten al nuevo esquema al cargar: Quince años→Quinceaño, Ensayo regular→Orquesta completa, Ensayo especial→Seccional de voces, Grabación→Video, Promoción→Radio y Viaje→Internacional.
+- Los tipos históricos no equivalentes (por ejemplo Cumpleaños) no se borran del historial.
+- No necesitas volver a configurar el Worker de Cloudflare.
+
+ADEMÁS CONSERVA LOS CAMBIOS DEL BUILD 18
+- Ubicación amarrada a destino real, GPS para Maps/Uber, tarifas por provincia, configuración reorganizada, títulos completos en Actividades y pagos anulables.
 
 INSTALACIÓN
-Reemplaza únicamente index.html y sw.js en el repositorio de OLMS.
-No es necesario volver a tocar el Worker de Cloudflare.
-
-PRUEBA RECOMENDADA
-1. Abre una actividad de prueba.
-2. Pega: https://maps.app.goo.gl/qEqrNNK83qmxKeYD7?g_st=ac
-3. OLMS debe resolver coordenadas antes de intentar leer una dirección del enlace.
-4. Verifica que País, Provincia, Distrito y tarifa se actualicen.
-
-La clave de datos sigue siendo control_olms_v2.
+Reemplaza index.html y sw.js en el repositorio de OLMS.

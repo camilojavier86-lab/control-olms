@@ -1,14 +1,14 @@
-const C='control-olms-v6-8-build-2026-09-24-17';
+const C='control-olms-v6-8-build-2026-09-24-19';
 const UPDATE_INFO={
   version:'6.8',
-  build:'2026.09.24-17',
+  build:'2026.09.24-19',
   kind:'maintenance',
-  title:'Corrección de enlaces cortos de Maps',
+  title:'Tipos de actividad agrupados por clase',
   notes:[
-    'Los enlaces cortos usan primero el Resolver configurado para obtener coordenadas exactas.',
-    'OLMS ya no confunde identificadores internos de Google con direcciones.',
-    'Provincia, distrito y tarifa se actualizan cuando el Resolver devuelve el punto exacto.',
-    'La URL de Cloudflare ya guardada se conserva; no necesitas configurarla otra vez.'
+    'Tipo de actividad se filtra según la Clase seleccionada.',
+    'Presentación / toque conserva Boda, Quinceaño, Evento corporativo e Inauguración y añade Resort y Restaurante.',
+    'Ensayo: Orquesta completa / Seccional de voces. Producción: Video / Audio. Promoción: Radio / TV. Viaje: Internacional.',
+    'Hotel y Resort aplican la tarifa especial de B/. 100.'
   ]
 }
 const ASSETS=[
