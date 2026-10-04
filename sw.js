@@ -1,14 +1,14 @@
-const C='control-olms-v6-8-build-2026-09-24-19';
+const C='control-olms-v6-8-build-2026-10-03-13';
 const UPDATE_INFO={
   version:'6.8',
-  build:'2026.09.24-19',
+  build:'2026.10.03-13',
   kind:'maintenance',
-  title:'Tipos de actividad agrupados por clase',
+  title:'Navegación exacta con Google Maps',
   notes:[
-    'Tipo de actividad se filtra según la Clase seleccionada.',
-    'Presentación / toque conserva Boda, Quinceaño, Evento corporativo e Inauguración y añade Resort y Restaurante.',
-    'Ensayo: Orquesta completa / Seccional de voces. Producción: Video / Audio. Promoción: Radio / TV. Viaje: Internacional.',
-    'Hotel y Resort aplican la tarifa especial de B/. 100.'
+    'OLMS puede guardar un enlace exacto de Google Maps o coordenadas como destino de navegación.',
+    'Google Maps abre el enlace original guardado y deja de depender del mapa interno.',
+    'Uber usa únicamente coordenadas exactas; nunca usa la dirección escrita.',
+    'Los lugares habituales conservan su enlace de Maps y sus coordenadas para reutilizarlos.'
   ]
 }
 const ASSETS=[
