@@ -1,14 +1,15 @@
-const C='control-olms-v6-8-build-2026-10-03-13';
+const C='control-olms-v6-8-build-2026-10-04-20';
 const UPDATE_INFO={
   version:'6.8',
-  build:'2026.10.03-13',
+  build:'2026.10.04-20',
   kind:'maintenance',
-  title:'Navegación exacta con Google Maps',
+  title:'Análisis financiero inteligente',
   notes:[
-    'OLMS puede guardar un enlace exacto de Google Maps o coordenadas como destino de navegación.',
-    'Google Maps abre el enlace original guardado y deja de depender del mapa interno.',
-    'Uber usa únicamente coordenadas exactas; nunca usa la dirección escrita.',
-    'Los lugares habituales conservan su enlace de Maps y sus coordenadas para reutilizarlos.'
+    'Calendario se reemplaza por 📊 Análisis; Google Calendar sigue disponible desde el encabezado y Configuración.',
+    'Asesor OLMS analiza cobros, gastos, márgenes, pendientes y tendencias sin depender de una IA externa.',
+    'Las respuestas cambian de redacción y recuerdan variantes recientes para evitar repeticiones.',
+    'Se añaden gráficos de gasto por categoría, rentabilidad por tipo y evolución de caja.',
+    'Tus datos siguen usando control_olms_v2; no necesitas borrar ni migrar información.'
   ]
 }
 const ASSETS=[

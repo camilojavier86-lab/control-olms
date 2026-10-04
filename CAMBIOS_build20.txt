@@ -1,0 +1,21 @@
+CONTROL OLMS v6.8 · BUILD 2026.10.04-20
+
+NUEVO: 📊 ANÁLISIS + ASESOR OLMS LOCAL
+
+- Reemplaza la pestaña Calendario por Análisis.
+- Google Calendar no se elimina: sigue accesible desde el encabezado y Configuración.
+- Panorama con indicadores derivados, sin repetir el Inicio.
+- Gráfico de gasto por categoría.
+- Evolución de caja de los últimos 6 meses.
+- Rentabilidad por tipo de actividad.
+- Ranking de actividades por gasto y margen.
+- Detección de gastos sin monto y actividades con margen bajo.
+- Asesor OLMS con dos acciones: ¿Cómo voy? y ¿Qué debo mejorar?
+- Motor local con múltiples escenarios y combinaciones de redacción.
+- Memoria de variantes para evitar repetir la misma frase de inmediato.
+- Mensajes temporales: no crea chat ni historial de consejos.
+- Funciona offline, sin Gemini, Cloudflare AI ni API keys.
+- Conserva localStorage: control_olms_v2.
+
+BASE
+- Construido sobre el build 2026.09.24-19, que ya incluye agrupación de tipos por clase, tarifa Hotel/Resort y anulación de pagos.
