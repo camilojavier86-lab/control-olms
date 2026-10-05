@@ -1,15 +1,15 @@
-const C='control-olms-v6-8-build-2026-10-04-20';
+const C='control-olms-v6-8-build-2026-10-04-21';
 const UPDATE_INFO={
   version:'6.8',
-  build:'2026.10.04-20',
+  build:'2026.10.04-21',
   kind:'maintenance',
-  title:'Análisis financiero inteligente',
+  title:'Pagos protegidos y Google más estable',
   notes:[
-    'Calendario se reemplaza por 📊 Análisis; Google Calendar sigue disponible desde el encabezado y Configuración.',
-    'Asesor OLMS analiza cobros, gastos, márgenes, pendientes y tendencias sin depender de una IA externa.',
-    'Las respuestas cambian de redacción y recuerdan variantes recientes para evitar repeticiones.',
-    'Se añaden gráficos de gasto por categoría, rentabilidad por tipo y evolución de caja.',
-    'Tus datos siguen usando control_olms_v2; no necesitas borrar ni migrar información.'
+    'Los pagos completados quedan protegidos para que una actualización no vuelva a marcarlos como pendientes.',
+    'OLMS mantiene un respaldo local independiente del historial de pagos.',
+    'Google Calendar reutiliza la autorización válida de este teléfono mientras Google la mantenga vigente.',
+    'La renovación automática ya no insiste cada minuto: si Google exige interacción, la sincronización queda pendiente sin interrumpirte.',
+    'No se borran actividades, gastos ni datos guardados en control_olms_v2.'
   ]
 }
 const ASSETS=[

@@ -452,15 +452,18 @@ window.addEventListener("error",e=>{
   if(sp){sp.classList.add("hide");setTimeout(()=>sp.remove(),260)}
 });
 const KEY="control_olms_v2";
+const PAYMENT_LEDGER_KEY="control_olms_payment_ledger_v1";
+const GOOGLE_TOKEN_KEY="control_olms_google_token_v1";
+const GOOGLE_TOKEN_EXP_KEY="control_olms_google_token_exp_v1";
 const OLMS_VERSION="6.8";
-const OLMS_BUILD="2026.10.04-20";
+const OLMS_BUILD="2026.10.04-21";
 const OLMS_BUILD_TYPE="maintenance";
 const OLMS_BUILD_NOTES=[
- "Calendario se reemplaza por 📊 Análisis financiero, manteniendo Google Calendar disponible desde el encabezado y Configuración.",
- "Nuevo Asesor OLMS local: analiza tus números sin API externa y varía su forma de responder para evitar mensajes repetitivos.",
- "Se añaden gastos por categoría, rentabilidad por tipo de actividad, evolución de caja y detección de actividades poco rentables.",
- "Los mensajes del Asesor son temporales: aparecen al pedirlos y desaparecen al tocar Entendido ✓.",
- "Se conserva la clave de datos control_olms_v2 y no es necesario borrar ni migrar tus registros."
+ "Los pagos cerrados quedan protegidos para que una actualización no vuelva a marcarlos como pendientes.",
+ "Se añade un respaldo local independiente del historial de pagos para recuperar abonos si el registro principal pierde alguno.",
+ "Google Calendar reutiliza el token válido de este teléfono mientras Google lo mantenga vigente.",
+ "La renovación automática deja de insistir cada minuto: hace un intento silencioso y, si Google exige interacción, deja la sincronización pendiente sin interrumpirte.",
+ "Análisis y la clave control_olms_v2 se mantienen sin borrar información."
 ];
 const OLMS_UPDATE_KEYS={last:"olms_update_last_build",pending:"olms_update_pending_install"};
 let olmsSWRegistration=null,olmsAvailableUpdate=null,olmsUpdateReloading=false;
@@ -538,7 +541,18 @@ const KNOWN_PLACES=[
 ];
 let autoFinal=true;
 let googleAccessToken=null;
-try{const t=sessionStorage.getItem("olms_google_token"),e=Number(sessionStorage.getItem("olms_google_token_exp")||0);if(t&&e>Date.now())googleAccessToken=t}catch(e){}
+function restoreStoredGoogleToken(){
+ try{
+   const now=Date.now();
+   const sessionToken=sessionStorage.getItem("olms_google_token"),sessionExp=Number(sessionStorage.getItem("olms_google_token_exp")||0);
+   const localToken=localStorage.getItem(GOOGLE_TOKEN_KEY),localExp=Number(localStorage.getItem(GOOGLE_TOKEN_EXP_KEY)||0);
+   if(sessionToken&&sessionExp>now+15000){googleAccessToken=sessionToken;return}
+   if(localToken&&localExp>now+15000){googleAccessToken=localToken;sessionStorage.setItem("olms_google_token",localToken);sessionStorage.setItem("olms_google_token_exp",String(localExp));return}
+   sessionStorage.removeItem("olms_google_token");sessionStorage.removeItem("olms_google_token_exp");
+   localStorage.removeItem(GOOGLE_TOKEN_KEY);localStorage.removeItem(GOOGLE_TOKEN_EXP_KEY);
+ }catch(e){}
+}
+restoreStoredGoogleToken();
 let googleTokenClient=null;
 
 
@@ -642,10 +656,53 @@ function normalizeActivity(a){
  a.expensePromptAnswered=!!a.expensePromptAnswered;
  a.paidFullAdjusted=!!a.paidFullAdjusted;
  a.paymentAdjustmentNote=String(a.paymentAdjustmentNote||"");
+ const activePaid=(a.payments||[]).filter(p=>!p.annulled).reduce((sum,p)=>sum+(Number(p.amount)||0),0);
+ const settlementTarget=a.free?0:Number(a.expected??a.final??0)||0;
+ a.paymentClosed=!!a.paymentClosed||a.paidFullAdjusted||(!a.free&&!!a.outcome&&settlementTarget>0&&activePaid+0.001>=settlementTarget);
+ a.paymentSettledAt=String(a.paymentSettledAt||"");
+ a.paymentSettlementExpected=(a.paymentSettlementExpected==null||a.paymentSettlementExpected==="")?0:Number(a.paymentSettlementExpected)||0;
+ a.paymentClosedAmount=(a.paymentClosedAmount==null||a.paymentClosedAmount==="")?0:Number(a.paymentClosedAmount)||0;
+ if(a.paymentClosed){if(!a.paymentSettledAt)a.paymentSettledAt=new Date().toISOString();if(!a.paymentSettlementExpected)a.paymentSettlementExpected=settlementTarget;if(!a.paymentClosedAmount)a.paymentClosedAmount=activePaid}
  return a;
 }
 state.activities=(Array.isArray(state.activities)?state.activities:[]).map(normalizeActivity);
 state.deleted=(Array.isArray(state.deleted)?state.deleted:[]).map(normalizeActivity);
+function readPaymentLedger(){
+ try{const x=JSON.parse(localStorage.getItem(PAYMENT_LEDGER_KEY)||"null");return x&&typeof x==="object"?x:{version:1,activities:{}}}catch(e){return{version:1,activities:{}}}
+}
+function restorePaymentsFromLedger(){
+ const ledger=readPaymentLedger(),entries=ledger.activities&&typeof ledger.activities==="object"?ledger.activities:{};
+ let changed=false;
+ const restoreOne=a=>{
+   const rec=entries[a.id];if(!rec)return;
+   const current=Array.isArray(a.payments)?a.payments:[],ids=new Set(current.map(p=>String(p.id||"")));
+   for(const lp of (Array.isArray(rec.payments)?rec.payments:[])){if(lp&&lp.id&&!ids.has(String(lp.id))){current.push({...lp});ids.add(String(lp.id));changed=true}}
+   a.payments=current;
+   const active=current.filter(p=>!p?.annulled).reduce((sum,p)=>sum+(Number(p?.amount)||0),0);
+   const closeAmount=Number(rec.paymentClosedAmount||0);
+   if(rec.paymentClosed&&(rec.paidFullAdjusted||active+0.001>=closeAmount)){
+     if(!a.paymentClosed)changed=true;
+     a.paymentClosed=true;
+     a.paymentSettledAt=String(rec.paymentSettledAt||a.paymentSettledAt||"");
+     a.paymentSettlementExpected=Number(rec.paymentSettlementExpected||a.paymentSettlementExpected||0);
+     a.paymentClosedAmount=closeAmount||active;
+     if(rec.paidFullAdjusted){a.paidFullAdjusted=true;a.paymentAdjustmentNote=String(rec.paymentAdjustmentNote||a.paymentAdjustmentNote||"")}
+   }
+ };
+ state.activities.forEach(restoreOne);state.deleted.forEach(restoreOne);
+ if(changed)localStorage.setItem(KEY,JSON.stringify(state));
+}
+function persistPaymentLedger(){
+ try{
+   const ledger=readPaymentLedger();ledger.version=1;ledger.activities=ledger.activities||{};ledger.updatedAt=new Date().toISOString();
+   [...state.activities,...state.deleted].forEach(a=>{
+     if(!a?.id)return;
+     if((a.payments||[]).length||a.paymentClosed||a.paidFullAdjusted){ledger.activities[a.id]={payments:(a.payments||[]).map(p=>({...p})),paymentClosed:!!a.paymentClosed,paymentSettledAt:String(a.paymentSettledAt||""),paymentSettlementExpected:Number(a.paymentSettlementExpected||0),paymentClosedAmount:Number(a.paymentClosedAmount||0),paidFullAdjusted:!!a.paidFullAdjusted,paymentAdjustmentNote:String(a.paymentAdjustmentNote||""),updatedAt:new Date().toISOString()}}
+   });
+   localStorage.setItem(PAYMENT_LEDGER_KEY,JSON.stringify(ledger));
+ }catch(e){console.warn("Respaldo de pagos",e)}
+}
+restorePaymentsFromLedger();persistPaymentLedger();
 state.settings=state.settings||{};
 state.settings.profile=state.settings.profile||{name:"",email:"",photo:"",googleName:"",googlePhoto:"",customName:false,customPhoto:false};
 state.settings.permanentlyDeletedCalendarIds=Array.isArray(state.settings.permanentlyDeletedCalendarIds)?state.settings.permanentlyDeletedCalendarIds:[];
@@ -756,9 +813,9 @@ function hasOpenFinancialWork(a){
  return false;
 }
 const historyLocked=a=>!!a?.outcome&&!hasOpenFinancialWork(a);
-const finalAmt=a=>a.free?0:Number(a.expected??a.final??0);
+const finalAmt=a=>a.free?0:Number((a.paymentClosed&&Number(a.paymentSettlementExpected)>0)?a.paymentSettlementExpected:(a.expected??a.final??0));
 const received=a=>(Array.isArray(a?.payments)?a.payments:[]).filter(p=>!p?.annulled).reduce((s,p)=>s+Number(p?.amount||0),0);
-const balance=a=>a.paidFullAdjusted?0:Math.max(0,finalAmt(a)-received(a));
+const balance=a=>(a.paymentClosed||a.paidFullAdjusted)?0:Math.max(0,finalAmt(a)-received(a));
 const extraordinary=a=>Math.max(0,received(a)-finalAmt(a));
 const negativeAdjustment=a=>a.paidFullAdjusted?Math.max(0,finalAmt(a)-received(a)):0;
 function expTotal(a){let x=(a?.expenses&&typeof a.expenses==="object")?a.expenses:{};let all=[...(Array.isArray(x.outbound)?x.outbound:[]),...(Array.isArray(x.return)?x.return:[]),...(Array.isArray(x.extras)?x.extras:[])];return all.reduce((s,e)=>s+(e?.amount==null?0:Number(e.amount)||0),0)}
@@ -778,7 +835,7 @@ function due(a){
 }
 function payStatus(a){
  if(a.free||!done(a))return "none";
- if(a.paidFullAdjusted||received(a)>=finalAmt(a))return "paid";
+ if(a.paymentClosed||a.paidFullAdjusted||received(a)>=finalAmt(a))return "paid";
  if(received(a)>0)return "partial";
  const d=due(a); if(d&&d<todayISO())return "overdue";
  return "pending";
@@ -798,7 +855,7 @@ function status(a){
  }
  return["gray","Cerrado"];
 }
-function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));persistPaymentLedger();render()}
 function periodArr(){
  return state.activities.filter(a=>{
   if(periodMode==="all")return a.date>=CALENDAR_SYNC_START;
@@ -1262,17 +1319,19 @@ function saveQuickPayment(id){
  if(!date)return toast("La fecha debe ser DD/MM/AAAA");
  a.payments=a.payments||[];
  a.payments.push({id:uid(),date,amount,annulled:false,annulledAt:"",annulReason:""});
- a.paidFullAdjusted=false;a.paymentAdjustmentNote="";
- const still=balance(a);
+ a.paidFullAdjusted=false;a.paymentAdjustmentNote="";a.paymentClosed=false;a.paymentSettledAt="";a.paymentSettlementExpected=0;a.paymentClosedAmount=0;
+ const still=Math.max(0,finalAmt(a)-received(a));
  if(still>0&&confirm(`Quedan ${money(still)} pendientes.\n\n¿Quieres marcar este pago como COMPLETO con observación?`)){
    let note="";
    while(!note.trim()){
      note=prompt("Observación obligatoria para cerrar el pago por un monto menor:","")||"";
      if(!note.trim()&&!confirm("La observación es obligatoria. ¿Intentar de nuevo?"))break;
    }
-   if(note.trim()){a.paidFullAdjusted=true;a.paymentAdjustmentNote=note.trim()}
+   if(note.trim()){a.paidFullAdjusted=true;a.paymentAdjustmentNote=note.trim();a.paymentClosed=true}
  }
- localStorage.setItem(KEY,JSON.stringify(state));
+ if(!a.paymentClosed&&finalAmt(a)>0&&received(a)+0.001>=finalAmt(a))a.paymentClosed=true;
+ if(a.paymentClosed){a.paymentSettledAt=new Date().toISOString();a.paymentSettlementExpected=finalAmt(a);a.paymentClosedAmount=received(a)}
+ localStorage.setItem(KEY,JSON.stringify(state));persistPaymentLedger();
  D('quickPaymentDlg').close();
  render();
  toast(balance(a)>0?"Pago parcial registrado":"Pago registrado");
@@ -1513,7 +1572,7 @@ function renderMore(){
  const notif=`<p class="muted">Recordatorios de actividades, gastos y cobros.</p><div class="row"><button class="btn primary" onclick="enableNotifications()">Activar notificaciones</button><button class="btn ghost" onclick="openNotifications()">Ver avisos (${notificationItems().length})</button></div><p class="muted" style="font-size:12px">Estado: <b>${notificationPermissionLabel()}</b></p>`;
  const indicators=`<div class="info"><div class="box"><small>Promedio neto por toque</small><b>${money(avgNetGig())}</b></div><div class="box"><small>Gasto promedio por ensayo</small><b>${money(avgRehearsal())}</b></div><div class="box"><small>Gastos del período</small><b>${money(k.g)}</b></div><div class="box"><small>Ganancia neta</small><b>${money(k.net)}</b></div></div>`;
  const rr=state.settings.regionRates||{},pr=state.settings.provinceRates||{};const provinceRateFields=PANAMA_PROVINCES.map((province,i)=>`<div class="region-rate"><label>${esc(province)}</label><input data-province-rate="${esc(province)}" id="rateProvince${i}" type="number" step=".01" value="${Number(pr[province]??(province==="Panamá"?50:province==="Panamá Oeste"?40:60)).toFixed(2)}"></div>`).join("");const tariffs=`<p class="muted">Tarifa automática según la ubicación confirmada. Prioridad: Tacos La Neta → Hotel/Resort → provincia.</p><div class="region-rates">${provinceRateFields}<div class="region-rate"><label>Hotel / Resort</label><input id="rateHotelResort" type="number" step=".01" value="${Number(rr.hotelResort??100).toFixed(2)}"></div><div class="region-rate"><label>Tacos La Neta</label><input id="rateTacos" type="number" step=".01" value="${Number(rr.tacosLaNeta??25).toFixed(2)}"></div></div><div class="row" style="margin-top:9px"><button class="btn primary" onclick="saveRegionalRates()">Guardar tarifas</button><button class="btn ghost" onclick="openPlaceDefaults()">Lugares y reglas propias</button></div><p class="form-help">Los cambios se aplican a actividades nuevas o futuras cuando recalculas la ubicación. No alteran actividades históricas ya cerradas.</p>`;
- const calendar=`<div class="row" style="align-items:center;margin-bottom:10px"><img class="service-logo" src="google-calendar.jpeg" alt="Google Calendar"><div><b>Google Calendar</b><div class="connection-line"><span class="dot ${connection.dot}"></span><span>${connection.text}</span></div></div></div><div class="sync-state"><strong>${googleAccessToken?"✅ Sincronización disponible":"📅 Integración configurada"}</strong><small>${syncText}</small><small>Dirección: OLMS → Google Calendar · Google nunca modifica OLMS</small></div><div class="row"><button class="btn primary brand-action" onclick="connectGoogle(false)"><img src="google.jpeg" alt="Google">${googleAccessToken?"Renovar conexión":"Conectar Google"}</button><button class="btn ghost brand-action" onclick="syncCalendar()"><img src="google-calendar.jpeg" alt="Google Calendar">Sincronizar ahora</button></div><p class="form-help">Cada cambio guardado en una actividad se envía a Calendar 5 segundos después. Al abrir OLMS se verifica la sincronización; si la app está abierta a las 12:00 a. m., vuelve a sincronizar.</p><details class="advanced-box"><summary>Configuración avanzada</summary><div class="client-id-row"><div class="field"><label>ID de cliente OAuth</label><input id="googleClientId" value="${esc(state.settings.googleClientId||DEFAULT_GOOGLE_CLIENT_ID)}" readonly></div><button class="btn ghost small" onclick="toggleGoogleClientIdEdit()">Editar</button></div><button class="btn ghost small" onclick="saveGoogleClientId()">Guardar ID</button></details>`;
+ const calendar=`<div class="row" style="align-items:center;margin-bottom:10px"><img class="service-logo" src="google-calendar.jpeg" alt="Google Calendar"><div><b>Google Calendar</b><div class="connection-line"><span class="dot ${connection.dot}"></span><span>${connection.text}</span></div></div></div><div class="sync-state"><strong>${googleAccessToken?"✅ Sincronización disponible":"📅 Integración configurada"}</strong><small>${syncText}</small><small>Dirección: OLMS → Google Calendar · Google nunca modifica OLMS</small></div><div class="row"><button class="btn primary brand-action" onclick="connectGoogle(false)"><img src="google.jpeg" alt="Google">${googleAccessToken?"Renovar conexión":"Conectar Google"}</button><button class="btn ghost brand-action" onclick="syncCalendar()"><img src="google-calendar.jpeg" alt="Google Calendar">Sincronizar ahora</button></div><p class="form-help">OLMS reutiliza la autorización válida de este teléfono y puede renovarla silenciosamente si Google conserva tu sesión. Si Google exige interacción, no abrirá pantallas repetidamente: dejará los cambios pendientes hasta que vuelvas a tocar Google Calendar.</p><details class="advanced-box"><summary>Configuración avanzada</summary><div class="client-id-row"><div class="field"><label>ID de cliente OAuth</label><input id="googleClientId" value="${esc(state.settings.googleClientId||DEFAULT_GOOGLE_CLIENT_ID)}" readonly></div><button class="btn ghost small" onclick="toggleGoogleClientIdEdit()">Editar</button></div><button class="btn ghost small" onclick="saveGoogleClientId()">Guardar ID</button></details>`;
  const mapsResolverUrl=String(state.settings.mapsResolverUrl||"").trim();const mapsResolver=`<p class="muted">Permite que OLMS convierta enlaces cortos <b>maps.app.goo.gl</b> en coordenadas exactas. Se configura una sola vez y puede usar Cloudflare Workers Free.</p><div class="field"><label>URL del Resolver OLMS Maps</label><input id="mapsResolverUrl" value="${esc(mapsResolverUrl)}" placeholder="https://olms-maps-resolver.tu-cuenta.workers.dev"></div><div class="row"><button class="btn primary" onclick="saveMapsResolverUrl(true)">Guardar y probar</button>${mapsResolverUrl?`<button class="btn ghost" onclick="clearMapsResolverUrl()">Quitar</button>`:""}</div><p class="form-help">No contiene API keys de Google ni modifica tus datos. Si está activo, al pegar un enlace corto OLMS obtiene las coordenadas y completa provincia, distrito y tarifa.</p>`;
  const deleted=`<p class="muted">${state.deleted.length?`${state.deleted.length} elemento${state.deleted.length===1?"":"s"} disponible${state.deleted.length===1?"":"s"}.`:"La carpeta está vacía."}</p><button class="btn ghost" onclick="openDeletedHistory()">Abrir historial de eliminados</button>`;
  const install=`<div class="row" style="align-items:center"><img class="service-logo" src="icon-192.png" alt="Control OLMS"><div><b>Control OLMS</b><div class="muted">PWA / acceso directo</div></div></div><p class="muted">Instala la aplicación desde una dirección HTTPS compatible.</p><button class="btn primary" onclick="installApp()">Instalar aplicación</button>`;
@@ -1903,13 +1962,13 @@ function openActivityForm(id="",fromImport=false){
 }
 async function saveActivity(habitual=false){
  let id=$("aid").value||uid(),old=state.activities.find(x=>x.id===id),oldSnapshot=old?structuredClone(old):null,rawTitle=String($("atitle").value||"").trim(),type=$("atype").value,country=$("acountry").value||"Panamá",province=currentProvince(),paymentRule=$("afree").checked?"Sin remuneración":buildPaymentRuleFromUI();
- let obj={id,kind:$("akind").value,type,title:rawTitle||type,venue:$("avenue").value.trim(),venueCategory:String($("avenue").dataset.placeType||old?.venueCategory||""),country,province,city:currentCity().trim(),location:$("alocation").value.trim(),mapsAddress:$("amapsaddress")?.value.trim()||"",mapsUrl:$("amapsurl")?.value.trim()||"",gpsLat:$("alat").value===""?null:Number($("alat").value),gpsLng:$("alng").value===""?null:Number($("alng").value),gpsAccuracy:$("aaccuracy").value===""?null:Number($("aaccuracy").value),date:$("adate").value,start:$("astart").value,end:$("aend").value,expected:$("afree").checked?0:Number($("aexpected").value||0),final:$("afree").checked?0:Number($("aexpected").value||0),free:$("afree").checked,outcome:$("aoutcome").value,notes:$("anotes").value,paymentRule,payments:old?.payments||[],expenses:old?.expenses||{outbound:[],return:[],extras:[]},calendarEventId:old?.calendarEventId||null,source:"manual",expenseReviewDone:old?.expenseReviewDone??false,expensePromptAnswered:old?.expensePromptAnswered??false,postPromptSnoozedUntil:old?.postPromptSnoozedUntil||null,liveStage:old?.liveStage||"",paidFullAdjusted:old?.paidFullAdjusted||false,paymentAdjustmentNote:old?.paymentAdjustmentNote||""};
+ let obj={id,kind:$("akind").value,type,title:rawTitle||type,venue:$("avenue").value.trim(),venueCategory:String($("avenue").dataset.placeType||old?.venueCategory||""),country,province,city:currentCity().trim(),location:$("alocation").value.trim(),mapsAddress:$("amapsaddress")?.value.trim()||"",mapsUrl:$("amapsurl")?.value.trim()||"",gpsLat:$("alat").value===""?null:Number($("alat").value),gpsLng:$("alng").value===""?null:Number($("alng").value),gpsAccuracy:$("aaccuracy").value===""?null:Number($("aaccuracy").value),date:$("adate").value,start:$("astart").value,end:$("aend").value,expected:$("afree").checked?0:Number($("aexpected").value||0),final:$("afree").checked?0:Number($("aexpected").value||0),free:$("afree").checked,outcome:$("aoutcome").value,notes:$("anotes").value,paymentRule,payments:old?.payments||[],expenses:old?.expenses||{outbound:[],return:[],extras:[]},calendarEventId:old?.calendarEventId||null,source:"manual",expenseReviewDone:old?.expenseReviewDone??false,expensePromptAnswered:old?.expensePromptAnswered??false,postPromptSnoozedUntil:old?.postPromptSnoozedUntil||null,liveStage:old?.liveStage||"",paidFullAdjusted:old?.paidFullAdjusted||false,paymentAdjustmentNote:old?.paymentAdjustmentNote||"",paymentClosed:old?.paymentClosed||false,paymentSettledAt:old?.paymentSettledAt||"",paymentSettlementExpected:old?.paymentSettlementExpected||0,paymentClosedAmount:old?.paymentClosedAmount||0};
  if(!obj.venue)return toast("Escribe el lugar de la actividad");if(!obj.date)return toast("Selecciona la fecha");if(country==="Panamá"&&!province)return toast("Selecciona la provincia");if(country==="Panamá"&&!obj.city)return toast("Selecciona el distrito");
  const conflict=findScheduleConflict(obj,id);if(conflict){alert(`No se puede guardar porque se cruza con:\n${conflict.title} · ${panamaDate(conflict.date)} · ${panamaRange(conflict)}`);return}
  if(old)Object.assign(old,obj);else state.activities.push(normalizeActivity(obj));rememberPlace(obj,habitual);
  const wasUnlocked=!!oldSnapshot?.outcome&&unlockedHistoryIds.has(id);unlockedHistoryIds.delete(id);
  if(wasUnlocked&&!habitual){const fields=["venue","country","province","city","location","mapsAddress","mapsUrl","gpsLat","gpsLng","expected","paymentRule","type","kind"];const changed=fields.some(k=>String(oldSnapshot?.[k]??"")!==String(obj?.[k]??""));if(changed&&confirm("¿Actualizar también la información de este lugar para futuros eventos?")){rememberPlace(obj,!!placeConfig(obj.venue)?.habitual)}}
- localStorage.setItem(KEY,JSON.stringify(state));render();D("activityDlg").close();toast(habitual?"Actividad guardada como habitual":"Actividad guardada en OLMS");queueCalendarSync(id);
+ localStorage.setItem(KEY,JSON.stringify(state));persistPaymentLedger();render();D("activityDlg").close();toast(habitual?"Actividad guardada como habitual":"Actividad guardada en OLMS");queueCalendarSync(id);
 }
 function unlockActivity(id){const a=state.activities.find(x=>x.id===id);if(!a?.outcome)return;if(!confirm("¿Desbloquear temporalmente este evento cerrado para corregirlo?\n\nAl guardar volverá a quedar bloqueado."))return;unlockedHistoryIds.add(id);D('detailDlg').close();openActivityForm(id)}
 function openDetail(id,tab="summary"){
@@ -1955,13 +2014,14 @@ function paymentsTab(a){
  if(a.free)return `<div class="locked-note">🎁 Esta actividad fue registrada sin cobro. Los gastos siguen disponibles en su pestaña.</div>`;
  const canAdd=done(a)&&balance(a)>0;
  const rows=(a.payments||[]).map((p,i)=>({...p,_i:i})).sort((x,y)=>String(x.date).localeCompare(String(y.date))).map(p=>p.annulled?`<div class="card payment-annulled"><div class="row" style="justify-content:space-between"><span class="payment-value">${panamaDate(p.date)} · <b>${money(p.amount)}</b></span><span class="badge gray">Anulado</span></div><div class="payment-audit">Este pago no cuenta en lo cobrado.${p.annulReason?` · ${esc(p.annulReason)}`:""}</div></div>`:`<div class="card"><div class="row" style="justify-content:space-between"><span class="payment-value">${panamaDate(p.date)} · <b>${money(p.amount)}</b></span><button class="btn danger small" onclick="annulPayment('${a.id}',${p._i})">Anular</button></div></div>`).join("")||'<div class="muted">Sin pagos registrados.</div>';
- return`<div class="info"><div class="box"><small>Monto esperado</small><b>${money(finalAmt(a))}</b></div><div class="box"><small>Recibido</small><b>${money(received(a))}</b></div><div class="box"><small>Saldo</small><b>${money(balance(a))}</b></div>${extraordinary(a)>0?`<div class="box"><small>Excedente excepcional</small><b>${money(extraordinary(a))}</b></div>`:""}${negativeAdjustment(a)>0?`<div class="box"><small>Ajuste negativo</small><b>-${money(negativeAdjustment(a))}</b></div>`:""}<div class="box"><small>Condición de pago</small><b>${esc(a.paymentRule||placeConfig(a.venue)?.rule||"Hasta 7 días")}</b></div><div class="box"><small>Fecha estimada</small><b>${due(a)?panamaDate(due(a)):"No aplica"}</b></div></div>${a.paymentAdjustmentNote?`<div class="sectionline"><b>Observación</b><p>${esc(a.paymentAdjustmentNote)}</p></div>`:""}<div class="sectionline"><div class="triphead"><h3>Abonos</h3>${canAdd?`<button class="btn ghost small" onclick="addPayment('${a.id}')">＋ Agregar abono</button>`:`<span class="history-lock">Registro de pagos</span>`}</div>${rows}</div>`
+ return`<div class="info"><div class="box"><small>Monto esperado</small><b>${money(finalAmt(a))}</b></div><div class="box"><small>Recibido</small><b>${money(received(a))}</b></div><div class="box"><small>Saldo</small><b>${money(balance(a))}</b></div>${extraordinary(a)>0?`<div class="box"><small>Excedente excepcional</small><b>${money(extraordinary(a))}</b></div>`:""}${negativeAdjustment(a)>0?`<div class="box"><small>Ajuste negativo</small><b>-${money(negativeAdjustment(a))}</b></div>`:""}<div class="box"><small>Condición de pago</small><b>${esc(a.paymentRule||placeConfig(a.venue)?.rule||"Hasta 7 días")}</b></div><div class="box"><small>Fecha estimada</small><b>${due(a)?panamaDate(due(a)):"No aplica"}</b></div></div>${a.paymentClosed?`<div class="locked-note">🔒 <b>Pago completado y protegido.</b><div class="muted">Una actualización de tarifa o del sistema no puede volver a marcar esta actividad como pendiente. Solo una anulación de pago reabre el saldo.</div></div>`:""}${a.paymentAdjustmentNote?`<div class="sectionline"><b>Observación</b><p>${esc(a.paymentAdjustmentNote)}</p></div>`:""}<div class="sectionline"><div class="triphead"><h3>Abonos</h3>${canAdd?`<button class="btn ghost small" onclick="addPayment('${a.id}')">＋ Agregar abono</button>`:`<span class="history-lock">Registro de pagos</span>`}</div>${rows}</div>`
 }
 function annulPayment(id,i){
  const a=state.activities.find(x=>x.id===id),p=a?.payments?.[i];if(!a||!p||p.annulled)return;
  if(!confirm(`¿Anular el pago de ${money(p.amount)}?\n\nEl registro se conservará, pero dejará de contar en lo cobrado.`))return;
- const reason=(prompt("Motivo de la anulación (opcional):","Error de captura")||"").trim();p.annulled=true;p.annulledAt=new Date().toISOString();p.annulReason=reason;a.paidFullAdjusted=false;a.paymentAdjustmentNote="";
- localStorage.setItem(KEY,JSON.stringify(state));render();openDetail(id,"payments");toast("Pago anulado · el control fue recalculado");
+ const reason=(prompt("Motivo de la anulación (opcional):","Error de captura")||"").trim();p.annulled=true;p.annulledAt=new Date().toISOString();p.annulReason=reason;a.paidFullAdjusted=false;a.paymentAdjustmentNote="";a.paymentClosed=false;a.paymentSettledAt="";a.paymentSettlementExpected=0;a.paymentClosedAmount=0;
+ if(finalAmt(a)>0&&received(a)+0.001>=finalAmt(a)){a.paymentClosed=true;a.paymentSettledAt=new Date().toISOString();a.paymentSettlementExpected=finalAmt(a);a.paymentClosedAmount=received(a)}
+ localStorage.setItem(KEY,JSON.stringify(state));persistPaymentLedger();render();openDetail(id,"payments");toast("Pago anulado · el control fue recalculado");
 }
 
 
@@ -2011,7 +2071,7 @@ function deleteActivity(id){if(!confirm("¿Mover esta actividad al historial de 
 function restoreDeleted(id){let i=state.deleted.findIndex(x=>x.id===id),a=state.deleted.splice(i,1)[0];state.activities.push(a);save();queueCalendarSync(a.id)}
 function reuseDeleted(id){
  let a=state.deleted.find(x=>x.id===id);if(!a)return;
- let c=structuredClone(a);c.id=uid();c.date=todayISO();c.start="20:00";c.end="22:00";c.outcome="";c.liveStage="";c.payments=[];c.expenses={outbound:[],return:[],extras:[]};c.calendarEventId=null;c.source="manual";c.deletedFromCalendar=false;c.pendingCalendarLocation="";c.pendingCalendarVenue="";c.expenseReviewDone=false;c.expensePromptAnswered=false;c.paidFullAdjusted=false;c.paymentAdjustmentNote="";
+ let c=structuredClone(a);c.id=uid();c.date=todayISO();c.start="20:00";c.end="22:00";c.outcome="";c.liveStage="";c.payments=[];c.expenses={outbound:[],return:[],extras:[]};c.calendarEventId=null;c.source="manual";c.deletedFromCalendar=false;c.pendingCalendarLocation="";c.pendingCalendarVenue="";c.expenseReviewDone=false;c.expensePromptAnswered=false;c.paidFullAdjusted=false;c.paymentAdjustmentNote="";c.paymentClosed=false;c.paymentSettledAt="";c.paymentSettlementExpected=0;c.paymentClosedAmount=0;
  state.activities.push(c);save();D('listDlg').close();openActivityForm(c.id)
 }
 
@@ -2110,15 +2170,18 @@ async function connectGoogle(silent=false){
    const ok=await new Promise(resolve=>{
      let settled=false;const finish=v=>{if(settled)return;settled=true;resolve(v)};
      googleTokenClient=google.accounts.oauth2.initTokenClient({client_id:clientId,scope:"openid email profile https://www.googleapis.com/auth/calendar.events",callback:async r=>{
-       if(r.error){if(!silent)toast("Google no autorizó el acceso");finish(false);return}
-       googleAccessToken=r.access_token;state.settings.calendarConnected=true;state.settings.googleTokenExpiresAt=Date.now()+Math.max(60,Number(r.expires_in||3600)-60)*1000;try{sessionStorage.setItem("olms_google_token",googleAccessToken);sessionStorage.setItem("olms_google_token_exp",String(state.settings.googleTokenExpiresAt))}catch(e){}localStorage.setItem(KEY,JSON.stringify(state));if(!silent)toast("Google Calendar conectado");try{await loadGoogleProfile(false)}catch(e){}renderMore();finish(true)
+       if(r.error){state.settings.googleReconnectNeeded=true;localStorage.setItem(KEY,JSON.stringify(state));if(!silent)toast("Google necesita que confirmes la conexión");finish(false);return}
+       googleAccessToken=r.access_token;state.settings.calendarConnected=true;state.settings.googleReconnectNeeded=false;try{localStorage.removeItem("olms_google_silent_fail_at")}catch(e){}state.settings.googleTokenExpiresAt=Date.now()+Math.max(60,Number(r.expires_in||3600)-60)*1000;
+       try{sessionStorage.setItem("olms_google_token",googleAccessToken);sessionStorage.setItem("olms_google_token_exp",String(state.settings.googleTokenExpiresAt));localStorage.setItem(GOOGLE_TOKEN_KEY,googleAccessToken);localStorage.setItem(GOOGLE_TOKEN_EXP_KEY,String(state.settings.googleTokenExpiresAt))}catch(e){}
+       localStorage.setItem(KEY,JSON.stringify(state));if(!silent)toast("Google Calendar conectado");try{await loadGoogleProfile(false)}catch(e){}renderMore();finish(true)
      }});
-     googleTokenClient.requestAccessToken({prompt:""});setTimeout(()=>finish(false),15000);
+     googleTokenClient.requestAccessToken({prompt:""});setTimeout(()=>finish(false),12000);
    });
    if(ok&&!silent)await syncCalendar(true);return ok;
- }catch(e){console.error(e);if(!silent)toast("No se pudo iniciar Google OAuth desde esta dirección");return false}
+ }catch(e){console.error(e);state.settings.googleReconnectNeeded=true;localStorage.setItem(KEY,JSON.stringify(state));if(!silent)toast("No se pudo iniciar Google OAuth desde esta dirección");return false}
 }
-async function gfetch(url,opt={}){const r=await fetch(url,{...opt,headers:{...(opt.headers||{}),Authorization:`Bearer ${googleAccessToken}`}});if(!r.ok){if(r.status===401){googleAccessToken=null;try{sessionStorage.removeItem("olms_google_token");sessionStorage.removeItem("olms_google_token_exp")}catch(e){}}const err=new Error(await r.text());err.status=r.status;throw err}if(r.status===204)return null;return r.json()}
+function clearStoredGoogleToken(){googleAccessToken=null;try{sessionStorage.removeItem("olms_google_token");sessionStorage.removeItem("olms_google_token_exp");localStorage.removeItem(GOOGLE_TOKEN_KEY);localStorage.removeItem(GOOGLE_TOKEN_EXP_KEY)}catch(e){}}
+async function gfetch(url,opt={}){const r=await fetch(url,{...opt,headers:{...(opt.headers||{}),Authorization:`Bearer ${googleAccessToken}`}});if(!r.ok){if(r.status===401){clearStoredGoogleToken();state.settings.googleReconnectNeeded=true;localStorage.setItem(KEY,JSON.stringify(state))}const err=new Error(await r.text());err.status=r.status;throw err}if(r.status===204)return null;return r.json()}
 function calendarTitle(a){return activityDisplayTitle(a)}
 function calendarHumanLocationText(a){const maps=String(a.mapsAddress||"").trim(),loc=String(a.location||"").trim(),city=String(a.city||"").trim(),prov=String(a.province||"").trim(),country=String(a.country||"Panamá").trim();if(maps)return maps;return [loc,city,prov,country].filter((v,i,arr)=>v&&arr.findIndex(x=>normText(x)===normText(v))===i).join(", ")||a.venue||""}
 function calendarLocationText(a){const gp=activityGPSPoint(a),human=calendarHumanLocationText(a);return gp?human:""}
@@ -2133,11 +2196,11 @@ async function updateCalendarEvent(a){return await gfetch(`https://www.googleapi
 async function deleteCalendarEventById(eventId){if(!googleAccessToken||!eventId)return;try{await gfetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${encodeURIComponent(eventId)}`,{method:"DELETE"})}catch(e){if(e.status!==404)throw e}}
 async function pushActivityToCalendar(a){if(!a||!googleAccessToken||a.date<CALENDAR_SYNC_START)return false;try{if(a.calendarEventId){try{await updateCalendarEvent(a)}catch(e){if(e.status===404){a.calendarEventId=null;await createCalendarEvent(a)}else throw e}}else await createCalendarEvent(a);a.calendarSyncPending=false;state.settings.lastCalendarSync=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(state));render();return true}catch(e){console.error(e);a.calendarSyncPending=true;localStorage.setItem(KEY,JSON.stringify(state));return false}}
 let calendarSaveTimers={},calendarDeleteTimers={};
-function queueCalendarSync(id){const a=state.activities.find(x=>x.id===id);if(!a)return;a.calendarSyncPending=true;localStorage.setItem(KEY,JSON.stringify(state));clearTimeout(calendarSaveTimers[id]);toast(state.settings.calendarConnected?"Guardado en OLMS · Calendar se actualizará en 5 s":"Guardado en OLMS · conecta Google para sincronizar");calendarSaveTimers[id]=setTimeout(async()=>{delete calendarSaveTimers[id];const x=state.activities.find(y=>y.id===id);if(!x)return;if(!googleAccessToken&&state.settings.calendarConnected)await connectGoogle(true);if(googleAccessToken){const ok=await pushActivityToCalendar(x);toast(ok?"Google Calendar actualizado ✓":"Cambio guardado · Calendar pendiente")}},5000)}
-function queueCalendarDeletion(a){if(!a?.calendarEventId)return;const id=a.calendarEventId;clearTimeout(calendarDeleteTimers[id]);calendarDeleteTimers[id]=setTimeout(async()=>{if(!googleAccessToken&&state.settings.calendarConnected)await connectGoogle(true);if(googleAccessToken){try{await deleteCalendarEventById(id);toast("Evento retirado de Google Calendar")}catch(e){console.error(e)}}},5000)}
+function queueCalendarSync(id){const a=state.activities.find(x=>x.id===id);if(!a)return;a.calendarSyncPending=true;localStorage.setItem(KEY,JSON.stringify(state));clearTimeout(calendarSaveTimers[id]);toast(state.settings.calendarConnected?"Guardado en OLMS · Calendar se sincronizará cuando Google esté disponible":"Guardado en OLMS · conecta Google para sincronizar");calendarSaveTimers[id]=setTimeout(async()=>{delete calendarSaveTimers[id];const x=state.activities.find(y=>y.id===id);if(!x)return;if(googleAccessToken){const ok=await pushActivityToCalendar(x);toast(ok?"Google Calendar actualizado ✓":"Cambio guardado · Calendar pendiente")}},5000)}
+function queueCalendarDeletion(a){if(!a?.calendarEventId)return;const id=a.calendarEventId;clearTimeout(calendarDeleteTimers[id]);calendarDeleteTimers[id]=setTimeout(async()=>{if(googleAccessToken){try{await deleteCalendarEventById(id);toast("Evento retirado de Google Calendar")}catch(e){console.error(e)}}},5000)}
 async function syncCalendar(silent=false){
- if(!googleAccessToken){if(state.settings.calendarConnected){await connectGoogle(true);if(!googleAccessToken){if(!silent)toast("Google necesita reconexión");return}}else{if(!silent)toast("Conecta Google primero");return}}
- let ok=0,fail=0;for(const a of state.activities.filter(x=>x.date>=CALENDAR_SYNC_START)){const done=await pushActivityToCalendar(a);done?ok++:fail++}state.settings.lastCalendarSync=new Date().toISOString();state.settings.lastCalendarEntrySync=todayISO();localStorage.setItem(KEY,JSON.stringify(state));render();if(!silent)toast(fail?`${ok} enviados · ${fail} pendientes`:`Google Calendar actualizado · ${ok} actividades`)
+ if(!googleAccessToken){if(silent)return false;if(state.settings.calendarConnected){return await connectGoogle(false)}else{toast("Conecta Google primero");return false}}
+ let ok=0,fail=0;for(const a of state.activities.filter(x=>x.date>=CALENDAR_SYNC_START)){const done=await pushActivityToCalendar(a);done?ok++:fail++}state.settings.lastCalendarSync=new Date().toISOString();state.settings.lastCalendarEntrySync=todayISO();localStorage.setItem(KEY,JSON.stringify(state));render();if(!silent)toast(fail?`${ok} enviados · ${fail} pendientes`:`Google Calendar actualizado · ${ok} actividades`);return fail===0
 }
 async function calendarQuickAction(){if(googleAccessToken)await syncCalendar();else await connectGoogle(false)}
 
@@ -2451,7 +2514,14 @@ function dismissCalendarLocation(id){const a=state.activities.find(x=>x.id===id)
 let lastSilentConnectAttempt=0,entryCalendarSyncDone=false;
 async function maybeAutoCalendarSync(){
  const now=new Date(),today=todayISO(),entryNeeded=!entryCalendarSyncDone,midnight=now.getHours()===0&&now.getMinutes()<5&&state.settings.lastMidnightSync!==today,pending=state.activities.some(a=>a.calendarSyncPending);
- if(!googleAccessToken&&state.settings.calendarConnected&&Date.now()-lastSilentConnectAttempt>60000){lastSilentConnectAttempt=Date.now();await connectGoogle(true)}
+ if(!googleAccessToken&&state.settings.calendarConnected&&(entryNeeded||midnight||pending)){
+   const failedAt=Number(localStorage.getItem("olms_google_silent_fail_at")||0),retryAfterFail=6*60*60*1000,minGap=10*60*1000;
+   if(Date.now()-lastSilentConnectAttempt>minGap&&Date.now()-failedAt>retryAfterFail){
+     lastSilentConnectAttempt=Date.now();
+     const ok=await connectGoogle(true);
+     if(!ok){try{localStorage.setItem("olms_google_silent_fail_at",String(Date.now()))}catch(e){}}
+   }
+ }
  if(googleAccessToken&&(entryNeeded||midnight||pending)){await syncCalendar(true);entryCalendarSyncDone=true;if(midnight)state.settings.lastMidnightSync=today;localStorage.setItem(KEY,JSON.stringify(state))}
 }
 
