@@ -1,17 +1,18 @@
-const C='control-olms-v6-8-build-2026-10-04-21';
+const C='control-olms-v6-8-build-2026-10-13-22';
 const UPDATE_INFO={
   version:'6.8',
-  build:'2026.10.04-21',
-  kind:'maintenance',
-  title:'Pagos protegidos y Google más estable',
+  build:'2026.10.13-22',
+  kind:'major-visual-update',
+  title:'Nueva experiencia visual OLMS',
   notes:[
-    'Los pagos completados quedan protegidos para que una actualización no vuelva a marcarlos como pendientes.',
-    'OLMS mantiene un respaldo local independiente del historial de pagos.',
-    'Google Calendar reutiliza la autorización válida de este teléfono mientras Google la mantenga vigente.',
-    'La renovación automática ya no insiste cada minuto: si Google exige interacción, la sincronización queda pendiente sin interrumpirte.',
-    'No se borran actividades, gastos ni datos guardados en control_olms_v2.'
+    'Nueva identidad visual OLMS aplicada de forma integral.',
+    'Flujos de actividad y gastos reorganizados para ser más claros e intuitivos.',
+    'Iconografía OLMS propia, transportes renovados y controles personalizados.',
+    'Animaciones de logro de 6 segundos para cobros, gastos y eventos completados.',
+    'Configuración reorganizada con respaldo manual y controles más claros.',
+    'No se borran actividades, pagos, gastos ni datos guardados en control_olms_v2.'
   ]
-}
+};
 const ASSETS=[
   './','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./mambito-logo.png',
   './google-calendar.jpeg','./google-maps.jpeg','./google.jpeg','./whatsapp.jpeg','./uber-logo.jpeg','./indrive-logo.png'
